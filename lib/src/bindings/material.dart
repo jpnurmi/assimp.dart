@@ -1136,9 +1136,9 @@ get aiGetMaterialIntegerArray => _aiGetMaterialIntegerArray ??= libassimp
 * See the sample for aiGetMaterialFloat for more information*/
 // ---------------------------------------------------------------------------
 typedef aiGetMaterialColor_t = Uint32 Function(Pointer<aiMaterial> mat,
-    Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiColor4D> out);
+    Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiColor4t> out);
 typedef aiGetMaterialColor_f = int Function(Pointer<aiMaterial> mat,
-    Pointer<Utf8> key, int type, int index, Pointer<aiColor4D> out);
+    Pointer<Utf8> key, int type, int index, Pointer<aiColor4t> out);
 
 aiGetMaterialColor_f _aiGetMaterialColor;
 get aiGetMaterialColor => _aiGetMaterialColor ??=

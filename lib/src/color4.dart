@@ -5,10 +5,10 @@
 import 'dart:ffi';
 import 'bindings/color4.dart' as bindings;
 
-class Color4D {
-  Pointer<bindings.aiColor4D> _ptr;
+class Color4t {
+  Pointer<bindings.aiColor4t> _ptr;
 
-  Color4D.fromNative(this._ptr);
+  Color4t.fromNative(this._ptr);
 
   double get r => _ptr.ref.r;
   double get g => _ptr.ref.g;

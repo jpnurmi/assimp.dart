@@ -236,7 +236,7 @@ class aiAnimMesh extends Struct {
   Pointer<aiVector3D> mBitangents;
 
   /** Replacement for aiMesh::mColors */
-  Pointer<aiColor4D> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
+  Pointer<aiColor4t> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
 
   /** Replacement for aiMesh::mTextureCoords */
   Pointer<aiVector3D> mTextureCoords; // AI_MAX_NUMBER_OF_TEXTURECOORDS
@@ -371,7 +371,7 @@ class aiMesh extends Struct {
     * colors per vertex. NULL if not present. Each array is
     * mNumVertices in size if present.
     */
-  Pointer<aiColor4D> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
+  Pointer<aiColor4t> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
 
   /** Vertex texture coords, also known as UV channels.
     * A mesh may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
