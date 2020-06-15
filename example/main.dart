@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import "../lib/assimp.dart";
+import '../lib/assimp.dart';
 
 void main() {
 //  Database d = Database("test.db");
