@@ -4,9 +4,12 @@
 
 import 'dart:ffi';
 import 'bindings/mesh.dart' as bindings;
+import 'utils.dart';
 
 class Mesh {
   Pointer<bindings.aiMesh> _ptr;
 
   Mesh.fromNative(this._ptr);
+
+  String get name => Utils.fromUtf8(_ptr.ref.mName);
 }

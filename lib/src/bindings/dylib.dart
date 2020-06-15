@@ -50,7 +50,7 @@ String get _dlsuffix => Platform.isWindows
     : Platform.isMacOS || Platform.isIOS ? 'dylib' : 'so';
 
 DynamicLibrary _dlopen(String name, {String path = ''}) {
-  String fullPath = '${path}/${_dlprefix}${name}.${_dlsuffix}';
+  String fullPath = '${path}${_dlprefix}${name}.${_dlsuffix}';
   return DynamicLibrary.open(fullPath);
 }
 
