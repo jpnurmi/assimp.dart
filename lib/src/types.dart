@@ -44,12 +44,68 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 import 'dart:ui';
 export 'dart:ui' show Color;
+
 import 'package:ffi/ffi.dart';
 import 'package:vector_math/vector_math.dart';
-export 'package:vector_math/vector_math.dart' show Plane, Ray;
+export 'package:vector_math/vector_math.dart'
+    show Aabb3, Plane, Quaternion, Ray, Vector2, Vector3;
 
-import 'vector3.dart';
 import 'bindings/types.dart' as bindings;
+
+extension AssimpAabb3 on Aabb3 {
+  static Aabb3 fromNative(Pointer<bindings.aiAABB> ptr) {
+    return Aabb3.minMax(
+      AssimpVector3.fromNative(ptr.ref.mMin),
+      AssimpVector3.fromNative(ptr.ref.mMax),
+    );
+  }
+
+  static Pointer<bindings.aiAABB> toNative(Aabb3 aabb) {
+    final Pointer<bindings.aiAABB> ptr = allocate();
+    ptr.ref.mMin = AssimpVector3.toNative(aabb.min);
+    ptr.ref.mMax = AssimpVector3.toNative(aabb.max);
+    return ptr;
+  }
+}
+
+extension AssimpColor3 on Color {
+  static Color fromNative(Pointer<bindings.aiColor3D> ptr) {
+    return Color.fromARGB(
+      255,
+      (ptr.ref.r * 255).round(),
+      (ptr.ref.g * 255).round(),
+      (ptr.ref.b * 255).round(),
+    );
+  }
+
+  static Pointer<bindings.aiColor3D> toNative(Color color) {
+    final Pointer<bindings.aiColor3D> ptr = allocate();
+    ptr.ref.r = color.red / 255.0;
+    ptr.ref.g = color.green / 255.0;
+    ptr.ref.b = color.blue / 255.0;
+    return ptr;
+  }
+}
+
+extension AssimpColor4 on Color {
+  static Color fromNative(Pointer<bindings.aiColor4t> ptr) {
+    return Color.fromARGB(
+      (ptr.ref.a * 255).round(),
+      (ptr.ref.r * 255).round(),
+      (ptr.ref.g * 255).round(),
+      (ptr.ref.b * 255).round(),
+    );
+  }
+
+  static Pointer<bindings.aiColor4t> toNative(Color color) {
+    final Pointer<bindings.aiColor4t> ptr = allocate();
+    ptr.ref.a = color.alpha / 255.0;
+    ptr.ref.r = color.red / 255.0;
+    ptr.ref.g = color.green / 255.0;
+    ptr.ref.b = color.blue / 255.0;
+    return ptr;
+  }
+}
 
 extension AssimpPlane on Plane {
   static Plane fromNative(Pointer<bindings.aiPlane> ptr) {
@@ -81,21 +137,44 @@ extension AssimpRay on Ray {
   }
 }
 
-extension AssimpColor3 on Color {
-  static Color fromNative(Pointer<bindings.aiColor3D> ptr) {
-    return Color.fromARGB(
-      255,
-      (ptr.ref.r * 255).round(),
-      (ptr.ref.g * 255).round(),
-      (ptr.ref.b * 255).round(),
-    );
+extension AssimpQuaternion on Quaternion {
+  static Quaternion fromNative(Pointer<bindings.aiQuaternion> ptr) {
+    return Quaternion(ptr.ref.x, ptr.ref.y, ptr.ref.z, ptr.ref.z);
   }
 
-  static Pointer<bindings.aiColor3D> toNative(Color color) {
-    final Pointer<bindings.aiColor3D> ptr = allocate();
-    ptr.ref.r = color.red / 255.0;
-    ptr.ref.g = color.green / 255.0;
-    ptr.ref.b = color.blue / 255.0;
+  static Pointer<bindings.aiQuaternion> toNative(Quaternion quaternion) {
+    final Pointer<bindings.aiQuaternion> ptr = allocate();
+    ptr.ref.x = quaternion.x;
+    ptr.ref.y = quaternion.y;
+    ptr.ref.z = quaternion.z;
+    ptr.ref.w = quaternion.w;
+    return ptr;
+  }
+}
+
+extension AssimpVector2 on Vector2 {
+  static Vector2 fromNative(Pointer<bindings.aiVector2D> ptr) {
+    return Vector2(ptr.ref.x, ptr.ref.y);
+  }
+
+  static Pointer<bindings.aiVector2D> toNative(Vector2 vec) {
+    final Pointer<bindings.aiVector2D> ptr = allocate();
+    ptr.ref.x = vec.x;
+    ptr.ref.y = vec.y;
+    return ptr;
+  }
+}
+
+extension AssimpVector3 on Vector3 {
+  static Vector3 fromNative(Pointer<bindings.aiVector3D> ptr) {
+    return Vector3(ptr.ref.x, ptr.ref.y, ptr.ref.z);
+  }
+
+  static Pointer<bindings.aiVector3D> toNative(Vector3 vec) {
+    final Pointer<bindings.aiVector3D> ptr = allocate();
+    ptr.ref.x = vec.x;
+    ptr.ref.y = vec.y;
+    ptr.ref.z = vec.z;
     return ptr;
   }
 }

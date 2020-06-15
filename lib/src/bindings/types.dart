@@ -49,6 +49,7 @@ import 'dart:ffi';
 
 import 'vector3.dart';
 
+export 'aabb.dart';
 export 'vector3.dart';
 export 'vector2.dart';
 export 'color4.dart';
