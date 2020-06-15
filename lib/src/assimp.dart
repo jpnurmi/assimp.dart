@@ -46,6 +46,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
 import 'bindings/cimport.dart' as bindings;
+import 'bindings/version.dart' as bindings;
 
 class Assimp {
   Assimp._();
@@ -53,5 +54,13 @@ class Assimp {
   static void enableVerboseLogging(bool enable) =>
       bindings.aiEnableVerboseLogging(enable ? 1 : 0);
 
-  static String errorString() => Utf8.fromUtf8(bindings.aiGetErrorString());
+  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
+  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
+
+  static int get versionMajor => bindings.aiGetVersionMajor();
+  static int get versionMinor => bindings.aiGetVersionMinor();
+  static int get versionRevision => bindings.aiGetVersionRevision();
+
+  static int get compileFlags => bindings.aiGetCompileFlags();
+  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
 }
