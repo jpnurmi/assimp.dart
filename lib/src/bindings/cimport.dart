@@ -443,6 +443,12 @@ get aiIsExtensionSupported => _aiIsExtensionSupported ??= libassimp
  * Format of the list: "*.3ds;*.obj;*.dae". NULL is not a valid parameter.
  */
 typedef aiGetExtensionList_t = Void Function(Pointer<aiString> out);
+typedef aiGetExtensionList_f = void Function(Pointer<aiString> out);
+
+aiGetExtensionList_f _aiGetExtensionList;
+get aiGetExtensionList => _aiGetExtensionList ??=
+    libassimp.lookupFunction<aiGetExtensionList_t, aiGetExtensionList_f>(
+        'aiGetExtensionList');
 
 // --------------------------------------------------------------------------------
 /** Get the approximated storage required by an imported asset
@@ -451,6 +457,13 @@ typedef aiGetExtensionList_t = Void Function(Pointer<aiString> out);
  */
 typedef aiGetMemoryRequirements_t = Void Function(
     Pointer<aiScene> scene, Pointer<aiMemoryInfo> mem);
+typedef aiGetMemoryRequirements_f = void Function(
+    Pointer<aiScene> scene, Pointer<aiMemoryInfo> mem);
+
+aiGetMemoryRequirements_f _aiGetMemoryRequirements;
+get aiGetMemoryRequirements => _aiGetMemoryRequirements ??= libassimp
+    .lookupFunction<aiGetMemoryRequirements_t, aiGetMemoryRequirements_f>(
+        'aiGetMemoryRequirements');
 
 // --------------------------------------------------------------------------------
 /** Create an empty property store. Property stores are used to collect import
@@ -459,6 +472,12 @@ typedef aiGetMemoryRequirements_t = Void Function(
  *   the #aiReleasePropertyStore API function.
  */
 typedef aiCreatePropertyStore_t = Pointer<aiPropertyStore> Function();
+typedef aiCreatePropertyStore_f = Pointer<aiPropertyStore> Function();
+
+aiCreatePropertyStore_f _aiCreatePropertyStore;
+get aiCreatePropertyStore => _aiCreatePropertyStore ??=
+    libassimp.lookupFunction<aiCreatePropertyStore_t, aiCreatePropertyStore_f>(
+        'aiCreatePropertyStore');
 
 // --------------------------------------------------------------------------------
 /** Delete a property store.
@@ -466,6 +485,13 @@ typedef aiCreatePropertyStore_t = Pointer<aiPropertyStore> Function();
  */
 typedef aiReleasePropertyStore_t = Void Function(
     Pointer<aiPropertyStore> store);
+typedef aiReleasePropertyStore_f = void Function(
+    Pointer<aiPropertyStore> store);
+
+aiReleasePropertyStore_f _aiReleasePropertyStore;
+get aiReleasePropertyStore => _aiReleasePropertyStore ??= libassimp
+    .lookupFunction<aiReleasePropertyStore_t, aiReleasePropertyStore_f>(
+        'aiReleasePropertyStore');
 
 // --------------------------------------------------------------------------------
 /** Set an integer property.
@@ -481,6 +507,13 @@ typedef aiReleasePropertyStore_t = Void Function(
  */
 typedef aiSetImportPropertyInteger_t = Void Function(
     Pointer<aiPropertyStore> store, Pointer<Utf8> name, Int32 value);
+typedef aiSetImportPropertyInteger_f = void Function(
+    Pointer<aiPropertyStore> store, Pointer<Utf8> name, int value);
+
+aiSetImportPropertyInteger_f _aiSetImportPropertyInteger;
+get aiSetImportPropertyInteger => _aiSetImportPropertyInteger ??= libassimp
+    .lookupFunction<aiSetImportPropertyInteger_t, aiSetImportPropertyInteger_f>(
+        'aiSetImportPropertyInteger');
 
 // --------------------------------------------------------------------------------
 /** Set a floating-point property.
@@ -496,6 +529,13 @@ typedef aiSetImportPropertyInteger_t = Void Function(
  */
 typedef aiSetImportPropertyFloat_t = Void Function(
     Pointer<aiPropertyStore> store, Pointer<Utf8> name, Float value);
+typedef aiSetImportPropertyFloat_f = void Function(
+    Pointer<aiPropertyStore> store, Pointer<Utf8> name, double value);
+
+aiSetImportPropertyFloat_f _aiSetImportPropertyFloat;
+get aiSetImportPropertyFloat => _aiSetImportPropertyFloat ??= libassimp
+    .lookupFunction<aiSetImportPropertyFloat_t, aiSetImportPropertyFloat_f>(
+        'aiSetImportPropertyFloat');
 
 // --------------------------------------------------------------------------------
 /** Set a string property.
@@ -513,6 +553,15 @@ typedef aiSetImportPropertyString_t = Void Function(
     Pointer<aiPropertyStore> store,
     Pointer<Utf8> name,
     Pointer<aiString> value);
+typedef aiSetImportPropertyString_f = void Function(
+    Pointer<aiPropertyStore> store,
+    Pointer<Utf8> name,
+    Pointer<aiString> value);
+
+aiSetImportPropertyString_f _aiSetImportPropertyString;
+get aiSetImportPropertyString => _aiSetImportPropertyString ??= libassimp
+    .lookupFunction<aiSetImportPropertyString_t, aiSetImportPropertyString_f>(
+        'aiSetImportPropertyString');
 
 // --------------------------------------------------------------------------------
 /** Set a matrix property.
@@ -530,6 +579,15 @@ typedef aiSetImportPropertyMatrix_t = Void Function(
     Pointer<aiPropertyStore> store,
     Pointer<Utf8> name,
     Pointer<aiMatrix4x4> value);
+typedef aiSetImportPropertyMatrix_f = void Function(
+    Pointer<aiPropertyStore> store,
+    Pointer<Utf8> name,
+    Pointer<aiMatrix4x4> value);
+
+aiSetImportPropertyMatrix_f _aiSetImportPropertyMatrix;
+get aiSetImportPropertyMatrix => _aiSetImportPropertyMatrix ??= libassimp
+    .lookupFunction<aiSetImportPropertyMatrix_t, aiSetImportPropertyMatrix_f>(
+        'aiSetImportPropertyMatrix');
 
 // --------------------------------------------------------------------------------
 /** Construct a quaternion from a 3x3 rotation matrix.
@@ -539,6 +597,14 @@ typedef aiSetImportPropertyMatrix_t = Void Function(
  */
 typedef aiCreateQuaternionFromMatrix_t = Void Function(
     Pointer<aiQuaternion> quat, Pointer<aiMatrix3x3> mat);
+typedef aiCreateQuaternionFromMatrix_f = void Function(
+    Pointer<aiQuaternion> quat, Pointer<aiMatrix3x3> mat);
+
+aiCreateQuaternionFromMatrix_f _aiCreateQuaternionFromMatrix;
+get aiCreateQuaternionFromMatrix =>
+    _aiCreateQuaternionFromMatrix ??= libassimp.lookupFunction<
+        aiCreateQuaternionFromMatrix_t,
+        aiCreateQuaternionFromMatrix_f>('aiCreateQuaternionFromMatrix');
 
 // --------------------------------------------------------------------------------
 /** Decompose a transformation matrix into its rotational, translational and
@@ -555,18 +621,35 @@ typedef aiDecomposeMatrix_t = Void Function(
     Pointer<aiVector3D> scaling,
     Pointer<aiQuaternion> rotation,
     Pointer<aiVector3D> position);
+typedef aiDecomposeMatrix_f = void Function(
+    Pointer<aiMatrix4x4> mat,
+    Pointer<aiVector3D> scaling,
+    Pointer<aiQuaternion> rotation,
+    Pointer<aiVector3D> position);
 
 // --------------------------------------------------------------------------------
 /** Transpose a 4x4 matrix.
  *  @param mat Pointer to the matrix to be transposed
  */
 typedef aiTransposeMatrix4_t = Void Function(Pointer<aiMatrix4x4> mat);
+typedef aiTransposeMatrix4_f = void Function(Pointer<aiMatrix4x4> mat);
+
+aiTransposeMatrix4_f _aiTransposeMatrix4;
+get aiTransposeMatrix4 => _aiTransposeMatrix4 ??=
+    libassimp.lookupFunction<aiTransposeMatrix4_t, aiTransposeMatrix4_f>(
+        'aiTransposeMatrix4');
 
 // --------------------------------------------------------------------------------
 /** Transpose a 3x3 matrix.
  *  @param mat Pointer to the matrix to be transposed
  */
 typedef aiTransposeMatrix3_t = Void Function(Pointer<aiMatrix3x3> mat);
+typedef aiTransposeMatrix3_f = void Function(Pointer<aiMatrix3x3> mat);
+
+aiTransposeMatrix3_f _aiTransposeMatrix3;
+get aiTransposeMatrix3 => _aiTransposeMatrix3 ??=
+    libassimp.lookupFunction<aiTransposeMatrix3_t, aiTransposeMatrix3_f>(
+        'aiTransposeMatrix3');
 
 // --------------------------------------------------------------------------------
 /** Transform a vector by a 3x3 matrix
@@ -575,6 +658,13 @@ typedef aiTransposeMatrix3_t = Void Function(Pointer<aiMatrix3x3> mat);
  */
 typedef aiTransformVecByMatrix3_t = Void Function(
     Pointer<aiVector3D> vec, Pointer<aiMatrix3x3> mat);
+typedef aiTransformVecByMatrix3_f = void Function(
+    Pointer<aiVector3D> vec, Pointer<aiMatrix3x3> mat);
+
+aiTransformVecByMatrix3_f _aiTransformVecByMatrix3;
+get aiTransformVecByMatrix3 => _aiTransformVecByMatrix3 ??= libassimp
+    .lookupFunction<aiTransformVecByMatrix3_t, aiTransformVecByMatrix3_f>(
+        'aiTransformVecByMatrix3');
 
 // --------------------------------------------------------------------------------
 /** Transform a vector by a 4x4 matrix
@@ -583,6 +673,13 @@ typedef aiTransformVecByMatrix3_t = Void Function(
  */
 typedef aiTransformVecByMatrix4_t = Void Function(
     Pointer<aiVector3D> vec, Pointer<aiMatrix4x4> mat);
+typedef aiTransformVecByMatrix4_f = void Function(
+    Pointer<aiVector3D> vec, Pointer<aiMatrix4x4> mat);
+
+aiTransformVecByMatrix4_f _aiTransformVecByMatrix4;
+get aiTransformVecByMatrix4 => _aiTransformVecByMatrix4 ??= libassimp
+    .lookupFunction<aiTransformVecByMatrix4_t, aiTransformVecByMatrix4_f>(
+        'aiTransformVecByMatrix4');
 
 // --------------------------------------------------------------------------------
 /** Multiply two 4x4 matrices.
@@ -591,6 +688,13 @@ typedef aiTransformVecByMatrix4_t = Void Function(
  */
 typedef aiMultiplyMatrix4_t = Void Function(
     Pointer<aiMatrix4x4> dst, Pointer<aiMatrix4x4> src);
+typedef aiMultiplyMatrix4_f = void Function(
+    Pointer<aiMatrix4x4> dst, Pointer<aiMatrix4x4> src);
+
+aiMultiplyMatrix4_f _aiMultiplyMatrix4;
+get aiMultiplyMatrix4 => _aiMultiplyMatrix4 ??=
+    libassimp.lookupFunction<aiMultiplyMatrix4_t, aiMultiplyMatrix4_f>(
+        'aiMultiplyMatrix4');
 
 // --------------------------------------------------------------------------------
 /** Multiply two 3x3 matrices.
@@ -599,24 +703,49 @@ typedef aiMultiplyMatrix4_t = Void Function(
  */
 typedef aiMultiplyMatrix3_t = Void Function(
     Pointer<aiMatrix3x3> dst, Pointer<aiMatrix3x3> src);
+typedef aiMultiplyMatrix3_f = void Function(
+    Pointer<aiMatrix3x3> dst, Pointer<aiMatrix3x3> src);
+
+aiMultiplyMatrix3_f _aiMultiplyMatrix3;
+get aiMultiplyMatrix3 => _aiMultiplyMatrix3 ??=
+    libassimp.lookupFunction<aiMultiplyMatrix3_t, aiMultiplyMatrix3_f>(
+        'aiMultiplyMatrix3');
 
 // --------------------------------------------------------------------------------
 /** Get a 3x3 identity matrix.
  *  @param mat Matrix to receive its personal identity
  */
 typedef aiIdentityMatrix3_t = Void Function(Pointer<aiMatrix3x3> mat);
+typedef aiIdentityMatrix3_f = void Function(Pointer<aiMatrix3x3> mat);
+
+aiIdentityMatrix3_f _aiIdentityMatrix3;
+get aiIdentityMatrix3 => _aiIdentityMatrix3 ??=
+    libassimp.lookupFunction<aiIdentityMatrix3_t, aiIdentityMatrix3_f>(
+        'aiIdentityMatrix3');
 
 // --------------------------------------------------------------------------------
 /** Get a 4x4 identity matrix.
  *  @param mat Matrix to receive its personal identity
  */
 typedef aiIdentityMatrix4_t = Void Function(Pointer<aiMatrix4x4> mat);
+typedef aiIdentityMatrix4_f = void Function(Pointer<aiMatrix4x4> mat);
+
+aiIdentityMatrix4_f _aiIdentityMatrix4;
+get aiIdentityMatrix4 => _aiIdentityMatrix4 ??=
+    libassimp.lookupFunction<aiIdentityMatrix4_t, aiIdentityMatrix4_f>(
+        'aiIdentityMatrix4');
 
 // --------------------------------------------------------------------------------
 /** Returns the number of import file formats available in the current Assimp build.
  * Use aiGetImportFormatDescription() to retrieve infos of a specific import format.
  */
 typedef aiGetImportFormatCount_t = Uint32 Function();
+typedef aiGetImportFormatCount_f = int Function();
+
+aiGetImportFormatCount_f _aiGetImportFormatCount;
+get aiGetImportFormatCount => _aiGetImportFormatCount ??= libassimp
+    .lookupFunction<aiGetImportFormatCount_t, aiGetImportFormatCount_f>(
+        'aiGetImportFormatCount');
 
 // --------------------------------------------------------------------------------
 /** Returns a description of the nth import file format. Use #aiGetImportFormatCount()
@@ -627,3 +756,11 @@ typedef aiGetImportFormatCount_t = Uint32 Function();
  */
 typedef aiGetImportFormatDescription_t = Pointer<aiImporterDesc> Function(
     Uint32 index);
+typedef aiGetImportFormatDescription_f = Pointer<aiImporterDesc> Function(
+    int index);
+
+aiGetImportFormatDescription_f _aiGetImportFormatDescription;
+get aiGetImportFormatDescription =>
+    _aiGetImportFormatDescription ??= libassimp.lookupFunction<
+        aiGetImportFormatDescription_t,
+        aiGetImportFormatDescription_f>('aiGetImportFormatDescription');

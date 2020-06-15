@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
+import 'dylib.dart';
+
 /** @file  version.h
  *  @brief Functions to query the version of the Assimp runtime, check
  *    compile flags, ...
@@ -56,6 +58,11 @@ import 'package:ffi/ffi.dart';
  *  @return Pointer to static string.
  */
 typedef aiGetLegalString_t = Pointer<Utf8> Function();
+typedef aiGetLegalString_f = Pointer<Utf8> Function();
+
+aiGetLegalString_f _aiGetLegalString;
+get aiGetLegalString => _aiGetLegalString ??= libassimp
+    .lookupFunction<aiGetLegalString_t, aiGetLegalString_f>('aiGetLegalString');
 
 // ---------------------------------------------------------------------------
 /** @brief Returns the current minor version number of Assimp.
@@ -63,6 +70,12 @@ typedef aiGetLegalString_t = Pointer<Utf8> Function();
  *    linked/built against
  */
 typedef aiGetVersionMinor_t = Uint32 Function();
+typedef aiGetVersionMinor_f = int Function();
+
+aiGetVersionMinor_f _aiGetVersionMinor;
+get aiGetVersionMinor => _aiGetVersionMinor ??=
+    libassimp.lookupFunction<aiGetVersionMinor_t, aiGetVersionMinor_f>(
+        'aiGetVersionMinor');
 
 // ---------------------------------------------------------------------------
 /** @brief Returns the current major version number of Assimp.
@@ -70,6 +83,12 @@ typedef aiGetVersionMinor_t = Uint32 Function();
  *    linked/built against
  */
 typedef aiGetVersionMajor_t = Uint32 Function();
+typedef aiGetVersionMajor_f = int Function();
+
+aiGetVersionMajor_f _aiGetVersionMajor;
+get aiGetVersionMajor => _aiGetVersionMajor ??=
+    libassimp.lookupFunction<aiGetVersionMajor_t, aiGetVersionMajor_f>(
+        'aiGetVersionMajor');
 
 // ---------------------------------------------------------------------------
 /** @brief Returns the repository revision of the Assimp runtime.
@@ -77,12 +96,23 @@ typedef aiGetVersionMajor_t = Uint32 Function();
  *          application was linked/built against.
  */
 typedef aiGetVersionRevision_t = Uint32 Function();
+typedef aiGetVersionRevision_f = int Function();
+
+aiGetVersionRevision_f _aiGetVersionRevision;
+get aiGetVersionRevision => _aiGetVersionRevision ??=
+    libassimp.lookupFunction<aiGetVersionRevision_t, aiGetVersionRevision_f>(
+        'aiGetVersionRevision');
 
 // ---------------------------------------------------------------------------
 /** @brief Returns the branch name of the Assimp runtime.
  *  @return The current branch name.
  */
 typedef aiGetBranchName_t = Pointer<Utf8> Function();
+typedef aiGetBranchName_f = Pointer<Utf8> Function();
+
+aiGetBranchName_f _aiGetBranchName;
+get aiGetBranchName => _aiGetBranchName ??= libassimp
+    .lookupFunction<aiGetBranchName_t, aiGetBranchName_f>('aiGetBranchName');
 
 //! Assimp was compiled as a shared object (Windows: DLL)
 const int ASSIMP_CFLAGS_SHARED = 0x1;
@@ -101,3 +131,9 @@ const int ASSIMP_CFLAGS_SINGLETHREADED = 0x10;
  *  @return Any bitwise combination of the ASSIMP_CFLAGS_xxx constants.
  */
 typedef aiGetCompileFlags_t = Uint32 Function();
+typedef aiGetCompileFlags_f = int Function();
+
+aiGetCompileFlags_f _aiGetCompileFlags;
+get aiGetCompileFlags => _aiGetCompileFlags ??=
+    libassimp.lookupFunction<aiGetCompileFlags_t, aiGetCompileFlags_f>(
+        'aiGetCompileFlags');

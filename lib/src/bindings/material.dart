@@ -50,6 +50,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
 import 'types.dart';
+import 'dylib.dart';
 
 // Name for default materials (2nd is used if meshes have UV coords)
 const String AI_DEFAULT_MATERIAL_NAME = 'DefaultMaterial';
@@ -1037,6 +1038,18 @@ typedef aiGetMaterialProperty_t = Uint32 Function(
   Uint32 index,
   Pointer<Pointer<aiMaterialProperty>> propOut,
 );
+typedef aiGetMaterialProperty_f = int Function(
+  Pointer<aiMaterial> mat,
+  Pointer<Utf8> key,
+  int type,
+  int index,
+  Pointer<Pointer<aiMaterialProperty>> propOut,
+);
+
+aiGetMaterialProperty_f _aiGetMaterialProperty;
+get aiGetMaterialProperty => _aiGetMaterialProperty ??=
+    libassimp.lookupFunction<aiGetMaterialProperty_t, aiGetMaterialProperty_f>(
+        'aiGetMaterialProperty');
 
 // ---------------------------------------------------------------------------
 /** @brief Retrieve an array of float values with a specific key
@@ -1071,6 +1084,18 @@ typedef aiGetMaterialFloatArray_t = Uint32 Function(
     Uint32 index,
     Pointer<Float> out, // ai_real*
     Pointer<Uint32> max);
+typedef aiGetMaterialFloatArray_f = int Function(
+    Pointer<aiMaterial> mat,
+    Pointer<Utf8> key,
+    int type,
+    int index,
+    Pointer<Float> out, // ai_real*
+    Pointer<Uint32> max);
+
+aiGetMaterialFloatArray_f _aiGetMaterialFloatArray;
+get aiGetMaterialFloatArray => _aiGetMaterialFloatArray ??= libassimp
+    .lookupFunction<aiGetMaterialFloatArray_t, aiGetMaterialFloatArray_f>(
+        'aiGetMaterialFloatArray');
 
 //// Use our friend, the C preprocessor
 //#define aiGetMaterialFloat (pMat, type, index, pKey, pOut) \
@@ -1088,6 +1113,18 @@ typedef aiGetMaterialIntegerArray_t = Uint32 Function(
     Uint32 index,
     Pointer<Int32> out,
     Pointer<Uint32> max);
+typedef aiGetMaterialIntegerArray_f = int Function(
+    Pointer<aiMaterial> mat,
+    Pointer<Utf8> key,
+    int type,
+    int index,
+    Pointer<Int32> out,
+    Pointer<Uint32> max);
+
+aiGetMaterialIntegerArray_f _aiGetMaterialIntegerArray;
+get aiGetMaterialIntegerArray => _aiGetMaterialIntegerArray ??= libassimp
+    .lookupFunction<aiGetMaterialIntegerArray_t, aiGetMaterialIntegerArray_f>(
+        'aiGetMaterialIntegerArray');
 
 //// use our friend, the C preprocessor
 //#define aiGetMaterialInteger (pMat, type, index, pKey, pOut) \
@@ -1100,6 +1137,13 @@ typedef aiGetMaterialIntegerArray_t = Uint32 Function(
 // ---------------------------------------------------------------------------
 typedef aiGetMaterialColor_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiColor4D> out);
+typedef aiGetMaterialColor_f = int Function(Pointer<aiMaterial> mat,
+    Pointer<Utf8> key, int type, int index, Pointer<aiColor4D> out);
+
+aiGetMaterialColor_f _aiGetMaterialColor;
+get aiGetMaterialColor => _aiGetMaterialColor ??=
+    libassimp.lookupFunction<aiGetMaterialColor_t, aiGetMaterialColor_f>(
+        'aiGetMaterialColor');
 
 // ---------------------------------------------------------------------------
 /** @brief Retrieve a aiUVTransform value from the material property table
@@ -1108,6 +1152,13 @@ typedef aiGetMaterialColor_t = Uint32 Function(Pointer<aiMaterial> mat,
 // ---------------------------------------------------------------------------
 typedef aiGetMaterialUVTransform_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiUVTransform> out);
+typedef aiGetMaterialUVTransform_f = int Function(Pointer<aiMaterial> mat,
+    Pointer<Utf8> key, int type, int index, Pointer<aiUVTransform> out);
+
+aiGetMaterialUVTransform_f _aiGetMaterialUVTransform;
+get aiGetMaterialUVTransform => _aiGetMaterialUVTransform ??= libassimp
+    .lookupFunction<aiGetMaterialUVTransform_t, aiGetMaterialUVTransform_f>(
+        'aiGetMaterialUVTransform');
 
 // ---------------------------------------------------------------------------
 /** @brief Retrieve a string from the material property table
@@ -1116,6 +1167,13 @@ typedef aiGetMaterialUVTransform_t = Uint32 Function(Pointer<aiMaterial> mat,
 // ---------------------------------------------------------------------------
 typedef aiGetMaterialString_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiString> out);
+typedef aiGetMaterialString_f = int Function(Pointer<aiMaterial> mat,
+    Pointer<Utf8> key, int type, int index, Pointer<aiString> out);
+
+aiGetMaterialString_f _aiGetMaterialString;
+get aiGetMaterialString => _aiGetMaterialString ??=
+    libassimp.lookupFunction<aiGetMaterialString_t, aiGetMaterialString_f>(
+        'aiGetMaterialString');
 
 // ---------------------------------------------------------------------------
 /** Get the number of textures for a particular texture type.
@@ -1128,6 +1186,15 @@ typedef aiGetMaterialTextureCount_t = Uint32 Function(
   Pointer<aiMaterial> mat,
   Uint32 type, // aiTextureType
 );
+typedef aiGetMaterialTextureCount_f = int Function(
+  Pointer<aiMaterial> mat,
+  int type, // aiTextureType
+);
+
+aiGetMaterialTextureCount_f _aiGetMaterialTextureCount;
+get aiGetMaterialTextureCount => _aiGetMaterialTextureCount ??= libassimp
+    .lookupFunction<aiGetMaterialTextureCount_t, aiGetMaterialTextureCount_f>(
+        'aiGetMaterialTextureCount');
 
 // ---------------------------------------------------------------------------
 /** @brief Helper function to get all values pertaining to a particular
@@ -1178,3 +1245,20 @@ typedef aiGetMaterialTexture_t = Uint32 Function(
   Pointer<Uint32> mapmode, // aiTextureMapMode*
   Pointer<Uint32> flags,
 );
+typedef aiGetMaterialTexture_f = int Function(
+  Pointer<aiMaterial> mat,
+  int type, // aiTextureType
+  int index,
+  Pointer<aiString> path,
+  Pointer<Uint32> mapping, // aiTextureMapping*
+  Pointer<Uint32> uvindex,
+  Pointer<Float> blend, // ai_real*
+  Pointer<Uint32> op, // aiTextureOp*
+  Pointer<Uint32> mapmode, // aiTextureMapMode*
+  Pointer<Uint32> flags,
+);
+
+aiGetMaterialTexture_f _aiGetMaterialTexture;
+get aiGetMaterialTexture => _aiGetMaterialTexture ??=
+    libassimp.lookupFunction<aiGetMaterialTexture_t, aiGetMaterialTexture_f>(
+        'aiGetMaterialTexture');

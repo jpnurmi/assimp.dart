@@ -48,6 +48,7 @@ import 'package:ffi/ffi.dart';
 */
 
 import 'types.dart';
+import 'dylib.dart';
 import 'scene.dart';
 import 'cfileio.dart';
 
@@ -75,6 +76,12 @@ class aiExportFormatDesc extends Struct {
  * Use aiGetExportFormatDescription() to retrieve infos of a specific export format.
  */
 typedef aiGetExportFormatCount_t = Uint32 Function();
+typedef aiGetExportFormatCount_f = int Function();
+
+aiGetExportFormatCount_f _aiGetExportFormatCount;
+get aiGetExportFormatCount => _aiGetExportFormatCount ??= libassimp
+    .lookupFunction<aiGetExportFormatCount_t, aiGetExportFormatCount_f>(
+        'aiGetExportFormatCount');
 
 // --------------------------------------------------------------------------------
 /** Returns a description of the nth export file format. Use #aiGetExportFormatCount()
@@ -86,6 +93,14 @@ typedef aiGetExportFormatCount_t = Uint32 Function();
  */
 typedef aiGetExportFormatDescription_t = Pointer<aiExportFormatDesc> Function(
     Uint32 index);
+typedef aiGetExportFormatDescription_f = Pointer<aiExportFormatDesc> Function(
+    int index);
+
+aiGetExportFormatDescription_f _aiGetExportFormatDescription;
+get aiGetExportFormatDescription =>
+    _aiGetExportFormatDescription ??= libassimp.lookupFunction<
+        aiGetExportFormatDescription_t,
+        aiGetExportFormatDescription_f>('aiGetExportFormatDescription');
 
 // --------------------------------------------------------------------------------
 /** Release a description of the nth export file format. Must be returned by
@@ -94,6 +109,14 @@ typedef aiGetExportFormatDescription_t = Pointer<aiExportFormatDesc> Function(
 */
 typedef aiReleaseExportFormatDescription_t = Void Function(
     Pointer<aiExportFormatDesc> desc);
+typedef aiReleaseExportFormatDescription_f = void Function(
+    Pointer<aiExportFormatDesc> desc);
+
+aiReleaseExportFormatDescription_f _aiReleaseExportFormatDescription;
+get aiReleaseExportFormatDescription =>
+    _aiReleaseExportFormatDescription ??= libassimp.lookupFunction<
+        aiReleaseExportFormatDescription_t,
+        aiReleaseExportFormatDescription_f>('aiReleaseExportFormatDescription');
 
 // --------------------------------------------------------------------------------
 /** Create a modifiable copy of a scene.
@@ -106,10 +129,21 @@ typedef aiReleaseExportFormatDescription_t = Void Function(
  */
 typedef aiCopyScene_t = Void Function(
     Pointer<aiScene> scene, Pointer<Pointer<aiScene>> out);
+typedef aiCopyScene_f = void Function(
+    Pointer<aiScene> scene, Pointer<Pointer<aiScene>> out);
+
+aiCopyScene_f _aiCopyScene;
+get aiCopyScene => _aiCopyScene ??=
+    libassimp.lookupFunction<aiCopyScene_t, aiCopyScene_f>('aiCopyScene');
 
 // --------------------------------------------------------------------------------
 /** Frees a scene copy created using aiCopyScene() */
 typedef aiFreeScene_t = Void Function(Pointer<aiScene> scene);
+typedef aiFreeScene_f = void Function(Pointer<aiScene> scene);
+
+aiFreeScene_f _aiFreeScene;
+get aiFreeScene => _aiFreeScene ??=
+    libassimp.lookupFunction<aiFreeScene_t, aiFreeScene_f>('aiFreeScene');
 
 // --------------------------------------------------------------------------------
 /** Exports the given scene to a chosen file format and writes the result file(s) to disk.
@@ -152,6 +186,12 @@ typedef aiFreeScene_t = Void Function(Pointer<aiScene> scene);
 */
 typedef aiExportScene_t = Uint32 Function(Pointer<aiScene> scene,
     Pointer<Utf8> formatId, Pointer<Utf8> fileName, Uint32 preprocessing);
+typedef aiExportScene_f = int Function(Pointer<aiScene> scene,
+    Pointer<Utf8> formatId, Pointer<Utf8> fileName, int preprocessing);
+
+aiExportScene_f _aiExportScene;
+get aiExportScene => _aiExportScene ??=
+    libassimp.lookupFunction<aiExportScene_t, aiExportScene_f>('aiExportScene');
 
 // --------------------------------------------------------------------------------
 /** Exports the given scene to a chosen file format using custom IO logic supplied by you.
@@ -174,6 +214,16 @@ typedef aiExportSceneEx_t = Uint32 Function(
     Pointer<Utf8> fileName,
     Pointer<aiFileIO> io,
     Uint32 preprocessing);
+typedef aiExportSceneEx_f = int Function(
+    Pointer<aiScene> scene,
+    Pointer<Utf8> formatId,
+    Pointer<Utf8> fileName,
+    Pointer<aiFileIO> io,
+    int preprocessing);
+
+aiExportSceneEx_f _aiExportSceneEx;
+get aiExportSceneEx => _aiExportSceneEx ??= libassimp
+    .lookupFunction<aiExportSceneEx_t, aiExportSceneEx_f>('aiExportSceneEx');
 
 // --------------------------------------------------------------------------------
 /** Describes a blob of exported scene data. Use #aiExportSceneToBlob() to create a blob containing an
@@ -223,10 +273,23 @@ class aiExportDataBlob extends Struct {
 */
 typedef aiExportSceneToBlob_t = Pointer<aiExportDataBlob> Function(
     Pointer<aiScene> scene, Pointer<Utf8> formatId, Uint32 preprocessing);
+typedef aiExportSceneToBlob_f = Pointer<aiExportDataBlob> Function(
+    Pointer<aiScene> scene, Pointer<Utf8> formatId, int preprocessing);
+
+aiExportSceneToBlob_f _aiExportSceneToBlob;
+get aiExportSceneToBlob => _aiExportSceneToBlob ??=
+    libassimp.lookupFunction<aiExportSceneToBlob_t, aiExportSceneToBlob_f>(
+        'aiExportSceneToBlob');
 
 // --------------------------------------------------------------------------------
 /** Releases the memory associated with the given exported data. Use this function to free a data blob
 * returned by aiExportScene().
 * @param pData the data blob returned by #aiExportSceneToBlob
 */
-typedef aiReleaseExportBlob_t = void Function(Pointer<aiExportDataBlob> data);
+typedef aiReleaseExportBlob_t = Void Function(Pointer<aiExportDataBlob> data);
+typedef aiReleaseExportBlob_f = void Function(Pointer<aiExportDataBlob> data);
+
+aiReleaseExportBlob_f _aiReleaseExportBlob;
+get aiReleaseExportBlob => _aiReleaseExportBlob ??=
+    libassimp.lookupFunction<aiReleaseExportBlob_t, aiReleaseExportBlob_f>(
+        'aiReleaseExportBlob');
