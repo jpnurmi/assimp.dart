@@ -42,15 +42,27 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+import 'dart:ui';
+import 'package:ffi/ffi.dart';
+
 import 'bindings/color4.dart' as bindings;
 
-class Color4t {
-  Pointer<bindings.aiColor4t> _ptr;
+extension AssimpColor4 on Color {
+  static Color fromNative(Pointer<bindings.aiColor4t> ptr) {
+    return Color.fromARGB(
+      (ptr.ref.a * 255).round(),
+      (ptr.ref.r * 255).round(),
+      (ptr.ref.g * 255).round(),
+      (ptr.ref.b * 255).round(),
+    );
+  }
 
-  Color4t.fromNative(this._ptr);
-
-  double get r => _ptr.ref.r;
-  double get g => _ptr.ref.g;
-  double get b => _ptr.ref.b;
-  double get a => _ptr.ref.a;
+  static Pointer<bindings.aiColor4t> toNative(Color color) {
+    final Pointer<bindings.aiColor4t> ptr = allocate();
+    ptr.ref.a = color.alpha / 255.0;
+    ptr.ref.r = color.red / 255.0;
+    ptr.ref.g = color.green / 255.0;
+    ptr.ref.b = color.blue / 255.0;
+    return ptr;
+  }
 }

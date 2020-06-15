@@ -42,14 +42,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
-import 'bindings/aabb.dart' as bindings;
+import 'package:ffi/ffi.dart';
+import 'package:vector_math/vector_math.dart';
+
 import 'vector3.dart';
+import 'bindings/aabb.dart' as bindings;
 
-class AABB {
-  Pointer<bindings.aiAABB> _ptr;
+extension AssimpAabb3 on Aabb3 {
+  static Aabb3 fromNative(Pointer<bindings.aiAABB> ptr) {
+    return Aabb3.minMax(
+      AssimpVector3.fromNative(ptr.ref.mMin),
+      AssimpVector3.fromNative(ptr.ref.mMax),
+    );
+  }
 
-  AABB.fromNative(this._ptr);
-
-  Vector3D get min => Vector3D.fromNative(_ptr.ref.mMin);
-  Vector3D get max => Vector3D.fromNative(_ptr.ref.mMax);
+  static Pointer<bindings.aiAABB> toNative(Aabb3 aabb) {
+    final Pointer<bindings.aiAABB> ptr = allocate();
+    ptr.ref.mMin = AssimpVector3.toNative(aabb.min);
+    ptr.ref.mMax = AssimpVector3.toNative(aabb.max);
+    return ptr;
+  }
 }

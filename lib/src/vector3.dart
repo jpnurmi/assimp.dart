@@ -42,14 +42,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+import 'package:ffi/ffi.dart';
+import 'package:vector_math/vector_math.dart';
+export 'package:vector_math/vector_math.dart' show Vector3;
+
 import 'bindings/vector3.dart' as bindings;
 
-class Vector3D {
-  Pointer<bindings.aiVector3D> _ptr;
+extension AssimpVector3 on Vector3 {
+  static Vector3 fromNative(Pointer<bindings.aiVector3D> ptr) {
+    return Vector3(ptr.ref.x, ptr.ref.y, ptr.ref.z);
+  }
 
-  Vector3D.fromNative(this._ptr);
-
-  double get x => _ptr.ref.x;
-  double get y => _ptr.ref.y;
-  double get z => _ptr.ref.z;
+  static Pointer<bindings.aiVector3D> toNative(Vector3 vec) {
+    final Pointer<bindings.aiVector3D> ptr = allocate();
+    ptr.ref.x = vec.x;
+    ptr.ref.y = vec.y;
+    ptr.ref.z = vec.z;
+    return ptr;
+  }
 }

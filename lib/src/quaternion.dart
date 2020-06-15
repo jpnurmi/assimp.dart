@@ -42,15 +42,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+import 'package:ffi/ffi.dart';
+import 'package:vector_math/vector_math.dart';
+export 'package:vector_math/vector_math.dart' show Quaternion;
+
 import 'bindings/quaternion.dart' as bindings;
 
-class Quaternion {
-  Pointer<bindings.aiQuaternion> _ptr;
+extension AssimpQuaternion on Quaternion {
+  static Quaternion fromNative(Pointer<bindings.aiQuaternion> ptr) {
+    return Quaternion(ptr.ref.x, ptr.ref.y, ptr.ref.z, ptr.ref.z);
+  }
 
-  Quaternion.fromNative(this._ptr);
-
-  double get w => _ptr.ref.w;
-  double get x => _ptr.ref.x;
-  double get y => _ptr.ref.y;
-  double get z => _ptr.ref.z;
+  static Pointer<bindings.aiQuaternion> toNative(Quaternion quaternion) {
+    final Pointer<bindings.aiQuaternion> ptr = allocate();
+    ptr.ref.x = quaternion.x;
+    ptr.ref.y = quaternion.y;
+    ptr.ref.z = quaternion.z;
+    ptr.ref.w = quaternion.w;
+    return ptr;
+  }
 }

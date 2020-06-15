@@ -42,42 +42,68 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
-import 'bindings/types.dart' as bindings;
+import 'dart:ui';
+export 'dart:ui' show Color;
+import 'package:ffi/ffi.dart';
+import 'package:vector_math/vector_math.dart';
+export 'package:vector_math/vector_math.dart' show Plane, Ray;
+
 import 'vector3.dart';
+import 'bindings/types.dart' as bindings;
 
-class Plane {
-  Pointer<bindings.aiPlane> _ptr;
+extension AssimpPlane on Plane {
+  static Plane fromNative(Pointer<bindings.aiPlane> ptr) {
+    return Plane.components(ptr.ref.a, ptr.ref.b, ptr.ref.c, ptr.ref.d);
+  }
 
-  Plane.fromNative(this._ptr);
-
-  double get a => _ptr.ref.a;
-  double get b => _ptr.ref.b;
-  double get c => _ptr.ref.c;
-  double get d => _ptr.ref.d;
+  static Pointer<bindings.aiPlane> toNative(Plane plane) {
+    final Pointer<bindings.aiPlane> ptr = allocate();
+    ptr.ref.a = plane.normal.x;
+    ptr.ref.b = plane.normal.y;
+    ptr.ref.c = plane.normal.z;
+    ptr.ref.d = plane.constant;
+    return ptr;
+  }
 }
 
-class Ray {
-  Pointer<bindings.aiRay> _ptr;
+extension AssimpRay on Ray {
+  static Ray fromNative(Pointer<bindings.aiRay> ptr) {
+    final pos = AssimpVector3.fromNative(ptr.ref.pos);
+    final dir = AssimpVector3.fromNative(ptr.ref.dir);
+    return Ray.originDirection(pos, dir);
+  }
 
-  Ray.fromNative(this._ptr);
-
-  Vector3D get pos => Vector3D.fromNative(_ptr.ref.pos);
-  Vector3D get dir => Vector3D.fromNative(_ptr.ref.dir);
+  static Pointer<bindings.aiRay> toNative(Ray ray) {
+    final Pointer<bindings.aiRay> ptr = allocate();
+    ptr.ref.pos = AssimpVector3.toNative(ray.origin);
+    ptr.ref.dir = AssimpVector3.toNative(ray.direction);
+    return ptr;
+  }
 }
 
-class Color3D {
-  Pointer<bindings.aiColor3D> _ptr;
+extension AssimpColor3 on Color {
+  static Color fromNative(Pointer<bindings.aiColor3D> ptr) {
+    return Color.fromARGB(
+      255,
+      (ptr.ref.r * 255).round(),
+      (ptr.ref.g * 255).round(),
+      (ptr.ref.b * 255).round(),
+    );
+  }
 
-  Color3D.fromNative(this._ptr);
-
-  double get r => _ptr.ref.r;
-  double get g => _ptr.ref.g;
-  double get b => _ptr.ref.b;
+  static Pointer<bindings.aiColor3D> toNative(Color color) {
+    final Pointer<bindings.aiColor3D> ptr = allocate();
+    ptr.ref.r = color.red / 255.0;
+    ptr.ref.g = color.green / 255.0;
+    ptr.ref.b = color.blue / 255.0;
+    return ptr;
+  }
 }
 
 class MemoryInfo {
   Pointer<bindings.aiMemoryInfo> _ptr;
 
+  MemoryInfo._();
   MemoryInfo.fromNative(this._ptr);
 
   int get textures => _ptr.ref.textures;
