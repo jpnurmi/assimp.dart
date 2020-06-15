@@ -42,48 +42,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
-import '../ffi/dylib_utils.dart';
+import 'dart:io';
 
-DynamicLibrary _aiLibrary;
-DynamicLibrary get aiLibrary => _aiLibrary ?? dlopenPlatformSpecific('assimp');
+String get _dlprefix => Platform.isWindows ? '' : 'lib';
+String get _dlsuffix => Platform.isWindows
+    ? 'dll'
+    : Platform.isMacOS || Platform.isIOS ? 'dylib' : 'so';
 
-//class aiBindings {
-//  final DynamicLibrary _dylib;
-//  static aiBindings _instance;
-//
-//  factory aiBindings() => _instance ??= aiBindings._();
-//
-//  aiBindings._() : _dylib = dlopenPlatformSpecific('assimp');
-//
-//  Pointer<Utf8> Function() aiGetErrorString;
-//  void Function(int enable) aiEnableVerboseLogging;
-//  Pointer<aiScene> Function(Pointer<Utf8> file, int flags) aiImportFile;
-//  Pointer<aiScene> Function(
-//          Pointer<Utf8> buffer, int length, int flags, Pointer<Utf8> hint)
-//      aiImportFileFromMemory;
-//  void Function(Pointer<aiScene> scene) aiReleaseImport;
+DynamicLibrary _dlopen(String name, {String path = ''}) {
+  String fullPath = '${path}/${_dlprefix}${name}.${_dlsuffix}';
+  return DynamicLibrary.open(fullPath);
+}
 
-//  aiBindings._() : _dylib = dlopenPlatformSpecific('assimp') {
-//    aiApplyPostProcessing = _dylib
-//        .lookup<NativeFunction<aiApplyPostProcessing_t>>(
-//            'aiApplyPostProcessing')
-//        .asFunction();
-//    aiGetErrorString = _dylib
-//        .lookup<NativeFunction<aiGetErrorString_t>>('aiGetErrorString')
-//        .asFunction();
-//    aiEnableVerboseLogging = _dylib
-//        .lookup<NativeFunction<aiEnableVerboseLogging_t>>(
-//            'aiEnableVerboseLogging')
-//        .asFunction();
-//    aiImportFile = _dylib
-//        .lookup<NativeFunction<aiImportFile_t>>('aiImportFile')
-//        .asFunction();
-//    aiImportFileFromMemory = _dylib
-//        .lookup<NativeFunction<aiImportFileFromMemory_t>>(
-//            'aiImportFileFromMemory')
-//        .asFunction();
-//    aiReleaseImport = _dylib
-//        .lookup<NativeFunction<aiReleaseImport_t>>('aiReleaseImport')
-//        .asFunction();
-//  }
-//}
+DynamicLibrary _libassimp;
+DynamicLibrary get libassimp => _libassimp ?? _dlopen('assimp');

@@ -29,7 +29,7 @@ class Scene {
     return ptr.address != 0 ? Scene.fromNative(ptr) : null;
   }
 
-  factory Scene.fromBuffer(String buffer, {int flags = 0, String hint = ""}) {
+  factory Scene.fromBuffer(String buffer, {int flags = 0, String hint = ''}) {
     final cbuffer = Utf8.toUtf8(buffer);
     final chint = Utf8.toUtf8(hint);
     final ptr =

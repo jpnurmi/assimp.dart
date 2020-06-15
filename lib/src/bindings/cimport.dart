@@ -51,7 +51,7 @@ import 'package:ffi/ffi.dart';
 
 import 'types.dart';
 import 'importerdesc.dart';
-import 'library.dart';
+import 'dylib.dart';
 import 'scene.dart';
 import 'cfileio.dart';
 
@@ -115,7 +115,7 @@ typedef aiImportFile_f = Pointer<aiScene> Function(
 
 aiImportFile_f _aiImportFile;
 get aiImportFile => _aiImportFile ??=
-    aiLibrary.lookupFunction<aiImportFile_t, aiImportFile_f>('aiImportFile');
+    libassimp.lookupFunction<aiImportFile_t, aiImportFile_f>('aiImportFile');
 
 // --------------------------------------------------------------------------------
 /** Reads the given file using user-defined I/O functions and returns
@@ -144,7 +144,7 @@ typedef aiImportFileEx_f = Pointer<aiScene> Function(
     Pointer<Utf8> file, int flags, Pointer<aiFileIO> fs);
 
 aiImportFileEx_f _aiImportFileEx;
-get aiImportFileEx => _aiImportFileEx ??= aiLibrary
+get aiImportFileEx => _aiImportFileEx ??= libassimp
     .lookupFunction<aiImportFileEx_t, aiImportFileEx_f>('aiImportFileEx');
 
 // --------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ typedef aiImportFileExWithProperties_f = Pointer<aiScene> Function(
 
 aiImportFileExWithProperties_f _aiImportFileExWithProperties;
 get aiImportFileExWithProperties =>
-    _aiImportFileExWithProperties ??= aiLibrary.lookupFunction<
+    _aiImportFileExWithProperties ??= libassimp.lookupFunction<
         aiImportFileExWithProperties_t,
         aiImportFileExWithProperties_f>('aiImportFileExWithProperties');
 
@@ -217,7 +217,7 @@ typedef aiImportFileFromMemory_f = Pointer<aiScene> Function(
     Pointer<Utf8> buffer, int length, int flags, Pointer<Utf8> hint);
 
 aiImportFileFromMemory_f _aiImportFileFromMemory;
-get aiImportFileFromMemory => _aiImportFileFromMemory ??= aiLibrary
+get aiImportFileFromMemory => _aiImportFileFromMemory ??= libassimp
     .lookupFunction<aiImportFileFromMemory_t, aiImportFileFromMemory_f>(
         'aiImportFileFromMemory');
 
@@ -264,7 +264,7 @@ typedef aiImportFileFromMemoryWithProperties_f = Pointer<aiScene> Function(
 
 aiImportFileFromMemoryWithProperties_f _aiImportFileFromMemoryWithProperties;
 get aiImportFileFromMemoryWithProperties =>
-    _aiImportFileFromMemoryWithProperties ??= aiLibrary.lookupFunction<
+    _aiImportFileFromMemoryWithProperties ??= libassimp.lookupFunction<
             aiImportFileFromMemoryWithProperties_t,
             aiImportFileFromMemoryWithProperties_f>(
         'aiImportFileFromMemoryWithProperties');
@@ -291,7 +291,7 @@ typedef aiApplyPostProcessing_f = Pointer<aiScene> Function(
 
 aiApplyPostProcessing_f _aiApplyPostProcessing;
 get aiApplyPostProcessing => _aiApplyPostProcessing ??=
-    aiLibrary.lookupFunction<aiApplyPostProcessing_t, aiApplyPostProcessing_f>(
+    libassimp.lookupFunction<aiApplyPostProcessing_t, aiApplyPostProcessing_f>(
         'aiApplyPostProcessing');
 
 // --------------------------------------------------------------------------------
@@ -322,7 +322,7 @@ typedef aiGetPredefinedLogStream_f = Pointer<aiLogStream> Function(
     Pointer<Utf8> file);
 
 aiGetPredefinedLogStream_f _aiGetPredefinedLogStream;
-get aiGetPredefinedLogStream => _aiGetPredefinedLogStream ??= aiLibrary
+get aiGetPredefinedLogStream => _aiGetPredefinedLogStream ??= libassimp
     .lookupFunction<aiGetPredefinedLogStream_t, aiGetPredefinedLogStream_f>(
         'aiGetPredefinedLogStream');
 
@@ -341,7 +341,7 @@ typedef aiAttachLogStream_f = void Function(Pointer<aiLogStream> stream);
 
 aiAttachLogStream_f _aiAttachLogStream;
 get aiAttachLogStream => _aiAttachLogStream ??=
-    aiLibrary.lookupFunction<aiAttachLogStream_t, aiAttachLogStream_f>(
+    libassimp.lookupFunction<aiAttachLogStream_t, aiAttachLogStream_f>(
         'aiAttachLogStream');
 
 // --------------------------------------------------------------------------------
@@ -355,7 +355,7 @@ typedef aiEnableVerboseLogging_t = Void Function(Int32 d);
 typedef aiEnableVerboseLogging_f = void Function(int d);
 
 aiEnableVerboseLogging_f _aiEnableVerboseLogging;
-get aiEnableVerboseLogging => _aiEnableVerboseLogging ??= aiLibrary
+get aiEnableVerboseLogging => _aiEnableVerboseLogging ??= libassimp
     .lookupFunction<aiEnableVerboseLogging_t, aiEnableVerboseLogging_f>(
         'aiEnableVerboseLogging');
 
@@ -373,7 +373,7 @@ typedef aiDetachLogStream_f = int Function(Pointer<aiLogStream> stream);
 
 aiDetachLogStream_f _aiDetachLogStream;
 get aiDetachLogStream => _aiDetachLogStream ??=
-    aiLibrary.lookupFunction<aiDetachLogStream_t, aiDetachLogStream_f>(
+    libassimp.lookupFunction<aiDetachLogStream_t, aiDetachLogStream_f>(
         'aiDetachLogStream');
 
 // --------------------------------------------------------------------------------
@@ -389,7 +389,7 @@ typedef aiDetachAllLogStreams_f = void Function();
 
 aiDetachAllLogStreams_f _aiDetachAllLogStreams;
 get aiDetachAllLogStreams => _aiDetachAllLogStreams ??=
-    aiLibrary.lookupFunction<aiDetachAllLogStreams_t, aiDetachAllLogStreams_f>(
+    libassimp.lookupFunction<aiDetachAllLogStreams_t, aiDetachAllLogStreams_f>(
         'aiDetachAllLogStreams');
 
 // --------------------------------------------------------------------------------
@@ -402,7 +402,7 @@ typedef aiReleaseImport_t = Void Function(Pointer<aiScene> scene);
 typedef aiReleaseImport_f = void Function(Pointer<aiScene> scene);
 
 aiReleaseImport_f _aiReleaseImport;
-get aiReleaseImport => _aiReleaseImport ??= aiLibrary
+get aiReleaseImport => _aiReleaseImport ??= libassimp
     .lookupFunction<aiReleaseImport_t, aiReleaseImport_f>('aiReleaseImport');
 
 // --------------------------------------------------------------------------------
@@ -416,7 +416,7 @@ typedef aiGetErrorString_t = Pointer<Utf8> Function();
 typedef aiGetErrorString_f = Pointer<Utf8> Function();
 
 aiGetErrorString_f _aiGetErrorString;
-get aiGetErrorString => _aiGetErrorString ??= aiLibrary
+get aiGetErrorString => _aiGetErrorString ??= libassimp
     .lookupFunction<aiGetErrorString_t, aiGetErrorString_f>('aiGetErrorString');
 
 // --------------------------------------------------------------------------------
@@ -430,7 +430,7 @@ typedef aiIsExtensionSupported_t = Int32 Function(Pointer<Utf8> extension);
 typedef aiIsExtensionSupported_f = int Function(Pointer<Utf8> extension);
 
 aiIsExtensionSupported_f _aiIsExtensionSupported;
-get aiIsExtensionSupported => _aiIsExtensionSupported ??= aiLibrary
+get aiIsExtensionSupported => _aiIsExtensionSupported ??= libassimp
     .lookupFunction<aiIsExtensionSupported_t, aiIsExtensionSupported_f>(
         'aiIsExtensionSupported');
 
