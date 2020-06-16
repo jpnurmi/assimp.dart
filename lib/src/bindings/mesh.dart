@@ -236,10 +236,10 @@ class aiAnimMesh extends Struct {
   Pointer<aiVector3D> mBitangents;
 
   /** Replacement for aiMesh::mColors */
-  Pointer<aiColor4D> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
+  Pointer<Pointer<aiColor4D>> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
 
   /** Replacement for aiMesh::mTextureCoords */
-  Pointer<aiVector3D> mTextureCoords; // AI_MAX_NUMBER_OF_TEXTURECOORDS
+  Pointer<Pointer<aiVector3D>> mTextureCoords; // AI_MAX_NUMBER_OF_TEXTURECOORDS
 
   /** The number of vertices in the aiAnimMesh, and thus the length of all
      * the member arrays.
@@ -371,13 +371,13 @@ class aiMesh extends Struct {
     * colors per vertex. NULL if not present. Each array is
     * mNumVertices in size if present.
     */
-  Pointer<aiColor4D> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
+  Pointer<Pointer<aiColor4D>> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
 
   /** Vertex texture coords, also known as UV channels.
     * A mesh may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
     * vertex. NULL if not present. The array is mNumVertices in size.
     */
-  Pointer<aiVector3D> mTextureCoords; // AI_MAX_NUMBER_OF_TEXTURECOORDS
+  Pointer<Pointer<aiVector3D>> mTextureCoords; // AI_MAX_NUMBER_OF_TEXTURECOORDS
 
   /** Specifies the number of components for a given UV channel.
     * Up to three channels are supported (UVW, for accessing volume
@@ -427,7 +427,7 @@ class aiMesh extends Struct {
      *      partitioning.
      *   - Vertex animations refer to meshes by their names.
      **/
-  Pointer<aiString> mName;
+  Pointer<aiString> mName; // ### TODO: aiString == int + char[]
 
   /** The number of attachment meshes. Note! Currently only works with Collada loader. */
   @Uint32()
@@ -448,5 +448,5 @@ class aiMesh extends Struct {
   /**
      *
      */
-  Pointer<aiAABB> mAABB;
+  Pointer<aiAABB> mAABB; // ### TODO: aiAABB == 2 x aiVector3D == 6 x double
 }
