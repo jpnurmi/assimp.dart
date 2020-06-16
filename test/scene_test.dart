@@ -43,17 +43,15 @@ import 'dart:io';
 import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 import 'package:assimp/assimp.dart';
+import 'test_utils.dart';
 
-String testFilePath(String fileName) => 'test/models/model-db/' + fileName;
-
-const Matcher isNullPointer = _IsNullPointer();
-
-class _IsNullPointer extends Matcher {
-  const _IsNullPointer();
-  @override
-  bool matches(ptr, Map matchState) => ptr.isNull;
-  @override
-  Description describe(Description description) => description.add('nullptr');
+class TestFrom {
+  static const int file = 0x1;
+  static const int bytes = 0x2;
+  static const int string = 0x4;
+  static const int ascii = file | string;
+  static const int binary = file | bytes;
+  static const int content = string | bytes;
 }
 
 void main() {
@@ -93,19 +91,20 @@ void main() {
     scene.dispose();
   }
 
-  void testBinaryScene(String fileName, void tester(Scene scene)) {
-    testSceneFromFile(fileName, tester);
-    testSceneFromBytes(fileName, tester);
-  }
-
-  void testAsciiScene(String fileName, void tester(Scene scene)) {
-    testSceneFromFile(fileName, tester);
-    testSceneFromBytes(fileName, tester);
-    testSceneFromString(fileName, tester);
+  void testScene(String fileName, int testFrom, void tester(Scene scene)) {
+    if (testFrom & TestFrom.file != 0) {
+      testSceneFromFile(fileName, tester);
+    }
+    if (testFrom & TestFrom.bytes != 0) {
+      testSceneFromBytes(fileName, tester);
+    }
+    if (testFrom & TestFrom.string != 0) {
+      testSceneFromString(fileName, tester);
+    }
   }
 
   test('3mf', () {
-    testBinaryScene('3mf/box.3mf', (scene) {
+    testScene('3mf/box.3mf', TestFrom.binary, (scene) {
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(1));
@@ -117,7 +116,7 @@ void main() {
       expect(scene.metaData, isNullPointer);
     });
 
-    testBinaryScene('3mf/spider.3mf', (scene) {
+    testScene('3mf/spider.3mf', TestFrom.binary, (scene) {
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(19));
@@ -131,7 +130,7 @@ void main() {
   });
 
   test('fbx', () {
-    testBinaryScene('fbx/huesitos.fbx', (scene) {
+    testScene('fbx/huesitos.fbx', TestFrom.binary, (scene) {
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(1));
@@ -145,11 +144,22 @@ void main() {
   });
 
   test('obj', () {
-    testAsciiScene('Obj/Spider/spider.obj', (scene) {
+    testScene('Obj/Spider/spider.obj', TestFrom.file, (scene) {
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(19));
-      expect(scene.materials.length, inInclusiveRange(5, 6));
+      expect(scene.materials.length, equals(6));
+      expect(scene.animations.length, isZero);
+      expect(scene.textures.length, isZero);
+      expect(scene.lights.length, isZero);
+      expect(scene.cameras.length, isZero);
+      expect(scene.metaData, isNullPointer);
+    });
+    testScene('Obj/Spider/spider.obj', TestFrom.content, (scene) {
+      expect(scene.flags, isZero);
+      expect(scene.rootNode, isNotNull);
+      expect(scene.meshes.length, equals(19));
+      expect(scene.materials.length, equals(5));
       expect(scene.animations.length, isZero);
       expect(scene.textures.length, isZero);
       expect(scene.lights.length, isZero);
