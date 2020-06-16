@@ -68,14 +68,14 @@ void main() {
     expect(scene.metaData, isNullPointer);
   });
 
-  void testSceneFromFile(String fileName, void tester(Scene scene)) {
+  void testSceneFromFile(String fileName, void tester(scene)) {
     final filePath = testFilePath(fileName);
     final scene = Scene.fromFile(filePath);
     tester(scene);
     scene.dispose();
   }
 
-  void testSceneFromBytes(String fileName, void tester(Scene scene)) {
+  void testSceneFromBytes(String fileName, void tester(scene)) {
     final filePath = testFilePath(fileName);
     final bytes = File(filePath).readAsBytesSync();
     final scene = Scene.fromBytes(bytes, hint: extension(filePath));
@@ -83,7 +83,7 @@ void main() {
     scene.dispose();
   }
 
-  void testSceneFromString(String fileName, void tester(Scene scene)) {
+  void testSceneFromString(String fileName, void tester(scene)) {
     final filePath = testFilePath(fileName);
     final str = File(filePath).readAsStringSync();
     final scene = Scene.fromString(str, hint: extension(filePath));
@@ -91,7 +91,7 @@ void main() {
     scene.dispose();
   }
 
-  void testScene(String fileName, int testFrom, void tester(Scene scene)) {
+  void testScene(String fileName, int testFrom, void tester(scene)) {
     if (testFrom & TestFrom.file != 0) {
       testSceneFromFile(fileName, tester);
     }
