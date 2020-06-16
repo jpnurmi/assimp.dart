@@ -91,7 +91,9 @@ class aiNode extends Struct {
    * surrounded by @verbatim <> @endverbatim e.g.
    *  @verbatim<DummyRootNode> @endverbatim.
    */
-  Pointer<aiString> mName;
+  @Uint32()
+  int mNameLength;
+  Pointer<Uint8> mName;
 
   /** The transformation relative to the node's parent. */
   Pointer<aiMatrix4x4> mTransformation;

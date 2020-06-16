@@ -43,7 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'package:vector_math/vector_math.dart';
+
 import 'bindings/scene.dart' as bindings;
+import 'metadata.dart';
+import 'types.dart';
 import 'utils.dart';
 
 class Node {
@@ -52,4 +56,30 @@ class Node {
   Node.fromNative(this._ptr);
 
   bool get isNull => Utils.isNull(_ptr);
+
+  //String get name => Utils.fromUtf8(_ptr?.ref?.mName);
+  String get name => Utils.fromString(_ptr?.ref?.mName, _ptr?.ref?.mNameLength);
+
+  Matrix4 get transformation =>
+      AssimpMatrix4.fromNative(_ptr?.ref?.mTransformation);
+
+  Node get parent => Utils.isNotNull(_ptr?.ref?.mParent)
+      ? Node.fromNative(_ptr.ref.mParent)
+      : null;
+
+  Iterable<Node> get children {
+    return Iterable.generate(
+      _ptr?.ref?.mNumChildren ?? 0,
+      (i) => Node.fromNative(_ptr.ref.mChildren[i]),
+    );
+  }
+
+  Iterable<int> get meshes {
+    return Iterable.generate(
+      _ptr?.ref?.mNumMeshes ?? 0,
+      (i) => _ptr.ref.mMeshes[i],
+    );
+  }
+
+  MetaData get metaData => MetaData.fromNative(_ptr?.ref?.mMetaData);
 }

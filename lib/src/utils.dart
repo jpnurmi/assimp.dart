@@ -57,4 +57,10 @@ class Utils {
     final data = Int8List.view(str.ref.data.asTypedList(len).buffer, 0, len);
     return utf8.decode(data);
   }
+
+  static String fromString(Pointer<Uint8> str, int len) {
+    if (isNull(str)) return null;
+    final data = Int8List.view(str.asTypedList(len).buffer, 0, len);
+    return utf8.decode(data);
+  }
 }

@@ -39,8 +39,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-import 'dart:io';
-import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 import 'package:assimp/assimp.dart';
 import 'test_utils.dart';
