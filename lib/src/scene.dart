@@ -45,16 +45,17 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
+import 'animation.dart';
 import 'bindings/scene.dart' as bindings;
 import 'bindings/cimport.dart' as bindings;
-
-import 'animation.dart';
 import 'camera.dart';
 import 'light.dart';
 import 'material.dart';
 import 'mesh.dart';
+import 'metadata.dart';
 import 'node.dart';
 import 'texture.dart';
+import 'utils.dart';
 
 class Scene {
   Pointer<bindings.aiScene> _ptr;
@@ -65,7 +66,7 @@ class Scene {
     final cpath = Utf8.toUtf8(path);
     final ptr = bindings.aiImportFile(cpath, flags);
     free(cpath);
-    return ptr.address != 0 ? Scene.fromNative(ptr) : null;
+    return Utils.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
   }
 
   factory Scene.fromBuffer(String buffer, {int flags = 0, String hint = ''}) {
@@ -75,12 +76,12 @@ class Scene {
         bindings.aiImportFileFromMemory(cbuffer, buffer.length, flags, chint);
     free(cbuffer);
     free(chint);
-    return ptr.address != 0 ? Scene.fromNative(ptr) : null;
+    return Utils.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
   }
 
-  int get flags => _ptr.ref.mFlags;
+  bool get isNull => Utils.isNull(_ptr);
 
-  Node get rootNode => Node.fromNative(_ptr.ref.mRootNode);
+  int get flags => _ptr?.ref?.mFlags ?? 0;
 
   List<Mesh> get meshes {
     final result = <Mesh>[];
@@ -135,6 +136,8 @@ class Scene {
     }
     return result;
   }
+
+  MetaData get metaData => MetaData.fromNative(_ptr?.ref?.mMetaData);
 
   void applyPostProcessing(int flags) {
     bindings.aiApplyPostProcessing(_ptr, flags);

@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+
 import 'bindings/mesh.dart' as bindings;
 import 'utils.dart';
 
@@ -49,6 +50,8 @@ class Mesh {
   Pointer<bindings.aiMesh> _ptr;
 
   Mesh.fromNative(this._ptr);
+
+  bool get isNull => Utils.isNull(_ptr);
 
   String get name => Utils.fromUtf8(_ptr.ref.mName);
 }

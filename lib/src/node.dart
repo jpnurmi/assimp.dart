@@ -42,10 +42,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+
 import 'bindings/scene.dart' as bindings;
+import 'utils.dart';
 
 class Node {
   Pointer<bindings.aiNode> _ptr;
 
   Node.fromNative(this._ptr);
+
+  bool get isNull => Utils.isNull(_ptr);
 }

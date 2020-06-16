@@ -42,10 +42,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+
 import 'bindings/anim.dart' as bindings;
+import 'utils.dart';
 
 class Animation {
   Pointer<bindings.aiAnimation> _ptr;
 
   Animation.fromNative(this._ptr);
+
+  bool get isNull => Utils.isNull(_ptr);
 }
