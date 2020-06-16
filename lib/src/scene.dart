@@ -83,58 +83,48 @@ class Scene {
 
   int get flags => _ptr?.ref?.mFlags ?? 0;
 
-  List<Mesh> get meshes {
-    final result = <Mesh>[];
-    final count = _ptr.ref.mNumMeshes;
-    for (int i = 0; i < count; ++i) {
-      result.add(Mesh.fromNative(_ptr.ref.mMeshes[i]));
-    }
-    return result;
+  Node get rootNode => Node.fromNative(_ptr?.ref?.mRootNode);
+
+  Iterable<Mesh> get meshes {
+    return Iterable.generate(
+      _ptr?.ref?.mNumMeshes ?? 0,
+      (i) => Mesh.fromNative(_ptr.ref.mMeshes[i]),
+    );
   }
 
-  List<Material> get materials {
-    final result = <Material>[];
-    final count = _ptr.ref.mNumMaterials;
-    for (int i = 0; i < count; ++i) {
-      result.add(Material.fromNative(_ptr.ref.mMaterials[i]));
-    }
-    return result;
+  Iterable<Material> get materials {
+    return Iterable.generate(
+      _ptr?.ref?.mNumMaterials ?? 0,
+      (i) => Material.fromNative(_ptr.ref.mMaterials[i]),
+    );
   }
 
-  List<Animation> get animations {
-    final result = <Animation>[];
-    final count = _ptr.ref.mNumAnimations;
-    for (int i = 0; i < count; ++i) {
-      result.add(Animation.fromNative(_ptr.ref.mAnimations[i]));
-    }
-    return result;
+  Iterable<Animation> get animations {
+    return Iterable.generate(
+      _ptr?.ref?.mNumAnimations ?? 0,
+      (i) => Animation.fromNative(_ptr.ref.mAnimations[i]),
+    );
   }
 
-  List<Texture> get textures {
-    final result = <Texture>[];
-    final count = _ptr.ref.mNumTextures;
-    for (int i = 0; i < count; ++i) {
-      result.add(Texture.fromNative(_ptr.ref.mTextures[i]));
-    }
-    return result;
+  Iterable<Texture> get textures {
+    return Iterable.generate(
+      _ptr?.ref?.mNumTextures ?? 0,
+      (i) => Texture.fromNative(_ptr.ref.mTextures[i]),
+    );
   }
 
-  List<Light> get lights {
-    final result = <Light>[];
-    final count = _ptr.ref.mNumLights;
-    for (int i = 0; i < count; ++i) {
-      result.add(Light.fromNative(_ptr.ref.mLights[i]));
-    }
-    return result;
+  Iterable<Light> get lights {
+    return Iterable.generate(
+      _ptr?.ref?.mNumLights ?? 0,
+      (i) => Light.fromNative(_ptr.ref.mLights[i]),
+    );
   }
 
-  List<Camera> get cameras {
-    final result = <Camera>[];
-    final count = _ptr.ref.mNumCameras;
-    for (int i = 0; i < count; ++i) {
-      result.add(Camera.fromNative(_ptr.ref.mCameras[i]));
-    }
-    return result;
+  Iterable<Camera> get cameras {
+    return Iterable.generate(
+      _ptr?.ref?.mNumCameras ?? 0,
+      (i) => Camera.fromNative(_ptr.ref.mCameras[i]),
+    );
   }
 
   MetaData get metaData => MetaData.fromNative(_ptr?.ref?.mMetaData);
