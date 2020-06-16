@@ -60,7 +60,7 @@ void main() {
     expect(Assimp.errorString, equals('Unable to open file "foobar".'));
     expect(scene1, isNull);
 
-    Scene scene2 = Scene.fromBuffer('foobar');
+    Scene scene2 = Scene.fromString('foobar');
     expect(Assimp.errorString, startsWith('No suitable reader found for'));
     expect(scene2, isNull);
   });

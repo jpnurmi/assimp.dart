@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 
@@ -69,14 +70,27 @@ class Scene {
     return Utils.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
   }
 
-  factory Scene.fromBuffer(String buffer, {int flags = 0, String hint = ''}) {
-    final cbuffer = Utf8.toUtf8(buffer);
+  factory Scene._fromBuffer(
+      Pointer<Utf8> cstr, int length, flags, String hint) {
     final chint = Utf8.toUtf8(hint);
-    final ptr =
-        bindings.aiImportFileFromMemory(cbuffer, buffer.length, flags, chint);
-    free(cbuffer);
+    final ptr = bindings.aiImportFileFromMemory(cstr, length, flags, chint);
+    free(cstr);
     free(chint);
     return Utils.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
+  }
+
+  factory Scene.fromString(String str, {int flags = 0, String hint = ''}) {
+    return Scene._fromBuffer(Utf8.toUtf8(str), str.length, flags, hint);
+  }
+
+  factory Scene.fromBytes(Uint8List bytes, {int flags = 0, String hint = ''}) {
+    // ### TODO: avoid copy...
+    // https://github.com/dart-lang/ffi/issues/31
+    // https://github.com/dart-lang/ffi/issues/27
+    final Pointer<Uint8> cbuffer = allocate<Uint8>(count: bytes.length);
+    final Uint8List carray = cbuffer.asTypedList(bytes.length);
+    carray.setAll(0, bytes);
+    return Scene._fromBuffer(cbuffer.cast(), bytes.length, flags, hint);
   }
 
   bool get isNull => Utils.isNull(_ptr);
