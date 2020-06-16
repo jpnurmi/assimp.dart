@@ -47,7 +47,7 @@ import 'dart:ffi';
  *  @brief RGBA color structure, including operators when compiling in C++
  */
 
-class aiColor4t extends Struct {
+class aiColor4D extends Struct {
   @Float() // ai_real
   double r, g, b, a;
 }

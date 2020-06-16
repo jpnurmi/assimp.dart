@@ -88,7 +88,7 @@ extension AssimpColor3 on Color {
 }
 
 extension AssimpColor4 on Color {
-  static Color fromNative(Pointer<bindings.aiColor4t> ptr) {
+  static Color fromNative(Pointer<bindings.aiColor4D> ptr) {
     return Color.fromARGB(
       (ptr.ref.a * 255).round(),
       (ptr.ref.r * 255).round(),
@@ -97,8 +97,8 @@ extension AssimpColor4 on Color {
     );
   }
 
-  static Pointer<bindings.aiColor4t> toNative(Color color) {
-    final Pointer<bindings.aiColor4t> ptr = allocate();
+  static Pointer<bindings.aiColor4D> toNative(Color color) {
+    final Pointer<bindings.aiColor4D> ptr = allocate();
     ptr.ref.a = color.alpha / 255.0;
     ptr.ref.r = color.red / 255.0;
     ptr.ref.g = color.green / 255.0;
