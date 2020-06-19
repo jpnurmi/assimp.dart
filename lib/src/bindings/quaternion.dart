@@ -42,12 +42,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-/** @file quaternion.h
- *  @brief Quaternion structure, including operators when compiling in C++
- */
-
-// ---------------------------------------------------------------------------
-/** Represents a quaternion in a 4D vector. */
 class aiQuaternion extends Struct {
   @Float() // ai_real
   double w, x, y, z;

@@ -43,7 +43,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-class aiVector2D extends Struct {
+import 'vector3.dart';
+
+class aiRay extends Struct {
+  Pointer<aiVector3D> get pos => Pointer.fromAddress(addressOf.address + 0);
+
   @Float() // ai_real
-  double x, y;
+  double _posX, _posY, _posZ;
+
+  Pointer<aiVector3D> get dir => Pointer.fromAddress(addressOf.address + 12);
+
+  @Float() // ai_real
+  double _dirX, _dirY, _dirZ;
 }

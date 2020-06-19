@@ -45,7 +45,9 @@ import 'dart:ffi';
 
 import 'package:vector_math/vector_math.dart';
 
+import 'bindings/node.dart' as bindings;
 import 'bindings/scene.dart' as bindings;
+
 import 'metadata.dart';
 import 'types.dart';
 import 'utils.dart';
@@ -58,7 +60,8 @@ class Node {
   bool get isNull => Utils.isNull(_ptr);
 
   //String get name => Utils.fromUtf8(_ptr?.ref?.mName);
-  String get name => Utils.fromString(_ptr?.ref?.mName, _ptr?.ref?.mNameLength);
+  String get name =>
+      null; //Utils.fromString(_ptr?.ref?.mName, _ptr?.ref?.mNameLength);
 
   Matrix4 get transformation =>
       AssimpMatrix4.fromNative(_ptr?.ref?.mTransformation);

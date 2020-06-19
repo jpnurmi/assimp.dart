@@ -5,6 +5,7 @@ Open Asset Import Library (assimp)
 
 Copyright (c) 2006-2019, assimp team
 
+
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
@@ -41,13 +42,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'bone.dart';
+import 'face.dart';
 import 'types.dart';
 
-// pahole libassimpd.so -M -C aiCamera
-class aiCamera extends Struct {
+// pahole libassimpd.so -M -C aiAnimMesh
+class aiAnimMesh extends Struct {
   // struct aiString            mName;                /*     0  1028 */
-  Pointer<aiString> get mName =>
-      Pointer<aiString>.fromAddress(addressOf.address + 0);
+  Pointer<aiString> get mName => Pointer.fromAddress(addressOf.address + 0);
 
   @Uint32()
   int _mNameLength;
@@ -182,45 +184,56 @@ class aiCamera extends Struct {
       _mName126,
       _mName127;
 
-  // aiVector3D                 mPosition;            /*  1028    12 */
-  Pointer<aiVector3D> get mPosition =>
-      Pointer.fromAddress(addressOf.address + 1028);
+  /* XXX 4 bytes hole, try to pack */
+  @Uint32()
+  int _mPadding0;
 
-  @Float() // ai_real
-  double _mPositionX, _mPositionY, _mPositionZ;
+  // aiVector3D *               mVertices;            /*  1032     8 */
+  Pointer<aiVector3D> mVertices;
 
-  // aiVector3D                 mUp;                  /*  1040    12 */
-  Pointer<aiVector3D> get mUp => Pointer.fromAddress(addressOf.address + 1040);
+  // aiVector3D *               mNormals;             /*  1040     8 */
+  Pointer<aiVector3D> mNormals;
 
-  @Float() // ai_real
-  double _mUpX, _mUpY, _mUpZ;
+  // aiVector3D *               mTangents;            /*  1048     8 */
+  Pointer<aiVector3D> mTangents;
 
-  // aiVector3D                 mLookAt;              /*  1052    12 */
-  Pointer<aiVector3D> get mLookAt =>
-      Pointer.fromAddress(addressOf.address + 1052);
+  // aiVector3D *               mBitangents;          /*  1056     8 */
+  Pointer<aiVector3D> mBitangents;
 
-  @Float() // ai_real
-  double _mLookAtX, _mLookAtY, _mLookAtZ;
+  // aiColor4D *                mColors[8];           /*  1064    64 */
+  Pointer<Pointer<aiColor4D>> get mColors =>
+      Pointer<Pointer<aiColor4D>>.fromAddress(addressOf.address + 1064);
 
-  // float                      mHorizontalFOV;       /*  1064     4 */
+  Pointer _mColors0,
+      _mColors1,
+      _mColors2,
+      _mColors3,
+      _mColors4,
+      _mColors5,
+      _mColors6,
+      _mColors7;
+
+  // aiVector3D *               mTextureCoords[8];    /*  1128    64 */
+  Pointer<Pointer<aiVector3D>> get mTextureCoords =>
+      Pointer<Pointer<aiVector3D>>.fromAddress(addressOf.address + 1128);
+
+  Pointer _mTextureCoords0,
+      _mTextureCoords1,
+      _mTextureCoords2,
+      _mTextureCoords3,
+      _mTextureCoords4,
+      _mTextureCoords5,
+      _mTextureCoords6,
+      _mTextureCoords7;
+
+  // unsigned int               mNumVertices;         /*  1192     4 */
+  @Uint32()
+  int mNumVertices;
+
+  // float                      mWeight;              /*  1196     4 */
   @Float()
-  double mHorizontalFOV;
+  double mWeight;
 
-  // float                      mClipPlaneNear;       /*  1068     4 */
-  @Float()
-  double mClipPlaneNear;
-
-  // float                      mClipPlaneFar;        /*  1072     4 */
-  @Float()
-  double mClipPlaneFar;
-
-  // float                      mAspect;              /*  1076     4 */
-  @Float()
-  double mAspect;
-
-  // float                      mOrthographicWidth;   /*  1080     4 */
-  @Float()
-  double mOrthographicWidth;
-
-  /* size: 1084, members: 9 */
+  /* size: 1200, members: 9 */
+  /* sum members: 1196, holes: 1, sum holes: 4 */
 }

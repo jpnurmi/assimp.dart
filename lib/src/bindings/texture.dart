@@ -42,119 +42,172 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+
 import 'package:ffi/ffi.dart';
 
-/** @file texture.h
- *  @brief Defines texture helper structures for the library
- *
- * Used for file formats which embed their textures into the model file.
- * Supported are both normal textures, which are stored as uncompressed
- * pixels, and "compressed" textures, which are stored in a file format
- * such as PNG or TGA.
- */
+import 'string.dart';
+import 'texel.dart';
 
-import 'types.dart';
-
-// --------------------------------------------------------------------------------
-
-/** \def AI_EMBEDDED_TEXNAME_PREFIX
- * \ref AI_MAKE_EMBEDDED_TEXNAME
- */
-const String AI_EMBEDDED_TEXNAME_PREFIX = '*';
-
-/** @def AI_MAKE_EMBEDDED_TEXNAME
- *  Used to build the reserved path name used by the material system to
- *  reference textures that are embedded into their corresponding
- *  model files. The parameter specifies the index of the texture
- *  (zero-based, in the aiScene::mTextures array)
- */
-String AI_MAKE_EMBEDDED_TEXNAME(String _n_) => AI_EMBEDDED_TEXNAME_PREFIX + _n_;
-
-// --------------------------------------------------------------------------------
-/** @brief Helper structure to represent a texel in a ARGB8888 format
- *
- *  Used by aiTexture.
- */
-class aiTexel extends Struct {
-  @Uint8()
-  int b;
-  @Uint8()
-  int g;
-  @Uint8()
-  int r;
-  @Uint8()
-  int a;
-}
-
-const int HINTMAXTEXTURELEN = 9;
-
-// --------------------------------------------------------------------------------
-/** Helper structure to describe an embedded texture
- *
- * Normally textures are contained in external files but some file formats embed
- * them directly in the model file. There are two types of embedded textures:
- * 1. Uncompressed textures. The color data is given in an uncompressed format.
- * 2. Compressed textures stored in a file format like png or jpg. The raw file
- * bytes are given so the application must utilize an image decoder (e.g. DevIL) to
- * get access to the actual color data.
- *
- * Embedded textures are referenced from materials using strings like "*0", "*1", etc.
- * as the texture paths (a single asterisk character followed by the
- * zero-based index of the texture in the aiScene::mTextures array).
- */
+// pahole libassimpd.so -M -C aiTexture
 class aiTexture extends Struct {
-/** Width of the texture, in pixels
- *
- * If mHeight is zero the texture is compressed in a format
- * like JPEG. In this case mWidth specifies the size of the
- * memory area pcData is pointing to, in bytes.
- */
+  // unsigned int               mWidth;               /*     0     4 */
   @Uint32()
   int mWidth;
 
-  /** Height of the texture, in pixels
-   *
-   * If this value is zero, pcData points to an compressed texture
-   * in any format (e.g. JPEG).
-   */
+  // unsigned int               mHeight;              /*     4     4 */
   @Uint32()
   int mHeight;
 
-  /** A hint from the loader to make it easier for applications
-   *  to determine the type of embedded textures.
-   *
-   * If mHeight != 0 this member is show how data is packed. Hint will consist of
-   * two parts: channel order and channel bitness (count of the bits for every
-   * color channel). For simple parsing by the viewer it's better to not omit
-   * absent color channel and just use 0 for bitness. For example:
-   * 1. Image contain RGBA and 8 bit per channel, achFormatHint == "rgba8888";
-   * 2. Image contain ARGB and 8 bit per channel, achFormatHint == "argb8888";
-   * 3. Image contain RGB and 5 bit for R and B channels and 6 bit for G channel, achFormatHint == "rgba5650";
-   * 4. One color image with B channel and 1 bit for it, achFormatHint == "rgba0010";
-   * If mHeight == 0 then achFormatHint is set set to '\\0\\0\\0\\0' if the loader has no additional
-   * information about the texture file format used OR the
-   * file extension of the format without a trailing dot. If there
-   * are multiple file extensions for a format, the shortest
-   * extension is chosen (JPEG maps to 'jpg', not to 'jpeg').
-   * E.g. 'dds\\0', 'pcx\\0', 'jpg\\0'.  All characters are lower-case.
-   * The fourth character will always be '\\0'.
-   */
-  Pointer<Utf8> achFormatHint;
+  // char                       achFormatHint[9];     /*     8     9 */
+  Pointer<Utf8> get mName => Pointer.fromAddress(addressOf.address + 8);
+  Pointer _mPadding0;
 
-  /** Data of the texture.
-   *
-   * Points to an array of mWidth * mHeight aiTexel's.
-   * The format of the texture data is always ARGB8888 to
-   * make the implementation for user of the library as easy
-   * as possible. If mHeight = 0 this is a pointer to a memory
-   * buffer of size mWidth containing the compressed texture
-   * data. Good luck, have fun!
-   */
+  /* XXX 7 bytes hole, try to pack */
+  Pointer _mPadding1;
+
+  // class aiTexel *            pcData;               /*    24     8 */
   Pointer<aiTexel> pcData;
 
-  /** Texture original filename
-   *
-   * Used to get the texture reference
-   */
-  Pointer<aiString> mFilename;
+  // struct aiString            mFilename;            /*    32  1028 */
+  Pointer<aiString> get mFilename =>
+      Pointer<aiString>.fromAddress(addressOf.address + 32);
+
+  @Uint32()
+  int _mFilenameLength;
+
+  // char[MAXLEN=1024]
+  Pointer _mFilename0,
+      _mFilename1,
+      _mFilename2,
+      _mFilename3,
+      _mFilename4,
+      _mFilename5,
+      _mFilename6,
+      _mFilename7,
+      _mFilename8,
+      _mFilename9,
+      _mFilename10,
+      _mFilename11,
+      _mFilename12,
+      _mFilename13,
+      _mFilename14,
+      _mFilename15,
+      _mFilename16,
+      _mFilename17,
+      _mFilename18,
+      _mFilename19,
+      _mFilename20,
+      _mFilename21,
+      _mFilename22,
+      _mFilename23,
+      _mFilename24,
+      _mFilename25,
+      _mFilename26,
+      _mFilename27,
+      _mFilename28,
+      _mFilename29,
+      _mFilename30,
+      _mFilename31,
+      _mFilename32,
+      _mFilename33,
+      _mFilename34,
+      _mFilename35,
+      _mFilename36,
+      _mFilename37,
+      _mFilename38,
+      _mFilename39,
+      _mFilename40,
+      _mFilename41,
+      _mFilename42,
+      _mFilename43,
+      _mFilename44,
+      _mFilename45,
+      _mFilename46,
+      _mFilename47,
+      _mFilename48,
+      _mFilename49,
+      _mFilename50,
+      _mFilename51,
+      _mFilename52,
+      _mFilename53,
+      _mFilename54,
+      _mFilename55,
+      _mFilename56,
+      _mFilename57,
+      _mFilename58,
+      _mFilename59,
+      _mFilename60,
+      _mFilename61,
+      _mFilename62,
+      _mFilename63,
+      _mFilename64,
+      _mFilename65,
+      _mFilename66,
+      _mFilename67,
+      _mFilename68,
+      _mFilename69,
+      _mFilename70,
+      _mFilename71,
+      _mFilename72,
+      _mFilename73,
+      _mFilename74,
+      _mFilename75,
+      _mFilename76,
+      _mFilename77,
+      _mFilename78,
+      _mFilename79,
+      _mFilename80,
+      _mFilename81,
+      _mFilename82,
+      _mFilename83,
+      _mFilename84,
+      _mFilename85,
+      _mFilename86,
+      _mFilename87,
+      _mFilename88,
+      _mFilename89,
+      _mFilename90,
+      _mFilename91,
+      _mFilename92,
+      _mFilename93,
+      _mFilename94,
+      _mFilename95,
+      _mFilename96,
+      _mFilename97,
+      _mFilename98,
+      _mFilename99,
+      _mFilename100,
+      _mFilename101,
+      _mFilename102,
+      _mFilename103,
+      _mFilename104,
+      _mFilename105,
+      _mFilename106,
+      _mFilename107,
+      _mFilename108,
+      _mFilename109,
+      _mFilename110,
+      _mFilename111,
+      _mFilename112,
+      _mFilename113,
+      _mFilename114,
+      _mFilename115,
+      _mFilename116,
+      _mFilename117,
+      _mFilename118,
+      _mFilename119,
+      _mFilename120,
+      _mFilename121,
+      _mFilename122,
+      _mFilename123,
+      _mFilename124,
+      _mFilename125,
+      _mFilename126,
+      _mFilename127;
+
+  /* size: 1064, members: 5 */
+  /* sum members: 1053, holes: 1, sum holes: 7 */
+  /* padding: 4 */
+  @Uint32()
+  int _mPadding2;
 }

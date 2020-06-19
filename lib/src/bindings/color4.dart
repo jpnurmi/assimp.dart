@@ -43,10 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-/** @file color4.h
- *  @brief RGBA color structure, including operators when compiling in C++
- */
-
 class aiColor4D extends Struct {
   @Float() // ai_real
   double r, g, b, a;

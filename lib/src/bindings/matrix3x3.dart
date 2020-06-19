@@ -43,10 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-/** @file matrix3x3.h
- *  @brief Definition of a 3x3 matrix, including operators when compiling in C++
- */
-
 class aiMatrix3x3 extends Struct {
   @Float() // ai_real
   double a1, a2, a3;

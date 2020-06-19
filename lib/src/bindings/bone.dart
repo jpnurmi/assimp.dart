@@ -5,6 +5,7 @@ Open Asset Import Library (assimp)
 
 Copyright (c) 2006-2019, assimp team
 
+
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
@@ -41,13 +42,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'types.dart';
+import 'node.dart';
+import 'matrix4x4.dart';
+import 'string.dart';
+import 'vertexweight.dart';
 
-// pahole libassimpd.so -M -C aiCamera
-class aiCamera extends Struct {
+// pahole libassimpd.so -M -C aiBone
+class aiBone extends Struct {
   // struct aiString            mName;                /*     0  1028 */
-  Pointer<aiString> get mName =>
-      Pointer<aiString>.fromAddress(addressOf.address + 0);
+  Pointer<aiString> get mName => Pointer.fromAddress(addressOf.address + 0);
 
   @Uint32()
   int _mNameLength;
@@ -182,45 +185,41 @@ class aiCamera extends Struct {
       _mName126,
       _mName127;
 
-  // aiVector3D                 mPosition;            /*  1028    12 */
-  Pointer<aiVector3D> get mPosition =>
-      Pointer.fromAddress(addressOf.address + 1028);
+  // unsigned int               mNumWeights;          /*  1028     4 */
+  @Uint32()
+  int mNumWeights;
 
-  @Float() // ai_real
-  double _mPositionX, _mPositionY, _mPositionZ;
+  // class aiNode *             mArmature;            /*  1032     8 */
+  Pointer<aiNode> mArmature;
 
-  // aiVector3D                 mUp;                  /*  1040    12 */
-  Pointer<aiVector3D> get mUp => Pointer.fromAddress(addressOf.address + 1040);
+  // class aiNode *             mNode;                /*  1040     8 */
+  Pointer<aiNode> mNode;
 
-  @Float() // ai_real
-  double _mUpX, _mUpY, _mUpZ;
+  // class aiVertexWeight *     mWeights;             /*  1048     8 */
+  Pointer<aiVertexWeight> mWeights;
 
-  // aiVector3D                 mLookAt;              /*  1052    12 */
-  Pointer<aiVector3D> get mLookAt =>
-      Pointer.fromAddress(addressOf.address + 1052);
+  // aiMatrix4x4                mOffsetMatrix;        /*  1056    64 */
+  Pointer<aiMatrix4x4> get mOffset =>
+      Pointer<aiMatrix4x4>.fromAddress(addressOf.address + 1056);
 
-  @Float() // ai_real
-  double _mLookAtX, _mLookAtY, _mLookAtZ;
-
-  // float                      mHorizontalFOV;       /*  1064     4 */
+  // 4x4 ai_real
   @Float()
-  double mHorizontalFOV;
+  double _mA1,
+      _mA2,
+      _mA3,
+      _mA4,
+      _mB1,
+      _mB2,
+      _mB3,
+      _mB4,
+      _mC1,
+      _mC2,
+      _mC3,
+      _mC4,
+      _mD1,
+      _mD2,
+      _mD3,
+      _mD4;
 
-  // float                      mClipPlaneNear;       /*  1068     4 */
-  @Float()
-  double mClipPlaneNear;
-
-  // float                      mClipPlaneFar;        /*  1072     4 */
-  @Float()
-  double mClipPlaneFar;
-
-  // float                      mAspect;              /*  1076     4 */
-  @Float()
-  double mAspect;
-
-  // float                      mOrthographicWidth;   /*  1080     4 */
-  @Float()
-  double mOrthographicWidth;
-
-  /* size: 1084, members: 9 */
+  /* size: 1120, members: 6 */
 }

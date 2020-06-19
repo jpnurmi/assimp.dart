@@ -43,7 +43,39 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-class aiVector2D extends Struct {
-  @Float() // ai_real
-  double x, y;
+// pahole libassimpd.so -M -C aiMemoryInfo
+class aiMemoryInfo extends Struct {
+  // unsigned int               textures;             /*     0     4 */
+  @Uint32()
+  int textures;
+
+  // unsigned int               materials;            /*     4     4 */
+  @Uint32()
+  int materials;
+
+  // unsigned int               meshes;               /*     8     4 */
+  @Uint32()
+  int meshes;
+
+  // unsigned int               nodes;                /*    12     4 */
+  @Uint32()
+  int nodes;
+
+  // unsigned int               animations;           /*    16     4 */
+  @Uint32()
+  int animations;
+
+  // unsigned int               cameras;              /*    20     4 */
+  @Uint32()
+  int cameras;
+
+  // unsigned int               lights;               /*    24     4 */
+  @Uint32()
+  int lights;
+
+  // unsigned int               total;                /*    28     4 */
+  @Uint32()
+  int total;
+
+  /* size: 32, members: 8 */
 }

@@ -62,12 +62,12 @@ extension AssimpAabb3 on Aabb3 {
     );
   }
 
-  static Pointer<bindings.aiAABB> toNative(Aabb3 aabb) {
-    final Pointer<bindings.aiAABB> ptr = allocate();
-    ptr.ref.mMin = AssimpVector3.toNative(aabb.min);
-    ptr.ref.mMax = AssimpVector3.toNative(aabb.max);
-    return ptr;
-  }
+//  static Pointer<bindings.aiAABB> toNative(Aabb3 aabb) {
+//    final Pointer<bindings.aiAABB> ptr = allocate();
+//    ptr.ref.mMin = AssimpVector3.toNative(aabb.min);
+//    ptr.ref.mMax = AssimpVector3.toNative(aabb.max);
+//    return ptr;
+//  }
 }
 
 extension AssimpColor3 on Color {
@@ -211,12 +211,12 @@ extension AssimpRay on Ray {
     return Ray.originDirection(pos, dir);
   }
 
-  static Pointer<bindings.aiRay> toNative(Ray ray) {
-    final Pointer<bindings.aiRay> ptr = allocate();
-    ptr.ref.pos = AssimpVector3.toNative(ray.origin);
-    ptr.ref.dir = AssimpVector3.toNative(ray.direction);
-    return ptr;
-  }
+//  static Pointer<bindings.aiRay> toNative(Ray ray) {
+//    final Pointer<bindings.aiRay> ptr = allocate();
+//    ptr.ref.pos = AssimpVector3.toNative(ray.origin);
+//    ptr.ref.dir = AssimpVector3.toNative(ray.direction);
+//    return ptr;
+//  }
 }
 
 extension AssimpQuaternion on Quaternion {
@@ -264,18 +264,18 @@ extension AssimpVector3 on Vector3 {
   }
 }
 
-class MemoryInfo {
-  Pointer<bindings.aiMemoryInfo> _ptr;
-
-  MemoryInfo._();
-  MemoryInfo.fromNative(this._ptr);
-
-  int get textures => _ptr?.ref?.textures ?? 0;
-  int get materials => _ptr?.ref?.materials ?? 0;
-  int get meshes => _ptr?.ref?.meshes ?? 0;
-  int get nodes => _ptr?.ref?.nodes ?? 0;
-  int get animations => _ptr?.ref?.animations ?? 0;
-  int get cameras => _ptr?.ref?.cameras ?? 0;
-  int get lights => _ptr?.ref?.lights ?? 0;
-  int get total => _ptr?.ref?.total ?? 0;
-}
+//class MemoryInfo {
+//  Pointer<bindings.aiMemoryInfo> _ptr;
+//
+//  MemoryInfo._();
+//  MemoryInfo.fromNative(this._ptr);
+//
+//  int get textures => _ptr?.ref?.textures ?? 0;
+//  int get materials => _ptr?.ref?.materials ?? 0;
+//  int get meshes => _ptr?.ref?.meshes ?? 0;
+//  int get nodes => _ptr?.ref?.nodes ?? 0;
+//  int get animations => _ptr?.ref?.animations ?? 0;
+//  int get cameras => _ptr?.ref?.cameras ?? 0;
+//  int get lights => _ptr?.ref?.lights ?? 0;
+//  int get total => _ptr?.ref?.total ?? 0;
+//}

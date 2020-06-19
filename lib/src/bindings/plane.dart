@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-class aiVector2D extends Struct {
+class aiPlane extends Struct {
   @Float() // ai_real
-  double x, y;
+  double a, b, c, d;
 }

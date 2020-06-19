@@ -44,7 +44,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 import 'types.dart';
 
+// pahole libassimpd.so -M -C aiAABB
 class aiAABB extends Struct {
-  Pointer<aiVector3D> mMin;
-  Pointer<aiVector3D> mMax;
+  // aiVector3D                 mMin;                 /*     0    12 */
+  Pointer<aiVector3D> get mMin => Pointer.fromAddress(addressOf.address + 0);
+
+  @Float() // ai_real
+  double _mMinX, _mMinY, _mMinZ;
+
+  // aiVector3D                 mMax;                 /*    12    12 */
+  Pointer<aiVector3D> get mMax => Pointer.fromAddress(addressOf.address + 12);
+
+  @Float() // ai_real
+  double _mMaxX, _mMaxY, _mMaxZ;
+
+  /* size: 24, members: 2 */
 }

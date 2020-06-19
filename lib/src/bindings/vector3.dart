@@ -43,12 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-/** @file vector3.h
- *  @brief 3D vector structure, including operators when compiling in C++
- */
-
-// ---------------------------------------------------------------------------
-/** Represents a three-dimensional vector. */
 class aiVector3D extends Struct {
   @Float() // ai_real
   double x, y, z;

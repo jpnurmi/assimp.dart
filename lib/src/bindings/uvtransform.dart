@@ -43,7 +43,27 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-class aiVector2D extends Struct {
+import 'vector2.dart';
+
+// pahole libassimpd.so -M -C aiUVTransform
+class aiUVTransform extends Struct {
+  // aiVector2D                 mTranslation;         /*     0     8 */
+  Pointer<aiVector2D> get mTranslation =>
+      Pointer.fromAddress(addressOf.address + 0);
+
   @Float() // ai_real
-  double x, y;
+  double _mTranslationX, _mTranslationY;
+
+  // aiVector2D                 mScaling;             /*     8     8 */
+  Pointer<aiVector2D> get mScaling =>
+      Pointer.fromAddress(addressOf.address + 0);
+
+  @Float() // ai_real
+  double _mScalingX, _mScalingY;
+
+  // ai_real                    mRotation;            /*    16     4 */
+  @Float()
+  double mRotation;
+
+  /* size: 20, members: 3 */
 }

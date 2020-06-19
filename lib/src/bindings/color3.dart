@@ -43,7 +43,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-class aiVector2D extends Struct {
-  @Float() // ai_real
-  double x, y;
+// pahole libassimpd.so -M -C aiColor3D
+class aiColor3D extends Struct {
+  // ai_real                    r;                    /*     0     4 */
+  @Float()
+  double r;
+
+  // ai_real                    g;                    /*     4     4 */
+  @Float()
+  double g;
+
+  // ai_real                    b;                    /*     8     4 */
+  @Float()
+  double b;
+
+  /* size: 12, members: 3 */
 }

@@ -56,7 +56,9 @@ class Utils {
   static String fromString(Pointer<bindings.aiString> str) {
     if (isNull(str)) return null;
     final len = str.ref.length;
-    final data = Uint8List.view(str.ref.data.asTypedList(len).buffer, 0, len);
+    if (len <= 0) return '';
+    final data = Uint8List.view(
+        str.ref.data.cast<Uint8>().asTypedList(len).buffer, 0, len);
     return utf8.decode(data);
   }
 

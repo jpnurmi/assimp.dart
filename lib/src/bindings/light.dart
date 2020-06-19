@@ -43,186 +43,217 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-/** @file light.h
- *  @brief Defines the aiLight data structure
- */
-
 import 'types.dart';
 
-// ---------------------------------------------------------------------------
-/** Enumerates all supported types of light sources.
- */
-class aiLightSourceType {
-  static const int aiLightSource_UNDEFINED = 0x0;
-
-  //! A directional light source has a well-defined direction
-  //! but is infinitely far away. That's quite a good
-  //! approximation for sun light.
-  static const int aiLightSource_DIRECTIONAL = 0x1;
-
-  //! A point light source has a well-defined position
-  //! in space but no direction - it emits light in all
-  //! directions. A normal bulb is a point light.
-  static const int aiLightSource_POINT = 0x2;
-
-  //! A spot light source emits light in a specific
-  //! angle. It has a position and a direction it is pointing to.
-  //! A good example for a spot light is a light spot in
-  //! sport arenas.
-  static const int aiLightSource_SPOT = 0x3;
-
-  //! The generic light level of the world, including the bounces
-  //! of all other light sources.
-  //! Typically, there's at most one ambient light in a scene.
-  //! This light type doesn't have a valid position, direction, or
-  //! other properties, just a color.
-  static const int aiLightSource_AMBIENT = 0x4;
-
-  //! An area light is a rectangle with predefined size that uniformly
-  //! emits light from one of its sides. The position is center of the
-  //! rectangle and direction is its normal vector.
-  static const int aiLightSource_AREA = 0x5;
-}
-
-// ---------------------------------------------------------------------------
-/** Helper structure to describe a light source.
- *
- *  Assimp supports multiple sorts of light sources, including
- *  directional, point and spot lights. All of them are defined with just
- *  a single structure and distinguished by their parameters.
- *  Note - some file formats (such as 3DS, ASE) export a "target point" -
- *  the point a spot light is looking at (it can even be animated). Assimp
- *  writes the target point as a subnode of a spotlights's main node,
- *  called "<spotName>.Target". However, this is just additional information
- *  then, the transformation tracks of the main node make the
- *  spot light already point in the right direction.
- */
+// pahole libassimpd.so -M -C aiLight
 class aiLight extends Struct {
-  /** The name of the light source.
-   *
-   *  There must be a node in the scenegraph with the same name.
-   *  This node specifies the position of the light in the scene
-   *  hierarchy and can be animated.
-   */
-  Pointer<aiString> mName;
+  // struct aiString            mName;                /*     0  1028 */
+  Pointer<aiString> get mName => Pointer.fromAddress(addressOf.address + 0);
 
-  /** The type of the light source.
-   *
-   * aiLightSource_UNDEFINED is not a valid value for this member.
-   */
   @Uint32()
-  int mType; // aiLightSourceType
+  int _mNameLength;
 
-  /** Position of the light source in space. Relative to the
-   *  transformation of the node corresponding to the light.
-   *
-   *  The position is undefined for directional lights.
-   */
-  Pointer<aiVector3D> mPosition;
+  // char[MAXLEN=1024]
+  Pointer _mName0,
+      _mName1,
+      _mName2,
+      _mName3,
+      _mName4,
+      _mName5,
+      _mName6,
+      _mName7,
+      _mName8,
+      _mName9,
+      _mName10,
+      _mName11,
+      _mName12,
+      _mName13,
+      _mName14,
+      _mName15,
+      _mName16,
+      _mName17,
+      _mName18,
+      _mName19,
+      _mName20,
+      _mName21,
+      _mName22,
+      _mName23,
+      _mName24,
+      _mName25,
+      _mName26,
+      _mName27,
+      _mName28,
+      _mName29,
+      _mName30,
+      _mName31,
+      _mName32,
+      _mName33,
+      _mName34,
+      _mName35,
+      _mName36,
+      _mName37,
+      _mName38,
+      _mName39,
+      _mName40,
+      _mName41,
+      _mName42,
+      _mName43,
+      _mName44,
+      _mName45,
+      _mName46,
+      _mName47,
+      _mName48,
+      _mName49,
+      _mName50,
+      _mName51,
+      _mName52,
+      _mName53,
+      _mName54,
+      _mName55,
+      _mName56,
+      _mName57,
+      _mName58,
+      _mName59,
+      _mName60,
+      _mName61,
+      _mName62,
+      _mName63,
+      _mName64,
+      _mName65,
+      _mName66,
+      _mName67,
+      _mName68,
+      _mName69,
+      _mName70,
+      _mName71,
+      _mName72,
+      _mName73,
+      _mName74,
+      _mName75,
+      _mName76,
+      _mName77,
+      _mName78,
+      _mName79,
+      _mName80,
+      _mName81,
+      _mName82,
+      _mName83,
+      _mName84,
+      _mName85,
+      _mName86,
+      _mName87,
+      _mName88,
+      _mName89,
+      _mName90,
+      _mName91,
+      _mName92,
+      _mName93,
+      _mName94,
+      _mName95,
+      _mName96,
+      _mName97,
+      _mName98,
+      _mName99,
+      _mName100,
+      _mName101,
+      _mName102,
+      _mName103,
+      _mName104,
+      _mName105,
+      _mName106,
+      _mName107,
+      _mName108,
+      _mName109,
+      _mName110,
+      _mName111,
+      _mName112,
+      _mName113,
+      _mName114,
+      _mName115,
+      _mName116,
+      _mName117,
+      _mName118,
+      _mName119,
+      _mName120,
+      _mName121,
+      _mName122,
+      _mName123,
+      _mName124,
+      _mName125,
+      _mName126,
+      _mName127;
 
-  /** Direction of the light source in space. Relative to the
-   *  transformation of the node corresponding to the light.
-   *
-   *  The direction is undefined for point lights. The vector
-   *  may be normalized, but it needn't.
-   */
-  Pointer<aiVector3D> mDirection;
+  // enum aiLightSourceType     mType;                /*  1028     4 */
+  @Uint32()
+  int mType;
 
-  /** Up direction of the light source in space. Relative to the
-   *  transformation of the node corresponding to the light.
-   *
-   *  The direction is undefined for point lights. The vector
-   *  may be normalized, but it needn't.
-   */
-  Pointer<aiVector3D> mUp;
+  // aiVector3D                 mPosition;            /*  1032    12 */
+  Pointer<aiVector3D> get mPosition =>
+      Pointer.fromAddress(addressOf.address + 1032);
 
-  /** Constant light attenuation factor.
-   *
-   *  The intensity of the light source at a given distance 'd' from
-   *  the light's position is
-   *  @code
-   *  Atten = 1/( att0 + att1 * d + att2 * d*d)
-   *  @endcode
-   *  This member corresponds to the att0 variable in the equation.
-   *  Naturally undefined for directional lights.
-   */
+  @Float() // ai_real
+  double _mPositionX, _mPositionY, _mPositionZ;
+
+  // aiVector3D                 mDirection;           /*  1044    12 */
+  Pointer<aiVector3D> get mDirection =>
+      Pointer.fromAddress(addressOf.address + 1044);
+
+  @Float() // ai_real
+  double _mDirectionX, _mDirectionY, _mDirectionZ;
+
+  // aiVector3D                 mUp;                  /*  1056    12 */
+  Pointer<aiVector3D> get mUp => Pointer.fromAddress(addressOf.address + 1044);
+
+  @Float() // ai_real
+  double _mUpX, _mUpY, _mUpZ;
+
+  // float                      mAttenuationConstant; /*  1068     4 */
   @Float()
   double mAttenuationConstant;
 
-  /** Linear light attenuation factor.
-   *
-   *  The intensity of the light source at a given distance 'd' from
-   *  the light's position is
-   *  @code
-   *  Atten = 1/( att0 + att1 * d + att2 * d*d)
-   *  @endcode
-   *  This member corresponds to the att1 variable in the equation.
-   *  Naturally undefined for directional lights.
-   */
+  // float                      mAttenuationLinear;   /*  1072     4 */
   @Float()
   double mAttenuationLinear;
 
-  /** Quadratic light attenuation factor.
-   *
-   *  The intensity of the light source at a given distance 'd' from
-   *  the light's position is
-   *  @code
-   *  Atten = 1/( att0 + att1 * d + att2 * d*d)
-   *  @endcode
-   *  This member corresponds to the att2 variable in the equation.
-   *  Naturally undefined for directional lights.
-   */
+  // float                      mAttenuationQuadratic; /*  1076     4 */
   @Float()
   double mAttenuationQuadratic;
 
-  /** Diffuse color of the light source
-   *
-   *  The diffuse light color is multiplied with the diffuse
-   *  material color to obtain the final color that contributes
-   *  to the diffuse shading term.
-   */
-  Pointer<aiColor3D> mColorDiffuse;
+  // struct aiColor3D           mColorDiffuse;        /*  1080    12 */
+  Pointer<aiColor3D> get mColorDiffuse =>
+      Pointer.fromAddress(addressOf.address + 1080);
 
-  /** Specular color of the light source
-   *
-   *  The specular light color is multiplied with the specular
-   *  material color to obtain the final color that contributes
-   *  to the specular shading term.
-   */
-  Pointer<aiColor3D> mColorSpecular;
+  @Float()
+  double _mColorDiffuseR, _mColorDiffuseG, _mColorDiffuseB;
 
-  /** Ambient color of the light source
-   *
-   *  The ambient light color is multiplied with the ambient
-   *  material color to obtain the final color that contributes
-   *  to the ambient shading term. Most renderers will ignore
-   *  this value it, is just a remaining of the fixed-function pipeline
-   *  that is still supported by quite many file formats.
-   */
-  Pointer<aiColor3D> mColorAmbient;
+  // struct aiColor3D           mColorSpecular;       /*  1092    12 */
+  Pointer<aiColor3D> get mColorSpecular =>
+      Pointer.fromAddress(addressOf.address + 1092);
 
-  /** Inner angle of a spot light's light cone.
-   *
-   *  The spot light has maximum influence on objects inside this
-   *  angle. The angle is given in radians. It is 2PI for point
-   *  lights and undefined for directional lights.
-   */
+  @Float()
+  double _mColorSpecularR, _mColorSpecularG, _mColorSpecularB;
+
+  // struct aiColor3D           mColorAmbient;        /*  1104    12 */
+  Pointer<aiColor3D> get mColorAmbient =>
+      Pointer.fromAddress(addressOf.address + 1104);
+
+  @Float()
+  double _mColorAmbientR, _mColorAmbientG, _mColorAmbientB;
+
+  // float                      mAngleInnerCone;      /*  1116     4 */
   @Float()
   double mAngleInnerCone;
 
-  /** Outer angle of a spot light's light cone.
-   *
-   *  The spot light does not affect objects outside this angle.
-   *  The angle is given in radians. It is 2PI for point lights and
-   *  undefined for directional lights. The outer angle must be
-   *  greater than or equal to the inner angle.
-   *  It is assumed that the application uses a smooth
-   *  interpolation between the inner and the outer cone of the
-   *  spot light.
-   */
+  // float                      mAngleOuterCone;      /*  1120     4 */
   @Float()
   double mAngleOuterCone;
 
-  /** Size of area light source. */
-  Pointer<aiVector2D> mSize;
+  // aiVector2D                 mSize;                /*  1124     8 */
+  Pointer<aiVector2D> get mSize =>
+      Pointer.fromAddress(addressOf.address + 1124);
+
+  @Float() // ai_real
+  double _mSizeX, _mSizeY;
+
+  /* size: 1132, members: 14 */
 }

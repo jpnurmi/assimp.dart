@@ -5,6 +5,8 @@ Open Asset Import Library (assimp)
 
 Copyright (c) 2006-2019, assimp team
 
+
+
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
@@ -41,18 +43,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'types.dart';
+import 'package:ffi/ffi.dart';
 
-// pahole libassimpd.so -M -C aiCamera
-class aiCamera extends Struct {
-  // struct aiString            mName;                /*     0  1028 */
-  Pointer<aiString> get mName =>
-      Pointer<aiString>.fromAddress(addressOf.address + 0);
+// pahole libassimpd.so -M -C aiString
+class aiString extends Struct {
+  // ai_uint32                  length;               /*     0     4 */
+  @Uint32() // ai_uint32
+  int length;
 
-  @Uint32()
-  int _mNameLength;
+  // char                       data[1024];           /*     4  1024 */
+  Pointer<Utf8> get data => Pointer<Utf8>.fromAddress(addressOf.address + 4);
 
-  // char[MAXLEN=1024]
   Pointer _mName0,
       _mName1,
       _mName2,
@@ -182,45 +183,5 @@ class aiCamera extends Struct {
       _mName126,
       _mName127;
 
-  // aiVector3D                 mPosition;            /*  1028    12 */
-  Pointer<aiVector3D> get mPosition =>
-      Pointer.fromAddress(addressOf.address + 1028);
-
-  @Float() // ai_real
-  double _mPositionX, _mPositionY, _mPositionZ;
-
-  // aiVector3D                 mUp;                  /*  1040    12 */
-  Pointer<aiVector3D> get mUp => Pointer.fromAddress(addressOf.address + 1040);
-
-  @Float() // ai_real
-  double _mUpX, _mUpY, _mUpZ;
-
-  // aiVector3D                 mLookAt;              /*  1052    12 */
-  Pointer<aiVector3D> get mLookAt =>
-      Pointer.fromAddress(addressOf.address + 1052);
-
-  @Float() // ai_real
-  double _mLookAtX, _mLookAtY, _mLookAtZ;
-
-  // float                      mHorizontalFOV;       /*  1064     4 */
-  @Float()
-  double mHorizontalFOV;
-
-  // float                      mClipPlaneNear;       /*  1068     4 */
-  @Float()
-  double mClipPlaneNear;
-
-  // float                      mClipPlaneFar;        /*  1072     4 */
-  @Float()
-  double mClipPlaneFar;
-
-  // float                      mAspect;              /*  1076     4 */
-  @Float()
-  double mAspect;
-
-  // float                      mOrthographicWidth;   /*  1080     4 */
-  @Float()
-  double mOrthographicWidth;
-
-  /* size: 1084, members: 9 */
+  /* size: 1028, members: 2 */
 }

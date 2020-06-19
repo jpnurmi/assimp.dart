@@ -43,17 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-/** @file metadata.h
- *  @brief Defines the data structures for holding node meta information.
- */
-
 import 'types.dart';
 
-// -------------------------------------------------------------------------------
-/**
-  * Enum used to distinguish data types
-  */
-// -------------------------------------------------------------------------------
 class aiMetadataType {
   static const int AI_BOOL = 0;
   static const int AI_INT32 = 1;
@@ -65,35 +56,39 @@ class aiMetadataType {
   static const int AI_META_MAX = 7;
 }
 
-// -------------------------------------------------------------------------------
-/**
-  * Metadata entry
-  *
-  * The type field uniquely identifies the underlying type of the data field
-  */
-// -------------------------------------------------------------------------------
+// pahole libassimpd.so -M -C aiMetadataEntry
 class aiMetadataEntry extends Struct {
+  // aiMetadataType             mType;                /*     0     4 */
   @Uint32()
   int mType;
+
+  /* XXX 4 bytes hole, try to pack */
+  @Uint32()
+  int _mPadding0;
+
+  // void *                     mData;                /*     8     8 */
   Pointer<Void> mData;
+
+  /* size: 16, members: 2 */
+  /* sum members: 12, holes: 1, sum holes: 4 */
 }
 
-// -------------------------------------------------------------------------------
-/**
-  * Container for holding metadata.
-  *
-  * Metadata is a key-value store using string keys and values.
-  */
-// -------------------------------------------------------------------------------
+// pahole libassimpd.so -M -C aiMetadata
 class aiMetadata extends Struct {
-  /** Length of the mKeys and mValues arrays, respectively */
+  // unsigned int               mNumProperties;       /*     0     4 */
   @Uint32()
   int mNumProperties;
 
-  /** Arrays of keys, may not be NULL. Entries in this array may not be NULL as well. */
+  /* XXX 4 bytes hole, try to pack */
+  @Uint32()
+  int _mPadding0;
+
+  // class aiString *           mKeys;                /*     8     8 */
   Pointer<aiString> mKeys;
 
-  /** Arrays of values, may not be NULL. Entries in this array may be NULL if the
-      * corresponding property key has no assigned value. */
+  // class aiMetadataEntry *    mValues;              /*    16     8 */
   Pointer<aiMetadataEntry> mValues;
+
+  /* size: 24, members: 3 */
+  /* sum members: 20, holes: 1, sum holes: 4 */
 }

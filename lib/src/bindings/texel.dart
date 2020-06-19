@@ -43,7 +43,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-class aiVector2D extends Struct {
-  @Float() // ai_real
-  double x, y;
+// pahole libassimpd.so -M -C aiTexel
+class aiTexel extends Struct {
+  // unsigned char              b;                    /*     0     1 */
+  @Uint8()
+  int b;
+
+  // unsigned char              g;                    /*     1     1 */
+  @Uint8()
+  int g;
+
+  // unsigned char              r;                    /*     2     1 */
+  @Uint8()
+  int r;
+
+  // unsigned char              a;                    /*     3     1 */
+  @Uint8()
+  int a;
+
+  /* size: 4, members: 4 */
 }

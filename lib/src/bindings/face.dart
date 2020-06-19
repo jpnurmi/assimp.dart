@@ -6,7 +6,6 @@ Open Asset Import Library (assimp)
 Copyright (c) 2006-2019, assimp team
 
 
-
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
@@ -43,7 +42,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-class aiVector2D extends Struct {
-  @Float() // ai_real
-  double x, y;
+import 'node.dart';
+import 'types.dart';
+
+// pahole libassimpd.so -M -C aiFace
+class aiFace extends Struct {
+  // unsigned int               mNumIndices;          /*     0     4 */
+  @Uint32()
+  int mNumIndices;
+
+  /* XXX 4 bytes hole, try to pack */
+  @Uint32()
+  int _mPadding;
+
+  // unsigned int *             mIndices;             /*     8     8 */
+  Pointer<Uint32> mIndices;
+
+  /* size: 16, members: 2 */
+  /* sum members: 12, holes: 1, sum holes: 4 */
 }

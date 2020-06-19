@@ -51,6 +51,7 @@ import 'package:ffi/ffi.dart';
 
 import 'types.dart';
 import 'importerdesc.dart';
+import 'memoryinfo.dart';
 import 'dylib.dart';
 import 'scene.dart';
 import 'cfileio.dart';

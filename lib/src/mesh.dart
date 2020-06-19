@@ -43,10 +43,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:assimp/src/bindings/types.dart';
-import 'package:ffi/ffi.dart';
-
+import 'bindings/animmesh.dart' as bindings;
+import 'bindings/bone.dart' as bindings;
+import 'bindings/face.dart' as bindings;
 import 'bindings/mesh.dart' as bindings;
+import 'bindings/vertexweight.dart' as bindings;
+
 import 'types.dart';
 import 'utils.dart';
 
@@ -93,7 +95,7 @@ class Bone {
     );
   }
 
-  Matrix4 get offset => AssimpMatrix4.fromNative(_ptr?.ref?.mOffsetMatrix);
+  Matrix4 get offset => AssimpMatrix4.fromNative(_ptr?.ref?.mOffset);
 }
 
 class AnimMesh {
@@ -266,7 +268,7 @@ class Mesh {
 
   int get materialIndex => _ptr?.ref?.mMaterialIndex ?? 0;
 
-  String get name => Utils.fromUtf8(_ptr?.ref?.mName, _ptr?.ref?.mNameLength);
+  String get name => Utils.fromString(_ptr?.ref?.mName);
 
   Iterable<AnimMesh> get animMeshes {
     return Iterable.generate(
