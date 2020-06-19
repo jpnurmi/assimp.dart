@@ -39,11 +39,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
+import 'dart:ffi';
+
 import 'package:test/test.dart';
 import 'package:assimp/assimp.dart';
+import '../lib/src/bindings/mesh.dart' as bindings;
 import 'test_utils.dart';
 
 void main() {
+  test('size', () {
+    expect(sizeOf<bindings.aiMesh>(), equals(1312));
+  });
+
   test('null', () {
     Mesh mesh = Mesh.fromNative(null);
     expect(mesh.isNull, isTrue);
@@ -85,7 +92,7 @@ void main() {
       expect(meshes.elementAt(0).faces.length, isZero);
       expect(meshes.elementAt(0).bones.length, isZero);
       expect(meshes.elementAt(0).materialIndex, isZero);
-      expect(meshes.elementAt(0).name, isNull);
+      expect(meshes.elementAt(0).name, isEmpty);
       expect(meshes.elementAt(0).animMeshes.length, isZero);
       expect(meshes.elementAt(0).morphingMethod, isZero);
       expect(meshes.elementAt(0).aabb, isNull);

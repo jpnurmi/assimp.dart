@@ -42,13 +42,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'package:ffi/ffi.dart';
+
 /** @file mesh.h
  *  @brief Declares the data structures in which the imported geometry is
     returned by ASSIMP: aiMesh, aiFace and aiBone data structures.
  */
 
 import 'types.dart';
-import 'aabb.dart';
 
 // ---------------------------------------------------------------------------
 // Limits. These values are required to match the settings Assimp was
@@ -315,6 +316,9 @@ class aiMesh extends Struct {
   @Uint32()
   int mNumFaces;
 
+  @Uint32()
+  int _mPadding0;
+
   /** Vertex positions.
     * This array is always present in a mesh. The array is
     * mNumVertices in size.
@@ -371,13 +375,31 @@ class aiMesh extends Struct {
     * colors per vertex. NULL if not present. Each array is
     * mNumVertices in size if present.
     */
-  Pointer<Pointer<aiColor4D>> mColors; // AI_MAX_NUMBER_OF_COLOR_SETS
+  Pointer<Pointer<aiColor4D>> get mColors =>
+      Pointer<Pointer<aiColor4D>>.fromAddress(addressOf.address + 48);
+  Pointer<Void> _mColors0;
+  Pointer<Void> _mColors1;
+  Pointer<Void> _mColors2;
+  Pointer<Void> _mColors3;
+  Pointer<Void> _mColors4;
+  Pointer<Void> _mColors5;
+  Pointer<Void> _mColors6;
+  Pointer<Void> _mColors7;
 
   /** Vertex texture coords, also known as UV channels.
     * A mesh may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
     * vertex. NULL if not present. The array is mNumVertices in size.
     */
-  Pointer<Pointer<aiVector3D>> mTextureCoords; // AI_MAX_NUMBER_OF_TEXTURECOORDS
+  Pointer<Pointer<aiVector3D>> get mTextureCoords =>
+      Pointer<Pointer<aiVector3D>>.fromAddress(addressOf.address + 112);
+  Pointer<Void> _mTextureCoords0;
+  Pointer<Void> _mTextureCoords1;
+  Pointer<Void> _mTextureCoords2;
+  Pointer<Void> _mTextureCoords3;
+  Pointer<Void> _mTextureCoords4;
+  Pointer<Void> _mTextureCoords5;
+  Pointer<Void> _mTextureCoords6;
+  Pointer<Void> _mTextureCoords7;
 
   /** Specifies the number of components for a given UV channel.
     * Up to three channels are supported (UVW, for accessing volume
@@ -386,7 +408,12 @@ class aiMesh extends Struct {
     * If the value is 1 for a given channel, p.y is set to 0.0f, too.
     * @note 4D coords are not supported
     */
-  Pointer<Uint32> mNumUVComponents; // AI_MAX_NUMBER_OF_TEXTURECOORDS
+  Pointer<Uint32> get mNumUVComponents =>
+      Pointer<Uint32>.fromAddress(addressOf.address + 176);
+  Pointer<Void> _mNumUVComponents0;
+  Pointer<Void> _mNumUVComponents1;
+  Pointer<Void> _mNumUVComponents2;
+  Pointer<Void> _mNumUVComponents3;
 
   /** The faces the mesh is constructed from.
     * Each face refers to a number of vertices by their indices.
@@ -401,6 +428,9 @@ class aiMesh extends Struct {
     */
   @Uint32()
   int mNumBones;
+
+  @Uint32()
+  int _mPadding1;
 
   /** The bones of this mesh.
     * A bone consists of a name by which it can be found in the
@@ -427,11 +457,144 @@ class aiMesh extends Struct {
      *      partitioning.
      *   - Vertex animations refer to meshes by their names.
      **/
-  Pointer<aiString> mName; // ### TODO: aiString == int + char[]
+  @Uint32()
+  int mNameLength;
+  Pointer<Utf8> get mName => Pointer<Utf8>.fromAddress(addressOf.address + 240);
+  Pointer<Void> _mName0;
+  Pointer<Void> _mName1;
+  Pointer<Void> _mName2;
+  Pointer<Void> _mName3;
+  Pointer<Void> _mName4;
+  Pointer<Void> _mName5;
+  Pointer<Void> _mName6;
+  Pointer<Void> _mName7;
+  Pointer<Void> _mName8;
+  Pointer<Void> _mName9;
+  Pointer<Void> _mName10;
+  Pointer<Void> _mName11;
+  Pointer<Void> _mName12;
+  Pointer<Void> _mName13;
+  Pointer<Void> _mName14;
+  Pointer<Void> _mName15;
+  Pointer<Void> _mName16;
+  Pointer<Void> _mName17;
+  Pointer<Void> _mName18;
+  Pointer<Void> _mName19;
+  Pointer<Void> _mName20;
+  Pointer<Void> _mName21;
+  Pointer<Void> _mName22;
+  Pointer<Void> _mName23;
+  Pointer<Void> _mName24;
+  Pointer<Void> _mName25;
+  Pointer<Void> _mName26;
+  Pointer<Void> _mName27;
+  Pointer<Void> _mName28;
+  Pointer<Void> _mName29;
+  Pointer<Void> _mName30;
+  Pointer<Void> _mName31;
+  Pointer<Void> _mName32;
+  Pointer<Void> _mName33;
+  Pointer<Void> _mName34;
+  Pointer<Void> _mName35;
+  Pointer<Void> _mName36;
+  Pointer<Void> _mName37;
+  Pointer<Void> _mName38;
+  Pointer<Void> _mName39;
+  Pointer<Void> _mName40;
+  Pointer<Void> _mName41;
+  Pointer<Void> _mName42;
+  Pointer<Void> _mName43;
+  Pointer<Void> _mName44;
+  Pointer<Void> _mName45;
+  Pointer<Void> _mName46;
+  Pointer<Void> _mName47;
+  Pointer<Void> _mName48;
+  Pointer<Void> _mName49;
+  Pointer<Void> _mName50;
+  Pointer<Void> _mName51;
+  Pointer<Void> _mName52;
+  Pointer<Void> _mName53;
+  Pointer<Void> _mName54;
+  Pointer<Void> _mName55;
+  Pointer<Void> _mName56;
+  Pointer<Void> _mName57;
+  Pointer<Void> _mName58;
+  Pointer<Void> _mName59;
+  Pointer<Void> _mName60;
+  Pointer<Void> _mName61;
+  Pointer<Void> _mName62;
+  Pointer<Void> _mName63;
+  Pointer<Void> _mName64;
+  Pointer<Void> _mName65;
+  Pointer<Void> _mName66;
+  Pointer<Void> _mName67;
+  Pointer<Void> _mName68;
+  Pointer<Void> _mName69;
+  Pointer<Void> _mName70;
+  Pointer<Void> _mName71;
+  Pointer<Void> _mName72;
+  Pointer<Void> _mName73;
+  Pointer<Void> _mName74;
+  Pointer<Void> _mName75;
+  Pointer<Void> _mName76;
+  Pointer<Void> _mName77;
+  Pointer<Void> _mName78;
+  Pointer<Void> _mName79;
+  Pointer<Void> _mName80;
+  Pointer<Void> _mName81;
+  Pointer<Void> _mName82;
+  Pointer<Void> _mName83;
+  Pointer<Void> _mName84;
+  Pointer<Void> _mName85;
+  Pointer<Void> _mName86;
+  Pointer<Void> _mName87;
+  Pointer<Void> _mName88;
+  Pointer<Void> _mName89;
+  Pointer<Void> _mName90;
+  Pointer<Void> _mName91;
+  Pointer<Void> _mName92;
+  Pointer<Void> _mName93;
+  Pointer<Void> _mName94;
+  Pointer<Void> _mName95;
+  Pointer<Void> _mName96;
+  Pointer<Void> _mName97;
+  Pointer<Void> _mName98;
+  Pointer<Void> _mName99;
+  Pointer<Void> _mName100;
+  Pointer<Void> _mName101;
+  Pointer<Void> _mName102;
+  Pointer<Void> _mName103;
+  Pointer<Void> _mName104;
+  Pointer<Void> _mName105;
+  Pointer<Void> _mName106;
+  Pointer<Void> _mName107;
+  Pointer<Void> _mName108;
+  Pointer<Void> _mName109;
+  Pointer<Void> _mName110;
+  Pointer<Void> _mName111;
+  Pointer<Void> _mName112;
+  Pointer<Void> _mName113;
+  Pointer<Void> _mName114;
+  Pointer<Void> _mName115;
+  Pointer<Void> _mName116;
+  Pointer<Void> _mName117;
+  Pointer<Void> _mName118;
+  Pointer<Void> _mName119;
+  Pointer<Void> _mName120;
+  Pointer<Void> _mName121;
+  Pointer<Void> _mName122;
+  Pointer<Void> _mName123;
+  Pointer<Void> _mName124;
+  Pointer<Void> _mName125;
+  Pointer<Void> _mName126;
+  Pointer<Void> _mName127;
 
   /** The number of attachment meshes. Note! Currently only works with Collada loader. */
   @Uint32()
   int mNumAnimMeshes;
+
+  @Uint32()
+  int _mPadding2;
 
   /** Attachment meshes for this mesh, for vertex-based animation.
      *  Attachment meshes carry replacement data for some of the
@@ -448,5 +611,19 @@ class aiMesh extends Struct {
   /**
      *
      */
-  Pointer<aiAABB> mAABB; // ### TODO: aiAABB == 2 x aiVector3D == 6 x double
+  @Float()
+  double mMinX;
+  @Float()
+  double mMinY;
+  @Float()
+  double mMinZ;
+  @Float()
+  double mMaxX;
+  @Float()
+  double mMaxY;
+  @Float()
+  double mMaxZ;
+
+  @Uint32()
+  int _mPadding3;
 }

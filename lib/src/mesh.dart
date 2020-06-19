@@ -43,6 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'package:assimp/src/bindings/types.dart';
 import 'package:ffi/ffi.dart';
 
 import 'bindings/mesh.dart' as bindings;
@@ -83,7 +84,7 @@ class Bone {
 
   bool get isNull => Utils.isNull(_ptr);
 
-  String get name => Utils.fromUtf8(_ptr?.ref?.mName);
+  String get name => Utils.fromString(_ptr?.ref?.mName);
 
   Iterable<VertexWeight> get weights {
     return Iterable.generate(
@@ -102,7 +103,7 @@ class AnimMesh {
 
   bool get isNull => Utils.isNull(_ptr);
 
-  String get name => Utils.fromUtf8(_ptr?.ref?.mName);
+  String get name => Utils.fromString(_ptr?.ref?.mName);
 
   Iterable<Vector3> get vertices {
     return Iterable.generate(
@@ -215,7 +216,8 @@ class Mesh {
   Iterable<Iterable<Color>> get colors {
     var n = 0;
     while (n < bindings.AI_MAX_NUMBER_OF_COLOR_SETS &&
-        Utils.isNotNull(_ptr?.ref?.mColors?.elementAt(n))) ++n;
+        _ptr?.ref?.mColors != null &&
+        Utils.isNotNull(_ptr.ref.mColors[n])) ++n;
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
@@ -228,7 +230,8 @@ class Mesh {
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
     while (n < bindings.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        Utils.isNotNull(_ptr?.ref?.mTextureCoords?.elementAt(n))) ++n;
+        _ptr?.ref?.mTextureCoords != null &&
+        Utils.isNotNull(_ptr.ref.mTextureCoords[n])) ++n;
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
@@ -242,8 +245,9 @@ class Mesh {
   Iterable<int> get uvComponents {
     var n = 0;
     while (n < bindings.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        Utils.isNotNull(_ptr?.ref?.mNumUVComponents?.elementAt(n))) ++n;
-    return Iterable.generate(n, (i) => _ptr.ref.mNumUVComponents[i]);
+        _ptr?.ref?.mNumUVComponents != null &&
+        _ptr.ref.mNumUVComponents.elementAt(n).value > 0) ++n;
+    return n > 0 ? _ptr.ref.mNumUVComponents.asTypedList(n) : [];
   }
 
   Iterable<Face> get faces {
@@ -262,7 +266,7 @@ class Mesh {
 
   int get materialIndex => _ptr?.ref?.mMaterialIndex ?? 0;
 
-  String get name => Utils.fromUtf8(_ptr.ref.mName);
+  String get name => Utils.fromUtf8(_ptr?.ref?.mName, _ptr?.ref?.mNameLength);
 
   Iterable<AnimMesh> get animMeshes {
     return Iterable.generate(

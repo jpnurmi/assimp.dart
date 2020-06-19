@@ -60,7 +60,7 @@ class MetaData {
   Iterable<String> get keys {
     return Iterable.generate(
       _ptr?.ref?.mNumProperties ?? 0,
-      (i) => Utils.fromUtf8(_ptr.ref.mKeys.elementAt(i)),
+      (i) => Utils.fromString(_ptr.ref.mKeys.elementAt(i)),
     );
   }
 

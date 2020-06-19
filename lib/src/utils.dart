@@ -45,22 +45,26 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:ffi/ffi.dart';
+
 import 'bindings/types.dart' as bindings;
 
 class Utils {
   static bool isNull(Pointer ptr) => ptr == null || ptr.address == 0;
   static bool isNotNull(Pointer ptr) => ptr != null && ptr.address != 0;
 
-  static String fromUtf8(Pointer<bindings.aiString> str) {
+  static String fromString(Pointer<bindings.aiString> str) {
     if (isNull(str)) return null;
     final len = str.ref.length;
-    final data = Int8List.view(str.ref.data.asTypedList(len).buffer, 0, len);
+    final data = Uint8List.view(str.ref.data.asTypedList(len).buffer, 0, len);
     return utf8.decode(data);
   }
 
-  static String fromString(Pointer<Uint8> str, int len) {
+  static String fromUtf8(Pointer<Utf8> str, int len) {
     if (isNull(str)) return null;
-    final data = Int8List.view(str.asTypedList(len).buffer, 0, len);
+    if (len <= 0) return '';
+    final data =
+        Uint8List.view(str.cast<Uint8>().asTypedList(len).buffer, 0, len);
     return utf8.decode(data);
   }
 }

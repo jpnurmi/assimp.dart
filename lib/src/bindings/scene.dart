@@ -93,7 +93,7 @@ class aiNode extends Struct {
    */
   @Uint32()
   int mNameLength;
-  Pointer<Uint8> mName;
+  Pointer<Utf8> mName;
 
   /** The transformation relative to the node's parent. */
   Pointer<aiMatrix4x4> mTransformation;
