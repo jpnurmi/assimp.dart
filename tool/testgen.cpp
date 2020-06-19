@@ -43,7 +43,7 @@ static void testMeshes(const QString &fileName)
     const aiScene *scene = aiImportFile(testFilePath(fileName).toLocal8Bit(), 0);
     QTextStream(stdout)
             << "testMeshes('" << fileName << "', (meshes) {\n"
-            << "  expect(meshes.length, " << equalsToInt(scene->mNumMeshes) << ");";
+            << "  expect(meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n";
     for (uint i = 0; i < scene->mNumMeshes; ++i) {
         const aiMesh *mesh = scene->mMeshes[i];
         QTextStream(stdout)
