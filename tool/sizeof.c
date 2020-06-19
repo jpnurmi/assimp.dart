@@ -22,9 +22,9 @@
 
 #include <stdio.h>
 
-// padding: pahole libassimp.so -C aiMesh
+// padding: pahole libassimp.so -C aiXxx
 
-int main()
+static void print_primitive_types()
 {
     printf("primitive:\n");
     printf("\tsizeof(int) = %zu\n", sizeof(int));
@@ -35,7 +35,10 @@ int main()
     printf("\tsizeof(double) = %zu\n", sizeof(double));
     printf("\tsizeof(void*) = %zu\n", sizeof(void*));
     printf("\n");
+}
 
+static void print_assimp_types()
+{
     printf("assimp:\n");
     printf("\tsizeof(aiAABB) = %zu\n", sizeof(struct aiAABB));
     printf("\tsizeof(aiAnimation) = %zu\n", sizeof(struct aiAnimation));
@@ -77,30 +80,10 @@ int main()
     printf("\tsizeof(aiVector3D) = %zu\n", sizeof(struct aiVector3D));
     printf("\tsizeof(aiVertexWeight) = %zu\n", sizeof(struct aiVertexWeight));
     printf("\n");
+}
 
-    printf("aiMesh:\n");
-    printf("\tsizeof(mPrimitiveTypes) = %zu\n", sizeof(unsigned int)); // @0: 4
-    printf("\tsizeof(mNumVertices) = %zu\n", sizeof(unsigned int)); // @4: 4
-    printf("\tsizeof(mNumFaces) = %zu\n", sizeof(unsigned int)); // @8: 4
-    // @12: 4 (padding)
-    printf("\tsizeof(mVertices) = %zu\n", sizeof(C_STRUCT aiVector3D*)); // @16: 8
-    printf("\tsizeof(mNormals) = %zu\n", sizeof(C_STRUCT aiVector3D*)); // @24: 8
-    printf("\tsizeof(mTangents) = %zu\n", sizeof(C_STRUCT aiVector3D*)); // @32: 8
-    printf("\tsizeof(mBitangents) = %zu\n", sizeof(C_STRUCT aiVector3D*)); // @40: 8
-    printf("\tsizeof(mColors) = %zu\n", sizeof(C_STRUCT aiColor4D* [AI_MAX_NUMBER_OF_COLOR_SETS])); // @48: 64
-    printf("\tsizeof(mTextureCoords) = %zu\n", sizeof(C_STRUCT aiVector3D* [AI_MAX_NUMBER_OF_TEXTURECOORDS])); // @112: 64
-    printf("\tsizeof(mNumUVComponents) = %zu\n", sizeof(unsigned int [AI_MAX_NUMBER_OF_TEXTURECOORDS])); // @176: 32
-    printf("\tsizeof(mFaces) = %zu\n", sizeof(C_STRUCT aiFace*)); // @208: 8
-    printf("\tsizeof(mNumBones) = %zu\n", sizeof(unsigned int)); // @216: 4
-    // @220: 4 (padding)
-    printf("\tsizeof(mBones) = %zu\n", sizeof(C_STRUCT aiBone**)); // @224: 8
-    printf("\tsizeof(mMaterialIndex) = %zu\n", sizeof(unsigned int)); // @232: 4
-    printf("\tsizeof(mName) = %zu\n", sizeof(C_STRUCT aiString)); // @236: 1028
-    printf("\tsizeof(mNumAnimMeshes) = %zu\n", sizeof(unsigned int)); // @1264: 4
-    // @1268: 4 (padding)
-    printf("\tsizeof(mAnimMeshes) = %zu\n", sizeof(C_STRUCT aiAnimMesh**)); // @1272: 8
-    printf("\tsizeof(mMethod) = %zu\n", sizeof(unsigned int)); // @1280: 4
-    printf("\tsizeof(mAABB) = %zu\n", sizeof(C_STRUCT aiAABB)); // @1284: 24
-    // @1308: 4 (padding) => 1312
-    printf("\n");
+int main()
+{
+    print_primitive_types();
+    print_assimp_types();
 }
