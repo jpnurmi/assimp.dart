@@ -18,6 +18,13 @@ class _IsNullPointer extends Matcher {
   Description describe(Description description) => description.add('nullptr');
 }
 
+void prepareTest() {
+  // https://github.com/flutter/flutter/issues/20907
+  if (Directory.current.path.endsWith('/test')) {
+    Directory.current = Directory.current.parent;
+  }
+}
+
 class TestFrom {
   static const int file = 0x1;
   static const int bytes = 0x2;
