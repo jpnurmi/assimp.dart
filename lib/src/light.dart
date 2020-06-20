@@ -46,6 +46,8 @@ import 'dart:ffi';
 import 'bindings.dart' as b;
 import 'extensions.dart';
 
+enum LightSourceType { undefined, directional, point, spot, ambient, area }
+
 class Light {
   Pointer<b.aiLight> _ptr;
 
@@ -54,4 +56,24 @@ class Light {
     if (AssimpPointer.isNull(ptr)) return null;
     return Light._(ptr);
   }
+
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
+  LightSourceType get type => LightSourceType.values[_ptr.ref.mType];
+
+  Vector3 get position => AssimpVector3.fromNative(_ptr.ref.mPosition);
+  Vector3 get direction => AssimpVector3.fromNative(_ptr.ref.mDirection);
+  Vector3 get up => AssimpVector3.fromNative(_ptr.ref.mUp);
+
+  double get attenuationConstant => _ptr.ref.mAttenuationConstant;
+  double get attenuationLinear => _ptr.ref.mAttenuationLinear;
+  double get attenuationQuadratic => _ptr.ref.mAttenuationQuadratic;
+
+  Color get colorDiffuse => AssimpColor3.fromNative(_ptr.ref.mColorDiffuse);
+  Color get colorSpecular => AssimpColor3.fromNative(_ptr.ref.mColorSpecular);
+  Color get colorAmbient => AssimpColor3.fromNative(_ptr.ref.mColorAmbient);
+
+  double get angleInnerCone => _ptr.ref.mAngleInnerCone;
+  double get angleOuterCone => _ptr.ref.mAngleOuterCone;
+
+  Size get size => AssimpSize.fromNative(_ptr.ref.mSize);
 }

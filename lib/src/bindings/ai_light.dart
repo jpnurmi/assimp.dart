@@ -330,7 +330,7 @@ class aiLight extends Struct {
   double _mDirectionX, _mDirectionY, _mDirectionZ;
 
   // aiVector3D                 mUp;                  /*  1056    12 */
-  Pointer<aiVector3D> get mUp => Pointer.fromAddress(addressOf.address + 1044);
+  Pointer<aiVector3D> get mUp => Pointer.fromAddress(addressOf.address + 1056);
 
   @Float() // ai_real
   double _mUpX, _mUpY, _mUpZ;

@@ -67,6 +67,13 @@ void testAnimations(String fileName, void tester(animations)) {
   scene.dispose();
 }
 
+void testLights(String fileName, void tester(lights)) {
+  final filePath = testModelPath(fileName);
+  final scene = Scene.fromFile(filePath);
+  tester(scene.lights);
+  scene.dispose();
+}
+
 void testMaterials(String fileName, void tester(materials)) {
   final filePath = testModelPath(fileName);
   final scene = Scene.fromFile(filePath);

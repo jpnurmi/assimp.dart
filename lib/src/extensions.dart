@@ -45,7 +45,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 import 'dart:ui';
-export 'dart:ui' show Color;
+export 'dart:ui' show Color, Size;
 
 import 'package:ffi/ffi.dart';
 import 'package:vector_math/vector_math.dart';
@@ -239,6 +239,20 @@ extension AssimpRay on Ray {
 //    ptr.ref.dir = AssimpVector3.toNative(ray.direction);
 //    return ptr;
 //  }
+}
+
+extension AssimpSize on Size {
+  static Size fromNative(Pointer<b.aiVector2D> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Size(ptr.ref.x, ptr.ref.y);
+  }
+
+  static Pointer<b.aiVector2D> toNative(Size size) {
+    final Pointer<b.aiVector2D> ptr = allocate();
+    ptr.ref.x = size.width;
+    ptr.ref.y = size.height;
+    return ptr;
+  }
 }
 
 extension AssimpString on String {

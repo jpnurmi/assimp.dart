@@ -15,17 +15,18 @@ static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 
 static QString equalsTo(const QString &value) { return QString("equals(%1)").arg(value); }
-static QString equalsToInt(int value) { return value ? QString("equals(%1)").arg(value) : "isZero"; }
+static QString equalsToInt(int value) { return value ? equalsTo(QString::number(value)) : "isZero"; }
 static QString equalsToFloat(float value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
 static QString equalsToDouble(double value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
-static QString equalsToString(const char *str, uint len) { return len ? QString("equals('%1')").arg(QString::fromUtf8(str, len).replace("\\", "\\\\").replace("$", "\\$")) : "isEmpty"; }
+static QString equalsToString(const char *str, uint len) { return len ? equalsTo(QString("'%1'").arg(QString::fromUtf8(str, len).replace("\\", "\\\\").replace("$", "\\$"))) : "isEmpty"; }
 static QString equalsToString(const aiString &str) { return equalsToString(str.data, str.length); }
+static QString equalsToColor3(const aiColor3D &c) { return QString("isSameColorAs(Color.fromARGB(255, %1, %2, %3))").arg(std::round(c.r * 255)).arg(std::round(c.g * 255)).arg(std::round(c.b * 255)); }
 static QString equalsToQuaternion(const aiQuaternion &q) { return QString("quaternionMoreOrLessEquals(Quaternion(%1, %2, %3, %4))").arg(q.x).arg(q.y).arg(q.z).arg(q.z); }
 static QString equalsToVector3(const aiVector3D &v) { return QString("vector3MoreOrLessEquals(Vector3(%1, %2, %3))").arg(v.x).arg(v.y).arg(v.z); }
 static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("matrix4MoreOrLessEquals(Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16))").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
-static QString equalsToByteArray(const char *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
-static QString equalsToIntArray(const uint *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
-static QString equalsToDoubleArray(const double *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
+static QString equalsToByteArray(const char *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return equalsTo("[%1]").arg(v.join(", ")); }
+static QString equalsToIntArray(const uint *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return equalsTo("[%1]").arg(v.join(", ")); }
+static QString equalsToDoubleArray(const double *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return equalsTo("[%1]").arg(v.join(", ")); }
 
 static QString equalsToAnimBehavior(int value)
 {
@@ -34,6 +35,19 @@ static QString equalsToAnimBehavior(int value)
     case aiAnimBehaviour_CONSTANT: return equalsTo("AnimBehavior.constant");
     case aiAnimBehaviour_LINEAR: return equalsTo("AnimBehavior.linear");
     case aiAnimBehaviour_REPEAT: return equalsTo("AnimBehavior.repeat");
+    default: return QString();
+    }
+}
+
+static QString equalsToLightSourceType(int value)
+{
+    switch (value) {
+    case aiLightSource_UNDEFINED: return equalsTo("LightSourceType.undefined");
+    case aiLightSource_DIRECTIONAL: return equalsTo("LightSourceType.directional");
+    case aiLightSource_POINT: return equalsTo("LightSourceType.point");
+    case aiLightSource_SPOT: return equalsTo("LightSourceType.spot");
+    case aiLightSource_AMBIENT: return equalsTo("LightSourceType.ambient");
+    case aiLightSource_AREA: return equalsTo("LightSourceType.area");
     default: return QString();
     }
 }
@@ -177,6 +191,50 @@ static void generateAnimationTest(const QString &fileName)
         });
         writeGroup(out, "obj", [&]() {
             writeAnimationTester(out, "Obj/Spider/spider.obj");
+        });
+    });
+}
+
+static void writeLightTester(QTextStream &out, const QString &fileName = QString())
+{
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testLights('" << fileName << "', (lights) {\n"
+        << "      expect(lights.length, " << equalsToInt(scene->mNumLights) << ");\n";
+    for (uint i = 0; i < scene->mNumLights; ++i) {
+        const aiLight *light = scene->mLights[i];
+        out << "      expect(lights.elementAt(" << i << ").name, " << equalsToString(light->mName) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").type, " << equalsToLightSourceType(light->mType) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").position, " << equalsToVector3(light->mPosition) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").direction, " << equalsToVector3(light->mDirection) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").up, " << equalsToVector3(light->mUp) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").attenuationConstant, " << equalsToFloat(light->mAttenuationConstant) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").attenuationLinear, " << equalsToFloat(light->mAttenuationLinear) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").attenuationQuadratic, " << equalsToFloat(light->mAttenuationQuadratic) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").colorDiffuse, " << equalsToColor3(light->mColorDiffuse) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").colorSpecular, " << equalsToColor3(light->mColorSpecular) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").colorAmbient, " << equalsToColor3(light->mColorAmbient) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").angleInnerCone, " << equalsToFloat(light->mAngleInnerCone) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").angleOuterCone, " << equalsToFloat(light->mAngleOuterCone) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").size.width, " << equalsToFloat(light->mSize.x) << ");\n"
+            << "      expect(lights.elementAt(" << i << ").size.height, " << equalsToFloat(light->mSize.y) << ");\n"
+            << (i < scene->mNumLights - 1 ? "\n" : "");
+    }
+    out << "    });\n";
+    aiReleaseImport(scene);
+}
+
+static void generateLightTest(const QString &fileName)
+{
+    generateTest<aiLight>("aiLight", fileName, [&](QTextStream &out) {
+        writeGroup(out, "3mf", [&]() {
+            writeLightTester(out, "3mf/box.3mf");
+            writeLightTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeLightTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeLightTester(out, "Obj/Spider/spider.obj");
         });
     });
 }
@@ -406,6 +464,7 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
     generateAnimationTest("animation_test.dart");
+    generateLightTest("light_test.dart");
     generateMaterialTest("material_test.dart");
     generateMeshTest("mesh_test.dart");
     generateNodeTest("node_test.dart");
