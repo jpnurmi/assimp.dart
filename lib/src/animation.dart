@@ -46,6 +46,137 @@ import 'dart:ffi';
 import 'bindings.dart' as b;
 import 'extensions.dart';
 
+enum AnimBehavior { defaults, constant, linear, repeat }
+
+class VectorKey {
+  Pointer<b.aiVectorKey> _ptr;
+
+  VectorKey._(this._ptr);
+  factory VectorKey.fromNative(Pointer<b.aiVectorKey> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return VectorKey._(ptr);
+  }
+
+  double get time => _ptr.ref.mTime;
+  Vector3 get value => AssimpVector3.fromNative(_ptr.ref.mValue);
+}
+
+class QuaternionKey {
+  Pointer<b.aiQuatKey> _ptr;
+
+  QuaternionKey._(this._ptr);
+  factory QuaternionKey.fromNative(Pointer<b.aiQuatKey> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return QuaternionKey._(ptr);
+  }
+
+  double get time => _ptr.ref.mTime;
+  Quaternion get value => AssimpQuaternion.fromNative(_ptr.ref.mValue);
+}
+
+class MeshKey {
+  Pointer<b.aiMeshKey> _ptr;
+
+  MeshKey._(this._ptr);
+  factory MeshKey.fromNative(Pointer<b.aiMeshKey> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return MeshKey._(ptr);
+  }
+
+  double get time => _ptr.ref.mTime;
+  int get value => _ptr.ref.mValue;
+}
+
+class MeshMorphKey {
+  Pointer<b.aiMeshMorphKey> _ptr;
+
+  MeshMorphKey._(this._ptr);
+  factory MeshMorphKey.fromNative(Pointer<b.aiMeshMorphKey> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return MeshMorphKey._(ptr);
+  }
+
+  double get time => _ptr.ref.mTime;
+  Iterable<int> get values =>
+      _ptr.ref.mValues.asTypedList(_ptr.ref.mNumValuesAndWeights);
+  Iterable<double> get weights =>
+      _ptr.ref.mWeights.asTypedList(_ptr.ref.mNumValuesAndWeights);
+}
+
+class NodeAnim {
+  Pointer<b.aiNodeAnim> _ptr;
+
+  NodeAnim._(this._ptr);
+  factory NodeAnim.fromNative(Pointer<b.aiNodeAnim> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return NodeAnim._(ptr);
+  }
+
+  String get name => AssimpString.fromNative(_ptr.ref.mNodeName);
+
+  Iterable<VectorKey> get positionKeys {
+    return Iterable.generate(
+      _ptr.ref.mNumPositionKeys,
+      (i) => VectorKey.fromNative(_ptr.ref.mPositionKeys.elementAt(i)),
+    );
+  }
+
+  Iterable<QuaternionKey> get rotationKeys {
+    return Iterable.generate(
+      _ptr.ref.mNumRotationKeys,
+      (i) => QuaternionKey.fromNative(_ptr.ref.mRotationKeys.elementAt(i)),
+    );
+  }
+
+  Iterable<VectorKey> get scalingKeys {
+    return Iterable.generate(
+      _ptr.ref.mNumScalingKeys,
+      (i) => VectorKey.fromNative(_ptr.ref.mScalingKeys.elementAt(i)),
+    );
+  }
+
+  AnimBehavior get preState => AnimBehavior.values[_ptr.ref.mPreState];
+  AnimBehavior get postState => AnimBehavior.values[_ptr.ref.mPostState];
+}
+
+class MeshAnim {
+  Pointer<b.aiMeshAnim> _ptr;
+
+  MeshAnim._(this._ptr);
+  factory MeshAnim.fromNative(Pointer<b.aiMeshAnim> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return MeshAnim._(ptr);
+  }
+
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
+
+  Iterable<MeshKey> get keys {
+    return Iterable.generate(
+      _ptr.ref.mNumKeys,
+      (i) => MeshKey.fromNative(_ptr.ref.mKeys.elementAt(i)),
+    );
+  }
+}
+
+class MeshMorphAnim {
+  Pointer<b.aiMeshMorphAnim> _ptr;
+
+  MeshMorphAnim._(this._ptr);
+  factory MeshMorphAnim.fromNative(Pointer<b.aiMeshMorphAnim> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return MeshMorphAnim._(ptr);
+  }
+
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
+
+  Iterable<MeshMorphKey> get keys {
+    return Iterable.generate(
+      _ptr.ref.mNumKeys,
+      (i) => MeshMorphKey.fromNative(_ptr.ref.mKeys.elementAt(i)),
+    );
+  }
+}
+
 class Animation {
   Pointer<b.aiAnimation> _ptr;
 
@@ -53,5 +184,30 @@ class Animation {
   factory Animation.fromNative(Pointer<b.aiAnimation> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Animation._(ptr);
+  }
+
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
+  double get duration => _ptr.ref.mDuration;
+  double get ticksPerSecond => _ptr.ref.mTicksPerSecond;
+
+  Iterable<NodeAnim> get channels {
+    return Iterable.generate(
+      _ptr.ref.mNumChannels,
+      (i) => NodeAnim.fromNative(_ptr.ref.mChannels[i]),
+    );
+  }
+
+  Iterable<MeshAnim> get meshChannels {
+    return Iterable.generate(
+      _ptr.ref.mNumMeshChannels,
+      (i) => MeshAnim.fromNative(_ptr.ref.mMeshChannels[i]),
+    );
+  }
+
+  Iterable<MeshMorphAnim> get meshMorphChannels {
+    return Iterable.generate(
+      _ptr.ref.mNumMorphMeshChannels,
+      (i) => MeshMorphAnim.fromNative(_ptr.ref.mMorphMeshChannels[i]),
+    );
   }
 }

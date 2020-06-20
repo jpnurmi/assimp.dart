@@ -8,6 +8,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
+import 'package:path/path.dart';
 // ignore: deprecated_member_use
 import 'package:test_api/test_api.dart' hide TypeMatcher, isInstanceOf;
 
@@ -32,6 +33,24 @@ Matcher matrix3MoreOrLessEquals(Matrix3 value,
 Matcher matrix4MoreOrLessEquals(Matrix4 value,
     {double epsilon = precisionErrorTolerance}) {
   return _IsWithinDistance<Matrix4>(
+      relativeError, value, precisionErrorTolerance);
+}
+
+Matcher quaternionMoreOrLessEquals(Quaternion value,
+    {double epsilon = precisionErrorTolerance}) {
+  return _IsWithinDistance<Quaternion>(
+      absoluteError, value, precisionErrorTolerance);
+}
+
+Matcher vector2MoreOrLessEquals(Vector2 value,
+    {double epsilon = precisionErrorTolerance}) {
+  return _IsWithinDistance<Vector2>(
+      relativeError, value, precisionErrorTolerance);
+}
+
+Matcher vector3MoreOrLessEquals(Vector3 value,
+    {double epsilon = precisionErrorTolerance}) {
+  return _IsWithinDistance<Vector3>(
       relativeError, value, precisionErrorTolerance);
 }
 

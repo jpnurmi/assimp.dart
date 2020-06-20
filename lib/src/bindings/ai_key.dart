@@ -53,7 +53,10 @@ class aiVectorKey extends Struct {
   double mTime;
 
   // aiVector3D                 mValue;               /*     8    12 */
-  Pointer<aiVector3D> mValue;
+  Pointer<aiVector3D> get mValue => Pointer.fromAddress(addressOf.address + 8);
+
+  @Float() // ai_real
+  double _mValueX, _mValueY, _mValueZ;
 
   /* size: 24, members: 2 */
   /* padding: 4 */
@@ -68,7 +71,11 @@ class aiQuatKey extends Struct {
   double mTime;
 
   // aiQuaternion               mValue;               /*     8    16 */
-  Pointer<aiQuaternion> mValue;
+  Pointer<aiQuaternion> get mValue =>
+      Pointer.fromAddress(addressOf.address + 8);
+
+  @Float() // ai_real
+  double _mValueX, _mValueY, _mValueZ, _mValueW;
 
   /* size: 24, members: 2 */
 }

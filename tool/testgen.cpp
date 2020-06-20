@@ -13,16 +13,30 @@ static QString import(const QString &package) { return QString("import '%1';").a
 
 static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(void *ptr) { return ptr ? "isNotNull" : "isNull"; }
-static QString isNullPointerOrNot(void *ptr) { return !ptr ? "isNullPointer" : "isNotNull"; }
 
+static QString equalsTo(const QString &value) { return QString("equals(%1)").arg(value); }
 static QString equalsToInt(int value) { return value ? QString("equals(%1)").arg(value) : "isZero"; }
 static QString equalsToFloat(float value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
 static QString equalsToDouble(double value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
 static QString equalsToString(const char *str, uint len) { return len ? QString("equals('%1')").arg(QString::fromUtf8(str, len).replace("\\", "\\\\").replace("$", "\\$")) : "isEmpty"; }
 static QString equalsToString(const aiString &str) { return equalsToString(str.data, str.length); }
+static QString equalsToQuaternion(const aiQuaternion &q) { return QString("quaternionMoreOrLessEquals(Quaternion(%1, %2, %3, %4))").arg(q.x).arg(q.y).arg(q.z).arg(q.z); }
+static QString equalsToVector3(const aiVector3D &v) { return QString("vector3MoreOrLessEquals(Vector3(%1, %2, %3))").arg(v.x).arg(v.y).arg(v.z); }
 static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("matrix4MoreOrLessEquals(Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16))").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
 static QString equalsToByteArray(const char *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
 static QString equalsToIntArray(const uint *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
+static QString equalsToDoubleArray(const double *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
+
+static QString equalsToAnimBehavior(int value)
+{
+    switch (value) {
+    case aiAnimBehaviour_DEFAULT: return equalsTo("AnimBehavior.defaults");
+    case aiAnimBehaviour_CONSTANT: return equalsTo("AnimBehavior.constant");
+    case aiAnimBehaviour_LINEAR: return equalsTo("AnimBehavior.linear");
+    case aiAnimBehaviour_REPEAT: return equalsTo("AnimBehavior.repeat");
+    default: return QString();
+    }
+}
 
 template <typename T>
 static int arraySize(T *array)
@@ -88,6 +102,83 @@ static void generateTest(const QString &typeName, const QString &fileName, std::
     writeSizeTest(out, typeName, sizeof(T));
     writer(out);
     writeFooter(out, fileName);
+}
+
+static void writeAnimationTester(QTextStream &out, const QString &fileName = QString())
+{
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testAnimations('" << fileName << "', (animations) {\n"
+        << "      expect(animations.length, " << equalsToInt(scene->mNumAnimations) << ");\n";
+    for (uint i = 0; i < scene->mNumAnimations; ++i) {
+        const aiAnimation *animation = scene->mAnimations[i];
+        out << "      expect(animations.elementAt(" << i << ").name, " << equalsToString(animation->mName) << ");\n";
+        out << "      expect(animations.elementAt(" << i << ").duration, " << equalsToDouble(animation->mDuration) << ");\n";
+        out << "      expect(animations.elementAt(" << i << ").ticksPerSecond, " << equalsToDouble(animation->mTicksPerSecond) << ");\n";
+        out << "      expect(animations.elementAt(" << i << ").channels.length, " << equalsToInt(animation->mNumChannels) << ");\n";
+        for (uint j = 0; j < animation->mNumChannels; ++j) {
+            const aiNodeAnim *channel = animation->mChannels[j];
+            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").positionKeys.length, " << equalsToInt(channel->mNumPositionKeys) << ");\n";
+            for (uint k = 0; k < channel->mNumPositionKeys; ++k) {
+                const aiVectorKey *key = channel->mPositionKeys + k;
+                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").positionKeys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
+                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").positionKeys.elementAt(" << k << ").value, " << equalsToVector3(key->mValue) << ");\n";
+            }
+            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").rotationKeys.length, " << equalsToInt(channel->mNumRotationKeys) << ");\n";
+            for (uint k = 0; k < channel->mNumRotationKeys; ++k) {
+                const aiQuatKey *key = channel->mRotationKeys + k;
+                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").rotationKeys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
+                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").rotationKeys.elementAt(" << k << ").value, " << equalsToQuaternion(key->mValue) << ");\n";
+            }
+            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").scalingKeys.length, " << equalsToInt(channel->mNumScalingKeys) << ");\n";
+            for (uint k = 0; k < channel->mNumScalingKeys; ++k) {
+                const aiVectorKey *key = channel->mScalingKeys + k;
+                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").scalingKeys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
+                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").scalingKeys.elementAt(" << k << ").value, " << equalsToVector3(key->mValue) << ");\n";
+            }
+            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").preState, " << equalsToAnimBehavior(channel->mPreState) << ");\n";
+            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").postState, " << equalsToAnimBehavior(channel->mPostState) << ");\n";
+        }
+        out << "      expect(animations.elementAt(" << i << ").meshChannels.length, " << equalsToInt(animation->mNumMeshChannels) << ");\n";
+        for (uint j = 0; j < animation->mNumMeshChannels; ++j) {
+            const aiMeshAnim *channel = animation->mMeshChannels[j];
+            out << "      expect(animations.elementAt(" << i << ").meshChannels.elementAt(" << j << ").keys.length, " << equalsToInt(channel->mNumKeys) << ");\n";
+            for (uint k = 0; k < channel->mNumKeys; ++k) {
+                const aiMeshKey *key = channel->mKeys + k;
+                out << "      expect(animations.elementAt(" << i << ").meshChannels.elementAt(" << j << ").keys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
+                out << "      expect(animations.elementAt(" << i << ").meshChannels.elementAt(" << j << ").keys.elementAt(" << k << ").value, " << equalsToInt(key->mValue) << ");\n";
+            }
+        }
+        out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.length, " << equalsToInt(animation->mNumMorphMeshChannels) << ");\n";
+        for (uint j = 0; j < animation->mNumMorphMeshChannels; ++j) {
+            const aiMeshMorphAnim *channel = animation->mMorphMeshChannels[j];
+            out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.elementAt(" << j << ").keys.length, " << equalsToInt(channel->mNumKeys) << ");\n";
+            for (uint k = 0; k < channel->mNumKeys; ++k) {
+                const aiMeshMorphKey *key = channel->mKeys + k;
+                out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.elementAt(" << j << ").keys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
+                out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.elementAt(" << j << ").keys.elementAt(" << k << ").values, " << equalsToIntArray(key->mValues, key->mNumValuesAndWeights) << ");\n";
+                out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.elementAt(" << j << ").keys.elementAt(" << k << ").weights, " << equalsToDoubleArray(key->mWeights, key->mNumValuesAndWeights) << ");\n";
+            }
+        }
+        out << (i < scene->mNumAnimations - 1 ? "\n" : "");
+    }
+    out << "    });\n";
+    aiReleaseImport(scene);
+}
+
+static void generateAnimationTest(const QString &fileName)
+{
+    generateTest<aiAnimation>("aiAnimation", fileName, [&](QTextStream &out) {
+        writeGroup(out, "3mf", [&]() {
+            writeAnimationTester(out, "3mf/box.3mf");
+            writeAnimationTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeAnimationTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeAnimationTester(out, "Obj/Spider/spider.obj");
+        });
+    });
 }
 
 static void writeMaterialTester(QTextStream &out, const QString &fileName = QString())
@@ -272,6 +363,7 @@ int main(int argc, char *argv[])
 
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
+    generateAnimationTest("animation_test.dart");
     generateMaterialTest("material_test.dart");
     generateMeshTest("mesh_test.dart");
     generateNodeTest("node_test.dart");
