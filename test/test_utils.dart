@@ -64,3 +64,14 @@ void testScene(String fileName,
     }
   }
 }
+
+void testMeshes(String fileName, void tester(meshes)) {
+  if (fileName == null) {
+    tester(Mesh.fromNative(null));
+  } else {
+    final filePath = testModelPath(fileName);
+    final scene = Scene.fromFile(filePath);
+    tester(scene.meshes);
+    scene.dispose();
+  }
+}

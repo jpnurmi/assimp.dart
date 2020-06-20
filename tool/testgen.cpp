@@ -15,7 +15,7 @@ static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 static QString isNullPointerOrNot(void *ptr) { return !ptr ? "isNullPointer" : "isNotNull"; }
 static QString equalsToInt(int count) { return count ? QString("equals(%1)").arg(count) : "isZero"; }
-static QString equalsToString(const aiString str) { return str.length ? QString("equals('%1')").arg(QString::fromLatin1(str.data, str.length)) : "isNull"; }
+static QString equalsToString(const aiString str) { return str.length ? QString("equals('%1')").arg(QString::fromLatin1(str.data, str.length)) : "isEmpty"; }
 
 template <typename T>
 static int arraySize(T *array)
@@ -90,66 +90,105 @@ static void writeSceneTester(QTextStream &out, const QString &fileName = QString
     }
 }
 
-static void generateSceneTest(const QString &fileName)
+template <typename T>
+static void generateTest(const QString &typeName, const QString &fileName, std::function<void(QTextStream &out)> writer)
 {
     QFile file(testFilePath(fileName));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
         qFatal(qPrintable(file.errorString()));
 
     QTextStream out(&file);
-
     writeHeader(out, fileName);
-
-    writeSizeTest(out, "aiScene", sizeof(aiScene));
-
-    writeGroup(out, "null", [&]() {
-        writeSceneTester(out);
-    });
-
-    writeGroup(out, "3mf", [&]() {
-        writeSceneTester(out, "3mf/box.3mf");
-        writeSceneTester(out, "3mf/spider.3mf");
-    });
-
-    writeGroup(out, "fbx", [&]() {
-        writeSceneTester(out, "fbx/huesitos.fbx");
-    });
-
-    writeGroup(out, "obj", [&]() {
-        writeSceneTester(out, "Obj/Spider/spider.obj");
-    });
-
+    writeSizeTest(out, typeName, sizeof(T));
+    writer(out);
     writeFooter(out, fileName);
 }
 
-static void testMeshes(const QString &fileName)
+static void generateSceneTest(const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    QTextStream(stdout)
-            << "testMeshes('" << fileName << "', (meshes) {\n"
-            << "  expect(meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n";
-    for (uint i = 0; i < scene->mNumMeshes; ++i) {
-        const aiMesh *mesh = scene->mMeshes[i];
-        QTextStream(stdout)
-                << "  expect(meshes.elementAt(" << i << ").primitiveTypes, " << equalsToInt(mesh->mPrimitiveTypes) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").vertices.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").normals.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").tangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").bitangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").colors.length, " << equalsToInt(arraySize(mesh->mColors)) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").textureCoords.length, " << equalsToInt(arraySize(mesh->mTextureCoords)) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").uvComponents.length, " << equalsToInt(arraySize(mesh->mNumUVComponents)) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").faces.length, " << equalsToInt(mesh->mNumFaces) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").bones.length, " << equalsToInt(mesh->mNumBones) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").materialIndex, " << equalsToInt(mesh->mMaterialIndex) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").name, " << equalsToString(mesh->mName) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").animMeshes.length, " << equalsToInt(mesh->mNumAnimMeshes) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").morphingMethod, " << equalsToInt(mesh->mMethod) << ");\n"
-                << "  expect(meshes.elementAt(" << i << ").aabb, isNull);\n" // ### TODO
+    generateTest<aiScene>("aiScene", fileName, [&](QTextStream &out) {
+        writeGroup(out, "null", [&]() {
+            writeSceneTester(out);
+        });
+        writeGroup(out, "3mf", [&]() {
+            writeSceneTester(out, "3mf/box.3mf");
+            writeSceneTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeSceneTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeSceneTester(out, "Obj/Spider/spider.obj");
+        });
+    });
+}
+
+static void writeMeshTester(QTextStream &out, const QString &fileName = QString())
+{
+    if (fileName.isNull()) {
+        out << "    testMeshes(null, (mesh) {\n"
+            << "      expect(mesh.isNull, isTrue);\n"
+            << "      expect(mesh.primitiveTypes, isZero);\n"
+            << "      expect(mesh.vertices, isEmpty);\n"
+            << "      expect(mesh.normals, isEmpty);\n"
+            << "      expect(mesh.tangents, isEmpty);\n"
+            << "      expect(mesh.bitangents, isEmpty);\n"
+            << "      expect(mesh.colors, isEmpty);\n"
+            << "      expect(mesh.textureCoords, isEmpty);\n"
+            << "      expect(mesh.uvComponents, isEmpty);\n"
+            << "      expect(mesh.faces, isEmpty);\n"
+            << "      expect(mesh.bones, isEmpty);\n"
+            << "      expect(mesh.materialIndex, isZero);\n"
+            << "      expect(mesh.name, isNull);\n"
+            << "      expect(mesh.animMeshes, isEmpty);\n"
+            << "      expect(mesh.morphingMethod, isZero);\n"
+            << "      expect(mesh.aabb, isNull);\n"
+            << "    });\n";
+    } else {
+        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+        out << "    testMeshes('" << fileName << "', (meshes) {\n"
+            << "      expect(meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n";
+        for (uint i = 0; i < scene->mNumMeshes; ++i) {
+            const aiMesh *mesh = scene->mMeshes[i];
+            out << "      expect(meshes.elementAt(" << i << ").primitiveTypes, " << equalsToInt(mesh->mPrimitiveTypes) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").vertices.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").normals.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").tangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").bitangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").colors.length, " << equalsToInt(arraySize(mesh->mColors)) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").textureCoords.length, " << equalsToInt(arraySize(mesh->mTextureCoords)) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").uvComponents.length, " << equalsToInt(arraySize(mesh->mNumUVComponents)) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").faces.length, " << equalsToInt(mesh->mNumFaces) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").bones.length, " << equalsToInt(mesh->mNumBones) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").materialIndex, " << equalsToInt(mesh->mMaterialIndex) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").name, " << equalsToString(mesh->mName) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").animMeshes.length, " << equalsToInt(mesh->mNumAnimMeshes) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").morphingMethod, " << equalsToInt(mesh->mMethod) << ");\n"
+                << "      expect(meshes.elementAt(" << i << ").aabb, isNull);\n" // ### TODO
                 << (i < scene->mNumMeshes - 1 ? "\n" : "");
+        }
+        out << "    });\n";
+        aiReleaseImport(scene);
     }
-    QTextStream(stdout) << "});\n\n";
-    aiReleaseImport(scene);
+}
+
+static void generateMeshTest(const QString &fileName)
+{
+    generateTest<aiMesh>("aiMesh", fileName, [&](QTextStream &out) {
+        writeGroup(out, "null", [&]() {
+            writeMeshTester(out);
+        });
+        writeGroup(out, "3mf", [&]() {
+            writeMeshTester(out, "3mf/box.3mf");
+            writeMeshTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeMeshTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeMeshTester(out, "Obj/Spider/spider.obj");
+        });
+    });
 }
 
 static void testNodes(const QString &fileName)
@@ -174,11 +213,7 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
     generateSceneTest("scene_test.dart");
-
-    testMeshes("3mf/box.3mf");
-    testMeshes("3mf/spider.3mf");
-    testMeshes("fbx/huesitos.fbx");
-    testMeshes("Obj/Spider/spider.obj");
+    generateMeshTest("mesh_test.dart");
 
     testNodes("3mf/box.3mf");
     testNodes("3mf/spider.3mf");
