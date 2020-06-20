@@ -195,6 +195,43 @@ static void generateAnimationTest(const QString &fileName)
     });
 }
 
+static void writeCameraTester(QTextStream &out, const QString &fileName = QString())
+{
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testCameras('" << fileName << "', (cameras) {\n"
+        << "      expect(cameras.length, " << equalsToInt(scene->mNumCameras) << ");\n";
+    for (uint i = 0; i < scene->mNumCameras; ++i) {
+        const aiCamera *camera = scene->mCameras[i];
+        out << "      expect(cameras.elementAt(" << i << ").name, " << equalsToString(camera->mName) << ");\n"
+            << "      expect(cameras.elementAt(" << i << ").position, " << equalsToVector3(camera->mPosition) << ");\n"
+            << "      expect(cameras.elementAt(" << i << ").up, " << equalsToVector3(camera->mUp) << ");\n"
+            << "      expect(cameras.elementAt(" << i << ").lookAt, " << equalsToVector3(camera->mLookAt) << ");\n"
+            << "      expect(cameras.elementAt(" << i << ").horizontalFov, " << equalsToFloat(camera->mHorizontalFOV) << ");\n"
+            << "      expect(cameras.elementAt(" << i << ").clipPlaneNear, " << equalsToFloat(camera->mClipPlaneNear) << ");\n"
+            << "      expect(cameras.elementAt(" << i << ").clipPlaneFar, " << equalsToFloat(camera->mClipPlaneFar) << ");\n"
+            << "      expect(cameras.elementAt(" << i << ").aspect, " << equalsToFloat(camera->mAspect) << ");\n"
+            << (i < scene->mNumCameras - 1 ? "\n" : "");
+    }
+    out << "    });\n";
+    aiReleaseImport(scene);
+}
+
+static void generateCameraTest(const QString &fileName)
+{
+    generateTest<aiCamera>("aiCamera", fileName, [&](QTextStream &out) {
+        writeGroup(out, "3mf", [&]() {
+            writeCameraTester(out, "3mf/box.3mf");
+            writeCameraTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeCameraTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeCameraTester(out, "Obj/Spider/spider.obj");
+        });
+    });
+}
+
 static void writeLightTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
@@ -464,6 +501,7 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
     generateAnimationTest("animation_test.dart");
+    generateCameraTest("camera_test.dart");
     generateLightTest("light_test.dart");
     generateMaterialTest("material_test.dart");
     generateMeshTest("mesh_test.dart");

@@ -54,4 +54,15 @@ class Camera {
     if (AssimpPointer.isNull(ptr)) return null;
     return Camera._(ptr);
   }
+
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
+
+  Vector3 get position => AssimpVector3.fromNative(_ptr.ref.mPosition);
+  Vector3 get up => AssimpVector3.fromNative(_ptr.ref.mUp);
+  Vector3 get lookAt => AssimpVector3.fromNative(_ptr.ref.mLookAt);
+
+  double get horizontalFov => _ptr.ref.mHorizontalFOV;
+  double get clipPlaneNear => _ptr.ref.mClipPlaneNear;
+  double get clipPlaneFar => _ptr.ref.mClipPlaneFar;
+  double get aspect => _ptr.ref.mAspect;
 }

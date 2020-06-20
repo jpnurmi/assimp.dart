@@ -345,9 +345,5 @@ class aiCamera extends Struct {
   @Float()
   double mAspect;
 
-  // float                      mOrthographicWidth;   /*  1080     4 */
-  @Float()
-  double mOrthographicWidth;
-
-  /* size: 1084, members: 9 */
+  /* size: 1080, members: 8 */
 }
