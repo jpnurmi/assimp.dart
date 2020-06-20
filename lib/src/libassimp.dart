@@ -50,11 +50,9 @@ String get _dlprefix => Platform.isWindows ? '' : 'lib';
 String get _dlsuffix => Platform.isWindows
     ? 'dll'
     : Platform.isMacOS || Platform.isIOS ? 'dylib' : 'so';
-
-DynamicLibrary _dlopen(String name, {String path = ''}) {
-  String fullPath = '${path}${_dlprefix}${name}.${_dlsuffix}';
-  return DynamicLibrary.open(fullPath);
-}
+String _dlpath(String path, String name) => '$path$_dlprefix$name.$_dlsuffix';
+DynamicLibrary _dlopen(String name, {String path = ''}) =>
+    DynamicLibrary.open(_dlpath(path, name));
 
 DynamicLibrary _libassimp;
 DynamicLibrary get libassimp => _libassimp ?? _dlopen('assimp');

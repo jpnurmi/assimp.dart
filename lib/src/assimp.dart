@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
+import 'libassimp.dart';
 
 class Assimp {
   Assimp._();

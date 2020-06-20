@@ -49,7 +49,7 @@ import 'package:ffi/ffi.dart';
 import 'animation.dart';
 import 'bindings.dart' as b;
 import 'camera.dart';
-import 'dylib.dart';
+import 'libassimp.dart';
 import 'light.dart';
 import 'material.dart';
 import 'mesh.dart';
