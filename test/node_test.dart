@@ -27,6 +27,8 @@ void main() {
   test('3mf', () {
     testNodes('3mf/box.3mf', (rootNode) {
       expect(rootNode.name, equals('3MF'));
+      expect(rootNode.transformation,
+          equals(Matrix4(1, 0, 0, 0, 0 ,1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(rootNode.parent, isNull);
       expect(rootNode.children.length, equals(1));
       expect(rootNode.meshes.length, isZero);
@@ -35,6 +37,8 @@ void main() {
 
     testNodes('3mf/spider.3mf', (rootNode) {
       expect(rootNode.name, equals('3MF'));
+      expect(rootNode.transformation,
+          equals(Matrix4(1, 0, 0, 0, 0 ,1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(rootNode.parent, isNull);
       expect(rootNode.children.length, equals(19));
       expect(rootNode.meshes.length, isZero);
@@ -46,6 +50,8 @@ void main() {
   test('fbx', () {
     testNodes('fbx/huesitos.fbx', (rootNode) {
       expect(rootNode.name, equals('RootNode'));
+      expect(rootNode.transformation,
+          equals(Matrix4(1, 0, 0, 0, 0 ,1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(rootNode.parent, isNull);
       expect(rootNode.children.length, equals(4));
       expect(rootNode.meshes.length, isZero);
@@ -57,6 +63,8 @@ void main() {
   test('obj', () {
     testNodes('Obj/Spider/spider.obj', (rootNode) {
       expect(rootNode.name, equals('spider.obj'));
+      expect(rootNode.transformation,
+          equals(Matrix4(1, 0, 0, 0, 0 ,1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(rootNode.parent, isNull);
       expect(rootNode.children.length, equals(19));
       expect(rootNode.meshes.length, isZero);
