@@ -43,25 +43,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
+// pahole libassimpd.so -M -C aiColor3D
+class aiColor3D extends Struct {
+  // ai_real                    r;                    /*     0     4 */
+  @Float()
+  double r;
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+  // ai_real                    g;                    /*     4     4 */
+  @Float()
+  double g;
 
-class Assimp {
-  Assimp._();
+  // ai_real                    b;                    /*     8     4 */
+  @Float()
+  double b;
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+  /* size: 12, members: 3 */
+}
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
-
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
-
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+class aiColor4D extends Struct {
+  @Float() // ai_real
+  double r, g, b, a;
 }

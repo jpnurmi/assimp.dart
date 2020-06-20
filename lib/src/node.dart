@@ -45,8 +45,8 @@ import 'dart:ffi';
 
 import 'package:vector_math/vector_math.dart';
 
-import 'bindings/node.dart' as bindings;
-import 'bindings/scene.dart' as bindings;
+import 'bindings/ai_node.dart' as bindings;
+import 'bindings/ai_scene.dart' as bindings;
 
 import 'metadata.dart';
 import 'types.dart';

@@ -47,7 +47,7 @@ import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 
-import 'bindings/types.dart' as bindings;
+import 'bindings/ai_string.dart' as bindings;
 
 class Utils {
   static bool isNull(Pointer ptr) => ptr == null || ptr.address == 0;

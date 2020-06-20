@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings/texture.dart' as bindings;
+import 'bindings/ai_texture.dart' as bindings;
 import 'utils.dart';
 
 class Texture {

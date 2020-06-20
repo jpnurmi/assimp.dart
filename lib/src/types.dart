@@ -50,7 +50,15 @@ import 'package:vector_math/vector_math.dart';
 export 'package:vector_math/vector_math.dart'
     show Aabb3, Matrix3, Matrix4, Plane, Quaternion, Ray, Vector2, Vector3;
 
-import 'bindings/types.dart' as bindings;
+import 'bindings/ai_aabb.dart' as bindings;
+import 'bindings/ai_color.dart' as bindings;
+import 'bindings/ai_matrix.dart' as bindings;
+import 'bindings/ai_plane.dart' as bindings;
+import 'bindings/ai_quaternion.dart' as bindings;
+import 'bindings/ai_ray.dart' as bindings;
+import 'bindings/ai_string.dart' as bindings;
+import 'bindings/ai_vector.dart' as bindings;
+
 import 'utils.dart';
 
 extension AssimpAabb3 on Aabb3 {

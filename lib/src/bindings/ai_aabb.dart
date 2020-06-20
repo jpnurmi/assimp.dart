@@ -14,18 +14,18 @@ with or without modification, are permitted provided that the following
 conditions are met:
 
 * Redistributions of source code must retain the above
-  copyright notice, this list of conditions and the
-  following disclaimer.
+copyright notice, this list of conditions and the
+following disclaimer.
 
 * Redistributions in binary form must reproduce the above
-  copyright notice, this list of conditions and the
-  following disclaimer in the documentation and/or other
-  materials provided with the distribution.
+copyright notice, this list of conditions and the
+following disclaimer in the documentation and/or other
+materials provided with the distribution.
 
 * Neither the name of the assimp team, nor the names of its
-  contributors may be used to endorse or promote products
-  derived from this software without specific prior
-  written permission of the assimp team.
+contributors may be used to endorse or promote products
+derived from this software without specific prior
+written permission of the assimp team.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -43,25 +43,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
+import 'ai_vector.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+// pahole libassimpd.so -M -C aiAABB
+class aiAABB extends Struct {
+  // aiVector3D                 mMin;                 /*     0    12 */
+  Pointer<aiVector3D> get mMin => Pointer.fromAddress(addressOf.address + 0);
 
-class Assimp {
-  Assimp._();
+  @Float() // ai_real
+  double _mMinX, _mMinY, _mMinZ;
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+  // aiVector3D                 mMax;                 /*    12    12 */
+  Pointer<aiVector3D> get mMax => Pointer.fromAddress(addressOf.address + 12);
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
+  @Float() // ai_real
+  double _mMaxX, _mMaxY, _mMaxZ;
 
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
-
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+  /* size: 24, members: 2 */
 }

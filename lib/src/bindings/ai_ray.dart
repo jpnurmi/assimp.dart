@@ -43,25 +43,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
+import 'ai_vector.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+class aiRay extends Struct {
+  Pointer<aiVector3D> get pos => Pointer.fromAddress(addressOf.address + 0);
 
-class Assimp {
-  Assimp._();
+  @Float() // ai_real
+  double _posX, _posY, _posZ;
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+  Pointer<aiVector3D> get dir => Pointer.fromAddress(addressOf.address + 12);
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
-
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
-
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+  @Float() // ai_real
+  double _dirX, _dirY, _dirZ;
 }

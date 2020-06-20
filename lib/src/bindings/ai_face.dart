@@ -6,7 +6,6 @@ Open Asset Import Library (assimp)
 Copyright (c) 2006-2019, assimp team
 
 
-
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
@@ -43,25 +42,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
+import 'ai_node.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+// pahole libassimpd.so -M -C aiFace
+class aiFace extends Struct {
+  // unsigned int               mNumIndices;          /*     0     4 */
+  @Uint32()
+  int mNumIndices;
 
-class Assimp {
-  Assimp._();
+  /* XXX 4 bytes hole, try to pack */
+  @Uint32()
+  int _mPadding;
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+  // unsigned int *             mIndices;             /*     8     8 */
+  Pointer<Uint32> mIndices;
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
-
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
-
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+  /* size: 16, members: 2 */
+  /* sum members: 12, holes: 1, sum holes: 4 */
 }

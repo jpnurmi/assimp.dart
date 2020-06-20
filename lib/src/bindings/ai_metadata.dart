@@ -43,25 +43,52 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
+import 'ai_string.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+class aiMetadataType {
+  static const int AI_BOOL = 0;
+  static const int AI_INT32 = 1;
+  static const int AI_UINT64 = 2;
+  static const int AI_FLOAT = 3;
+  static const int AI_DOUBLE = 4;
+  static const int AI_AISTRING = 5;
+  static const int AI_AIVECTOR3D = 6;
+  static const int AI_META_MAX = 7;
+}
 
-class Assimp {
-  Assimp._();
+// pahole libassimpd.so -M -C aiMetadataEntry
+class aiMetadataEntry extends Struct {
+  // aiMetadataType             mType;                /*     0     4 */
+  @Uint32()
+  int mType;
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+  /* XXX 4 bytes hole, try to pack */
+  @Uint32()
+  int _mPadding0;
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
+  // void *                     mData;                /*     8     8 */
+  Pointer<Void> mData;
 
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
+  /* size: 16, members: 2 */
+  /* sum members: 12, holes: 1, sum holes: 4 */
+}
 
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+// pahole libassimpd.so -M -C aiMetadata
+class aiMetadata extends Struct {
+  // unsigned int               mNumProperties;       /*     0     4 */
+  @Uint32()
+  int mNumProperties;
+
+  /* XXX 4 bytes hole, try to pack */
+  @Uint32()
+  int _mPadding0;
+
+  // class aiString *           mKeys;                /*     8     8 */
+  Pointer<aiString> mKeys;
+
+  // class aiMetadataEntry *    mValues;              /*    16     8 */
+  Pointer<aiMetadataEntry> mValues;
+
+  /* size: 24, members: 3 */
+  /* sum members: 20, holes: 1, sum holes: 4 */
 }

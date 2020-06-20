@@ -45,23 +45,36 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+typedef aiFileWriteProc_t = Uint32 Function(
+    Pointer<aiFile> file, Pointer<Utf8>, Uint32, Uint32);
+typedef aiFileReadProc_t = Uint32 Function(
+    Pointer<aiFile> file, Pointer<Utf8>, Uint32, Uint32);
+typedef aiFileTellProc_t = Uint32 Function(Pointer<aiFile> file);
+typedef aiFileFlushProc_t = Void Function(Pointer<aiFile> file);
+typedef aiFileSeek_t = Uint32 Function(Pointer<aiFile> file, Uint32, Uint32);
 
-class Assimp {
-  Assimp._();
+// pahole libassimpd.so -M -C aiFile
+class aiFile extends Struct {
+  // aiFileReadProc             ReadProc;             /*     0     8 */
+  Pointer<NativeFunction> ReadProc;
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+  //aiFileWriteProc            WriteProc;            /*     8     8 */
+  Pointer<NativeFunction> WriteProc;
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
+  // aiFileTellProc             TellProc;             /*    16     8 */
+  Pointer<NativeFunction> TellProc; // aiFileTellProc_t
 
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
+  // aiFileTellProc             FileSizeProc;         /*    24     8 */
+  Pointer<NativeFunction> FileSizeProc;
 
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+  // aiFileSeek                 SeekProc;             /*    32     8 */
+  Pointer<NativeFunction> SeekProc;
+
+  // aiFileFlushProc            FlushProc;            /*    40     8 */
+  Pointer<NativeFunction> FlushProc;
+
+  // aiUserData                 UserData;             /*    48     8 */
+  Pointer<Void> UserData;
+
+  /* size: 56, members: 7 */
 }

@@ -43,11 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings/animmesh.dart' as bindings;
-import 'bindings/bone.dart' as bindings;
-import 'bindings/face.dart' as bindings;
-import 'bindings/mesh.dart' as bindings;
-import 'bindings/vertexweight.dart' as bindings;
+import 'bindings/ai_anim_mesh.dart' as bindings;
+import 'bindings/ai_bone.dart' as bindings;
+import 'bindings/ai_face.dart' as bindings;
+import 'bindings/ai_mesh.dart' as bindings;
+import 'bindings/ai_vertex_weight.dart' as bindings;
 
 import 'types.dart';
 import 'utils.dart';

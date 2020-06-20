@@ -43,25 +43,27 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
+import 'ai_vector.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+// pahole libassimpd.so -M -C aiUVTransform
+class aiUVTransform extends Struct {
+  // aiVector2D                 mTranslation;         /*     0     8 */
+  Pointer<aiVector2D> get mTranslation =>
+      Pointer.fromAddress(addressOf.address + 0);
 
-class Assimp {
-  Assimp._();
+  @Float() // ai_real
+  double _mTranslationX, _mTranslationY;
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+  // aiVector2D                 mScaling;             /*     8     8 */
+  Pointer<aiVector2D> get mScaling =>
+      Pointer.fromAddress(addressOf.address + 0);
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
+  @Float() // ai_real
+  double _mScalingX, _mScalingY;
 
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
+  // ai_real                    mRotation;            /*    16     4 */
+  @Float()
+  double mRotation;
 
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+  /* size: 20, members: 3 */
 }

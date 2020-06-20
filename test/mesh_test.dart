@@ -43,7 +43,7 @@ import 'dart:ffi';
 
 import 'package:test/test.dart';
 import 'package:assimp/assimp.dart';
-import '../lib/src/bindings/mesh.dart' as bindings;
+import '../lib/src/bindings/ai_mesh.dart' as bindings;
 import 'test_utils.dart';
 
 void main() {

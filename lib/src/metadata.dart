@@ -46,7 +46,7 @@ import 'dart:ffi';
 import 'package:assimp/assimp.dart';
 
 import 'utils.dart';
-import 'bindings/metadata.dart' as bindings;
+import 'bindings/ai_metadata.dart' as bindings;
 
 class MetaData {
   Pointer<bindings.aiMetadata> _ptr;

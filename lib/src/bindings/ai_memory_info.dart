@@ -43,25 +43,52 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
+import 'ai_scene.dart';
+import 'dylib.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+typedef aiGetMemoryRequirements_t = Void Function(
+    Pointer<aiScene> scene, Pointer<aiMemoryInfo> mem);
+typedef aiGetMemoryRequirements_f = void Function(
+    Pointer<aiScene> scene, Pointer<aiMemoryInfo> mem);
 
-class Assimp {
-  Assimp._();
+aiGetMemoryRequirements_f _aiGetMemoryRequirements;
+get aiGetMemoryRequirements => _aiGetMemoryRequirements ??= libassimp
+    .lookupFunction<aiGetMemoryRequirements_t, aiGetMemoryRequirements_f>(
+        'aiGetMemoryRequirements');
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+// pahole libassimpd.so -M -C aiMemoryInfo
+class aiMemoryInfo extends Struct {
+  // unsigned int               textures;             /*     0     4 */
+  @Uint32()
+  int textures;
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
+  // unsigned int               materials;            /*     4     4 */
+  @Uint32()
+  int materials;
 
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
+  // unsigned int               meshes;               /*     8     4 */
+  @Uint32()
+  int meshes;
 
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+  // unsigned int               nodes;                /*    12     4 */
+  @Uint32()
+  int nodes;
+
+  // unsigned int               animations;           /*    16     4 */
+  @Uint32()
+  int animations;
+
+  // unsigned int               cameras;              /*    20     4 */
+  @Uint32()
+  int cameras;
+
+  // unsigned int               lights;               /*    24     4 */
+  @Uint32()
+  int lights;
+
+  // unsigned int               total;                /*    28     4 */
+  @Uint32()
+  int total;
+
+  /* size: 32, members: 8 */
 }

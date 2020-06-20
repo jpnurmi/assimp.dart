@@ -45,23 +45,23 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+import 'ai_file.dart';
 
-class Assimp {
-  Assimp._();
+typedef aiFileOpenProc_t = Pointer<aiFile> Function(
+    Pointer<aiFileIO> file, Pointer<Utf8>, Pointer<Utf8>);
+typedef aiFileCloseProc_t = Void Function(
+    Pointer<aiFileIO> file, Pointer<aiFile>);
 
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
+// pahole libassimpd.so -M -C aiFileIO
+class aiFileIO extends Struct {
+  // aiFileOpenProc             OpenProc;             /*     0     8 */
+  Pointer<NativeFunction> OpenProc;
 
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
+  // aiFileCloseProc            CloseProc;            /*     8     8 */
+  Pointer<NativeFunction> CloseProc;
 
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
+  // aiUserData                 UserData;             /*    16     8 */
+  Pointer<Void> UserData;
 
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
+  /* size: 24, members: 3 */
 }

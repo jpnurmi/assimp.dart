@@ -1,17 +1,15 @@
 /*
----------------------------------------------------------------------------
 Open Asset Import Library (assimp)
----------------------------------------------------------------------------
+----------------------------------------------------------------------
 
 Copyright (c) 2006-2019, assimp team
-
 
 
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
-with or without modification, are permitted provided that the following
-conditions are met:
+with or without modification, are permitted provided that the
+following conditions are met:
 
 * Redistributions of source code must retain the above
   copyright notice, this list of conditions and the
@@ -38,30 +36,21 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
----------------------------------------------------------------------------
+
+----------------------------------------------------------------------
 */
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
+import 'ai_scene.dart';
+import 'dylib.dart';
 
-import 'bindings/ai_global.dart' as bindings;
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_log_stream.dart' as bindings;
+typedef aiApplyPostProcessing_t = Pointer<aiScene> Function(
+    Pointer<aiScene> scene, Uint32 flags);
+typedef aiApplyPostProcessing_f = Pointer<aiScene> Function(
+    Pointer<aiScene> scene, int flags);
 
-class Assimp {
-  Assimp._();
-
-  static void enableVerboseLogging(bool enable) =>
-      bindings.aiEnableVerboseLogging(enable ? 1 : 0);
-
-  static String get errorString => Utf8.fromUtf8(bindings.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(bindings.aiGetLegalString());
-
-  static int get versionMajor => bindings.aiGetVersionMajor();
-  static int get versionMinor => bindings.aiGetVersionMinor();
-  static int get versionRevision => bindings.aiGetVersionRevision();
-
-  static int get compileFlags => bindings.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(bindings.aiGetBranchName());
-}
+aiApplyPostProcessing_f _aiApplyPostProcessing;
+get aiApplyPostProcessing => _aiApplyPostProcessing ??=
+    libassimp.lookupFunction<aiApplyPostProcessing_t, aiApplyPostProcessing_f>(
+        'aiApplyPostProcessing');

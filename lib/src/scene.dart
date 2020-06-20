@@ -47,8 +47,9 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 
 import 'animation.dart';
-import 'bindings/scene.dart' as bindings;
-import 'bindings/cimport.dart' as bindings;
+import 'bindings/ai_import.dart' as bindings;
+import 'bindings/ai_scene.dart' as bindings;
+import 'bindings/ai_post_processing.dart' as bindings;
 import 'camera.dart';
 import 'light.dart';
 import 'material.dart';
