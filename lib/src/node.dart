@@ -63,7 +63,7 @@ class Node {
   Matrix4 get transformation =>
       AssimpMatrix4.fromNative(_ptr?.ref?.mTransformation);
 
-  Node get parent => AssimpPointer.isNull(_ptr?.ref?.mParent)
+  Node get parent => AssimpPointer.isNotNull(_ptr?.ref?.mParent)
       ? Node.fromNative(_ptr.ref.mParent)
       : null;
 
@@ -81,5 +81,7 @@ class Node {
     );
   }
 
-  MetaData get metaData => MetaData.fromNative(_ptr?.ref?.mMetaData);
+  MetaData get metaData => AssimpPointer.isNotNull(_ptr?.ref?.mMetaData)
+      ? MetaData.fromNative(_ptr.ref.mMetaData)
+      : null;
 }

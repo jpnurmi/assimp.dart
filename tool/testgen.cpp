@@ -3,7 +3,8 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 
-static QString testFilePath(const QString &fileName) { return QDir::current().filePath(fileName); }
+static QDir testModelDir() { return QDir(QDir::currentPath() + "/models/model-db/"); }
+static QString testModelPath(const QString &fileName) { return testModelDir().filePath(fileName); }
 
 static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(void *ptr) { return ptr ? "isNotNull" : "isNull"; }
@@ -22,7 +23,7 @@ static int arraySize(T *array)
 
 static void testScene(const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testFilePath(fileName).toLocal8Bit(), 0);
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     QTextStream(stdout)
             << "testScene('" << fileName << "', TestFrom.xxx, (scene) {\n"
             << "  expect(scene.flags, " << isZeroOrNot(scene->mFlags) << ");\n"
@@ -40,7 +41,7 @@ static void testScene(const QString &fileName)
 
 static void testMeshes(const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testFilePath(fileName).toLocal8Bit(), 0);
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     QTextStream(stdout)
             << "testMeshes('" << fileName << "', (meshes) {\n"
             << "  expect(meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n";
@@ -70,25 +71,24 @@ static void testMeshes(const QString &fileName)
 
 static void testNodes(const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testFilePath(fileName).toLocal8Bit(), 0);
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     QTextStream(stdout)
             << "testNodes('" << fileName << "', (rootNode) {\n"
             << "  expect(rootNode.name, " << equalsToString(scene->mRootNode->mName) << ");\n"
 //            << "  expect(rootNode.transformation, " << isNullOrNot(scene->mRootNode->mTransformation) << ");\n"
-            << "  expect(rootNode.parent, " << isNullPointerOrNot(scene->mRootNode->mParent) << ");\n"
+            << "  expect(rootNode.parent, " << isNullOrNot(scene->mRootNode->mParent) << ");\n"
             << "  expect(rootNode.children.length, " << equalsToInt(scene->mRootNode->mNumChildren) << ");\n"
             << "  expect(rootNode.meshes.length, " << equalsToInt(scene->mRootNode->mNumMeshes) << ");\n"
-            << "  expect(rootNode.metaData, " << isNullPointerOrNot(scene->mRootNode->mMetaData) << ");\n"
+            << "  expect(rootNode.metaData, " << isNullOrNot(scene->mRootNode->mMetaData) << ");\n"
             << "});\n\n";
     aiReleaseImport(scene);
 }
-
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : MODELDB));
+    QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
     testScene("3mf/box.3mf");
     testScene("3mf/spider.3mf");

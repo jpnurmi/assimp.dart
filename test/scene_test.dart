@@ -39,22 +39,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-import 'dart:io';
-import 'package:path/path.dart' hide equals;
+import 'dart:ffi';
+
 import 'package:test/test.dart';
 import 'package:assimp/assimp.dart';
+import '../lib/src/bindings/ai_scene.dart' as bindings;
 import 'test_utils.dart';
 
-class TestFrom {
-  static const int file = 0x1;
-  static const int bytes = 0x2;
-  static const int string = 0x4;
-  static const int ascii = file | string;
-  static const int binary = file | bytes;
-  static const int content = string | bytes;
-}
-
 void main() {
+  test('size', () {
+    expect(sizeOf<bindings.aiScene>(), equals(128));
+  });
+
   test('null', () {
     Scene scene = Scene.fromNative(null);
     expect(scene.flags, isZero);
@@ -67,41 +63,6 @@ void main() {
     expect(scene.cameras, isEmpty);
     expect(scene.metaData, isNullPointer);
   });
-
-  void testSceneFromFile(String fileName, void tester(scene)) {
-    final filePath = testFilePath(fileName);
-    final scene = Scene.fromFile(filePath);
-    tester(scene);
-    scene.dispose();
-  }
-
-  void testSceneFromBytes(String fileName, void tester(scene)) {
-    final filePath = testFilePath(fileName);
-    final bytes = File(filePath).readAsBytesSync();
-    final scene = Scene.fromBytes(bytes, hint: extension(filePath));
-    tester(scene);
-    scene.dispose();
-  }
-
-  void testSceneFromString(String fileName, void tester(scene)) {
-    final filePath = testFilePath(fileName);
-    final str = File(filePath).readAsStringSync();
-    final scene = Scene.fromString(str, hint: extension(filePath));
-    tester(scene);
-    scene.dispose();
-  }
-
-  void testScene(String fileName, int testFrom, void tester(scene)) {
-    if (testFrom & TestFrom.file != 0) {
-      testSceneFromFile(fileName, tester);
-    }
-    if (testFrom & TestFrom.bytes != 0) {
-      testSceneFromBytes(fileName, tester);
-    }
-    if (testFrom & TestFrom.string != 0) {
-      testSceneFromString(fileName, tester);
-    }
-  }
 
   test('3mf', () {
     testScene('3mf/box.3mf', TestFrom.binary, (scene) {
@@ -155,6 +116,7 @@ void main() {
       expect(scene.cameras.length, isZero);
       expect(scene.metaData, isNullPointer);
     });
+
     testScene('Obj/Spider/spider.obj', TestFrom.content, (scene) {
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);

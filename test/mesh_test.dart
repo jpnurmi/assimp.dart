@@ -72,7 +72,7 @@ void main() {
   });
 
   void testMeshes(String fileName, void tester(meshes)) {
-    final filePath = testFilePath(fileName);
+    final filePath = testModelPath(fileName);
     final scene = Scene.fromFile(filePath);
     tester(scene.meshes);
     scene.dispose();
