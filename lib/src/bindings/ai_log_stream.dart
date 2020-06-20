@@ -45,8 +45,6 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
-
 typedef aiLogStreamCallback_t = Void Function(
     Pointer<Utf8> message, Pointer<Utf8> user);
 
@@ -57,42 +55,17 @@ typedef aiGetPredefinedLogStream_f = Pointer<aiLogStream> Function(
     int streams, // aiDefaultLogStream
     Pointer<Utf8> file);
 
-aiGetPredefinedLogStream_f _aiGetPredefinedLogStream;
-get aiGetPredefinedLogStream => _aiGetPredefinedLogStream ??= libassimp
-    .lookupFunction<aiGetPredefinedLogStream_t, aiGetPredefinedLogStream_f>(
-        'aiGetPredefinedLogStream');
-
 typedef aiAttachLogStream_t = Void Function(Pointer<aiLogStream> stream);
 typedef aiAttachLogStream_f = void Function(Pointer<aiLogStream> stream);
-
-aiAttachLogStream_f _aiAttachLogStream;
-get aiAttachLogStream => _aiAttachLogStream ??=
-    libassimp.lookupFunction<aiAttachLogStream_t, aiAttachLogStream_f>(
-        'aiAttachLogStream');
 
 typedef aiEnableVerboseLogging_t = Void Function(Int32 d);
 typedef aiEnableVerboseLogging_f = void Function(int d);
 
-aiEnableVerboseLogging_f _aiEnableVerboseLogging;
-get aiEnableVerboseLogging => _aiEnableVerboseLogging ??= libassimp
-    .lookupFunction<aiEnableVerboseLogging_t, aiEnableVerboseLogging_f>(
-        'aiEnableVerboseLogging');
-
 typedef aiDetachLogStream_t = Uint32 Function(Pointer<aiLogStream> stream);
 typedef aiDetachLogStream_f = int Function(Pointer<aiLogStream> stream);
 
-aiDetachLogStream_f _aiDetachLogStream;
-get aiDetachLogStream => _aiDetachLogStream ??=
-    libassimp.lookupFunction<aiDetachLogStream_t, aiDetachLogStream_f>(
-        'aiDetachLogStream');
-
 typedef aiDetachAllLogStreams_t = Void Function();
 typedef aiDetachAllLogStreams_f = void Function();
-
-aiDetachAllLogStreams_f _aiDetachAllLogStreams;
-get aiDetachAllLogStreams => _aiDetachAllLogStreams ??=
-    libassimp.lookupFunction<aiDetachAllLogStreams_t, aiDetachAllLogStreams_f>(
-        'aiDetachAllLogStreams');
 
 // pahole libassimpd.so -M -C aiLogStream
 class aiLogStream extends Struct {

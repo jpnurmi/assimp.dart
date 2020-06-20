@@ -45,29 +45,16 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
-
 typedef aiGetImporterDesc_t = Pointer<aiImporterDesc> Function(
     Pointer<Utf8> extension);
 
 typedef aiGetImportFormatCount_t = Uint32 Function();
 typedef aiGetImportFormatCount_f = int Function();
 
-aiGetImportFormatCount_f _aiGetImportFormatCount;
-get aiGetImportFormatCount => _aiGetImportFormatCount ??= libassimp
-    .lookupFunction<aiGetImportFormatCount_t, aiGetImportFormatCount_f>(
-        'aiGetImportFormatCount');
-
 typedef aiGetImportFormatDescription_t = Pointer<aiImporterDesc> Function(
     Uint32 index);
 typedef aiGetImportFormatDescription_f = Pointer<aiImporterDesc> Function(
     int index);
-
-aiGetImportFormatDescription_f _aiGetImportFormatDescription;
-get aiGetImportFormatDescription =>
-    _aiGetImportFormatDescription ??= libassimp.lookupFunction<
-        aiGetImportFormatDescription_t,
-        aiGetImportFormatDescription_f>('aiGetImportFormatDescription');
 
 // pahole libassimpd.so -M -C aiImporterDesc
 class aiImporterDesc extends Struct {

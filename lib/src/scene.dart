@@ -49,6 +49,7 @@ import 'package:ffi/ffi.dart';
 import 'animation.dart';
 import 'bindings.dart' as b;
 import 'camera.dart';
+import 'dylib.dart';
 import 'light.dart';
 import 'material.dart';
 import 'mesh.dart';
@@ -64,7 +65,7 @@ class Scene {
 
   factory Scene.fromFile(String path, {int flags = 0}) {
     final cpath = Utf8.toUtf8(path);
-    final ptr = b.aiImportFile(cpath, flags);
+    final ptr = aiImportFile(cpath, flags);
     free(cpath);
     return AssimpPointer.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
   }
@@ -72,7 +73,7 @@ class Scene {
   factory Scene._fromBuffer(
       Pointer<Utf8> cstr, int length, flags, String hint) {
     final chint = Utf8.toUtf8(hint);
-    final ptr = b.aiImportFileFromMemory(cstr, length, flags, chint);
+    final ptr = aiImportFileFromMemory(cstr, length, flags, chint);
     free(cstr);
     free(chint);
     return AssimpPointer.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
@@ -143,11 +144,11 @@ class Scene {
   MetaData get metaData => MetaData.fromNative(_ptr?.ref?.mMetaData);
 
   void applyPostProcessing(int flags) {
-    b.aiApplyPostProcessing(_ptr, flags);
+    aiApplyPostProcessing(_ptr, flags);
   }
 
   void dispose() {
-    b.aiReleaseImport(_ptr);
+    aiReleaseImport(_ptr);
     _ptr = null;
   }
 }

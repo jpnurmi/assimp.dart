@@ -45,7 +45,6 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
 import 'ai_file_io.dart';
 import 'ai_property_store.dart';
 import 'ai_scene.dart';
@@ -55,18 +54,10 @@ typedef aiImportFile_t = Pointer<aiScene> Function(
 typedef aiImportFile_f = Pointer<aiScene> Function(
     Pointer<Utf8> file, int flags);
 
-aiImportFile_f _aiImportFile;
-get aiImportFile => _aiImportFile ??=
-    libassimp.lookupFunction<aiImportFile_t, aiImportFile_f>('aiImportFile');
-
 typedef aiImportFileEx_t = Pointer<aiScene> Function(
     Pointer<Utf8> file, Uint32 flags, Pointer<aiFileIO> fs);
 typedef aiImportFileEx_f = Pointer<aiScene> Function(
     Pointer<Utf8> file, int flags, Pointer<aiFileIO> fs);
-
-aiImportFileEx_f _aiImportFileEx;
-get aiImportFileEx => _aiImportFileEx ??= libassimp
-    .lookupFunction<aiImportFileEx_t, aiImportFileEx_f>('aiImportFileEx');
 
 typedef aiImportFileExWithProperties_t = Pointer<aiScene> Function(
     Pointer<Utf8> file,
@@ -79,21 +70,10 @@ typedef aiImportFileExWithProperties_f = Pointer<aiScene> Function(
     Pointer<aiFileIO> fs,
     Pointer<aiPropertyStore> props);
 
-aiImportFileExWithProperties_f _aiImportFileExWithProperties;
-get aiImportFileExWithProperties =>
-    _aiImportFileExWithProperties ??= libassimp.lookupFunction<
-        aiImportFileExWithProperties_t,
-        aiImportFileExWithProperties_f>('aiImportFileExWithProperties');
-
 typedef aiImportFileFromMemory_t = Pointer<aiScene> Function(
     Pointer<Utf8> buffer, Uint32 length, Uint32 flags, Pointer<Utf8> hint);
 typedef aiImportFileFromMemory_f = Pointer<aiScene> Function(
     Pointer<Utf8> buffer, int length, int flags, Pointer<Utf8> hint);
-
-aiImportFileFromMemory_f _aiImportFileFromMemory;
-get aiImportFileFromMemory => _aiImportFileFromMemory ??= libassimp
-    .lookupFunction<aiImportFileFromMemory_t, aiImportFileFromMemory_f>(
-        'aiImportFileFromMemory');
 
 typedef aiImportFileFromMemoryWithProperties_t = Pointer<aiScene> Function(
     Pointer<Utf8> buffer,
@@ -108,16 +88,5 @@ typedef aiImportFileFromMemoryWithProperties_f = Pointer<aiScene> Function(
     Pointer<Utf8> hint,
     Pointer<aiPropertyStore> props);
 
-aiImportFileFromMemoryWithProperties_f _aiImportFileFromMemoryWithProperties;
-get aiImportFileFromMemoryWithProperties =>
-    _aiImportFileFromMemoryWithProperties ??= libassimp.lookupFunction<
-            aiImportFileFromMemoryWithProperties_t,
-            aiImportFileFromMemoryWithProperties_f>(
-        'aiImportFileFromMemoryWithProperties');
-
 typedef aiReleaseImport_t = Void Function(Pointer<aiScene> scene);
 typedef aiReleaseImport_f = void Function(Pointer<aiScene> scene);
-
-aiReleaseImport_f _aiReleaseImport;
-get aiReleaseImport => _aiReleaseImport ??= libassimp
-    .lookupFunction<aiReleaseImport_t, aiReleaseImport_f>('aiReleaseImport');

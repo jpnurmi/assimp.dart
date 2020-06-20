@@ -45,7 +45,6 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
 import 'ai_color.dart';
 import 'ai_string.dart';
 import 'ai_material_property.dart';
@@ -82,11 +81,6 @@ typedef aiGetMaterialProperty_f = int Function(
   Pointer<Pointer<aiMaterialProperty>> propOut,
 );
 
-aiGetMaterialProperty_f _aiGetMaterialProperty;
-get aiGetMaterialProperty => _aiGetMaterialProperty ??=
-    libassimp.lookupFunction<aiGetMaterialProperty_t, aiGetMaterialProperty_f>(
-        'aiGetMaterialProperty');
-
 typedef aiGetMaterialFloatArray_t = Uint32 Function(
     Pointer<aiMaterial> mat,
     Pointer<Utf8> key,
@@ -101,11 +95,6 @@ typedef aiGetMaterialFloatArray_f = int Function(
     int index,
     Pointer<Float> out, // ai_real*
     Pointer<Uint32> max);
-
-aiGetMaterialFloatArray_f _aiGetMaterialFloatArray;
-get aiGetMaterialFloatArray => _aiGetMaterialFloatArray ??= libassimp
-    .lookupFunction<aiGetMaterialFloatArray_t, aiGetMaterialFloatArray_f>(
-        'aiGetMaterialFloatArray');
 
 typedef aiGetMaterialIntegerArray_t = Uint32 Function(
     Pointer<aiMaterial> mat,
@@ -122,40 +111,20 @@ typedef aiGetMaterialIntegerArray_f = int Function(
     Pointer<Int32> out,
     Pointer<Uint32> max);
 
-aiGetMaterialIntegerArray_f _aiGetMaterialIntegerArray;
-get aiGetMaterialIntegerArray => _aiGetMaterialIntegerArray ??= libassimp
-    .lookupFunction<aiGetMaterialIntegerArray_t, aiGetMaterialIntegerArray_f>(
-        'aiGetMaterialIntegerArray');
-
 typedef aiGetMaterialColor_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiColor4D> out);
 typedef aiGetMaterialColor_f = int Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, int type, int index, Pointer<aiColor4D> out);
-
-aiGetMaterialColor_f _aiGetMaterialColor;
-get aiGetMaterialColor => _aiGetMaterialColor ??=
-    libassimp.lookupFunction<aiGetMaterialColor_t, aiGetMaterialColor_f>(
-        'aiGetMaterialColor');
 
 typedef aiGetMaterialUVTransform_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiUVTransform> out);
 typedef aiGetMaterialUVTransform_f = int Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, int type, int index, Pointer<aiUVTransform> out);
 
-aiGetMaterialUVTransform_f _aiGetMaterialUVTransform;
-get aiGetMaterialUVTransform => _aiGetMaterialUVTransform ??= libassimp
-    .lookupFunction<aiGetMaterialUVTransform_t, aiGetMaterialUVTransform_f>(
-        'aiGetMaterialUVTransform');
-
 typedef aiGetMaterialString_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiString> out);
 typedef aiGetMaterialString_f = int Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, int type, int index, Pointer<aiString> out);
-
-aiGetMaterialString_f _aiGetMaterialString;
-get aiGetMaterialString => _aiGetMaterialString ??=
-    libassimp.lookupFunction<aiGetMaterialString_t, aiGetMaterialString_f>(
-        'aiGetMaterialString');
 
 typedef aiGetMaterialTextureCount_t = Uint32 Function(
   Pointer<aiMaterial> mat,
@@ -165,11 +134,6 @@ typedef aiGetMaterialTextureCount_f = int Function(
   Pointer<aiMaterial> mat,
   int type, // aiTextureType
 );
-
-aiGetMaterialTextureCount_f _aiGetMaterialTextureCount;
-get aiGetMaterialTextureCount => _aiGetMaterialTextureCount ??= libassimp
-    .lookupFunction<aiGetMaterialTextureCount_t, aiGetMaterialTextureCount_f>(
-        'aiGetMaterialTextureCount');
 
 typedef aiGetMaterialTexture_t = Uint32 Function(
   Pointer<aiMaterial> mat,
@@ -195,8 +159,3 @@ typedef aiGetMaterialTexture_f = int Function(
   Pointer<Uint32> mapmode, // aiTextureMapMode*
   Pointer<Uint32> flags,
 );
-
-aiGetMaterialTexture_f _aiGetMaterialTexture;
-get aiGetMaterialTexture => _aiGetMaterialTexture ??=
-    libassimp.lookupFunction<aiGetMaterialTexture_t, aiGetMaterialTexture_f>(
-        'aiGetMaterialTexture');

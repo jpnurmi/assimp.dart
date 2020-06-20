@@ -43,7 +43,6 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
 import 'ai_export_data_blob.dart';
 import 'ai_file_io.dart';
 import 'ai_scene.dart';
@@ -53,25 +52,13 @@ typedef aiCopyScene_t = Void Function(
 typedef aiCopyScene_f = void Function(
     Pointer<aiScene> scene, Pointer<Pointer<aiScene>> out);
 
-aiCopyScene_f _aiCopyScene;
-get aiCopyScene => _aiCopyScene ??=
-    libassimp.lookupFunction<aiCopyScene_t, aiCopyScene_f>('aiCopyScene');
-
 typedef aiFreeScene_t = Void Function(Pointer<aiScene> scene);
 typedef aiFreeScene_f = void Function(Pointer<aiScene> scene);
-
-aiFreeScene_f _aiFreeScene;
-get aiFreeScene => _aiFreeScene ??=
-    libassimp.lookupFunction<aiFreeScene_t, aiFreeScene_f>('aiFreeScene');
 
 typedef aiExportScene_t = Uint32 Function(Pointer<aiScene> scene,
     Pointer<Utf8> formatId, Pointer<Utf8> fileName, Uint32 preprocessing);
 typedef aiExportScene_f = int Function(Pointer<aiScene> scene,
     Pointer<Utf8> formatId, Pointer<Utf8> fileName, int preprocessing);
-
-aiExportScene_f _aiExportScene;
-get aiExportScene => _aiExportScene ??=
-    libassimp.lookupFunction<aiExportScene_t, aiExportScene_f>('aiExportScene');
 
 typedef aiExportSceneEx_t = Uint32 Function(
     Pointer<aiScene> scene,
@@ -86,24 +73,10 @@ typedef aiExportSceneEx_f = int Function(
     Pointer<aiFileIO> io,
     int preprocessing);
 
-aiExportSceneEx_f _aiExportSceneEx;
-get aiExportSceneEx => _aiExportSceneEx ??= libassimp
-    .lookupFunction<aiExportSceneEx_t, aiExportSceneEx_f>('aiExportSceneEx');
-
 typedef aiExportSceneToBlob_t = Pointer<aiExportDataBlob> Function(
     Pointer<aiScene> scene, Pointer<Utf8> formatId, Uint32 preprocessing);
 typedef aiExportSceneToBlob_f = Pointer<aiExportDataBlob> Function(
     Pointer<aiScene> scene, Pointer<Utf8> formatId, int preprocessing);
 
-aiExportSceneToBlob_f _aiExportSceneToBlob;
-get aiExportSceneToBlob => _aiExportSceneToBlob ??=
-    libassimp.lookupFunction<aiExportSceneToBlob_t, aiExportSceneToBlob_f>(
-        'aiExportSceneToBlob');
-
 typedef aiReleaseExportBlob_t = Void Function(Pointer<aiExportDataBlob> data);
 typedef aiReleaseExportBlob_f = void Function(Pointer<aiExportDataBlob> data);
-
-aiReleaseExportBlob_f _aiReleaseExportBlob;
-get aiReleaseExportBlob => _aiReleaseExportBlob ??=
-    libassimp.lookupFunction<aiReleaseExportBlob_t, aiReleaseExportBlob_f>(
-        'aiReleaseExportBlob');

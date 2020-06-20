@@ -45,47 +45,26 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
 import 'ai_matrix.dart';
 import 'ai_string.dart';
 
 typedef aiCreatePropertyStore_t = Pointer<aiPropertyStore> Function();
 typedef aiCreatePropertyStore_f = Pointer<aiPropertyStore> Function();
 
-aiCreatePropertyStore_f _aiCreatePropertyStore;
-get aiCreatePropertyStore => _aiCreatePropertyStore ??=
-    libassimp.lookupFunction<aiCreatePropertyStore_t, aiCreatePropertyStore_f>(
-        'aiCreatePropertyStore');
-
 typedef aiReleasePropertyStore_t = Void Function(
     Pointer<aiPropertyStore> store);
 typedef aiReleasePropertyStore_f = void Function(
     Pointer<aiPropertyStore> store);
-
-aiReleasePropertyStore_f _aiReleasePropertyStore;
-get aiReleasePropertyStore => _aiReleasePropertyStore ??= libassimp
-    .lookupFunction<aiReleasePropertyStore_t, aiReleasePropertyStore_f>(
-        'aiReleasePropertyStore');
 
 typedef aiSetImportPropertyInteger_t = Void Function(
     Pointer<aiPropertyStore> store, Pointer<Utf8> name, Int32 value);
 typedef aiSetImportPropertyInteger_f = void Function(
     Pointer<aiPropertyStore> store, Pointer<Utf8> name, int value);
 
-aiSetImportPropertyInteger_f _aiSetImportPropertyInteger;
-get aiSetImportPropertyInteger => _aiSetImportPropertyInteger ??= libassimp
-    .lookupFunction<aiSetImportPropertyInteger_t, aiSetImportPropertyInteger_f>(
-        'aiSetImportPropertyInteger');
-
 typedef aiSetImportPropertyFloat_t = Void Function(
     Pointer<aiPropertyStore> store, Pointer<Utf8> name, Float value);
 typedef aiSetImportPropertyFloat_f = void Function(
     Pointer<aiPropertyStore> store, Pointer<Utf8> name, double value);
-
-aiSetImportPropertyFloat_f _aiSetImportPropertyFloat;
-get aiSetImportPropertyFloat => _aiSetImportPropertyFloat ??= libassimp
-    .lookupFunction<aiSetImportPropertyFloat_t, aiSetImportPropertyFloat_f>(
-        'aiSetImportPropertyFloat');
 
 typedef aiSetImportPropertyString_t = Void Function(
     Pointer<aiPropertyStore> store,
@@ -96,11 +75,6 @@ typedef aiSetImportPropertyString_f = void Function(
     Pointer<Utf8> name,
     Pointer<aiString> value);
 
-aiSetImportPropertyString_f _aiSetImportPropertyString;
-get aiSetImportPropertyString => _aiSetImportPropertyString ??= libassimp
-    .lookupFunction<aiSetImportPropertyString_t, aiSetImportPropertyString_f>(
-        'aiSetImportPropertyString');
-
 typedef aiSetImportPropertyMatrix_t = Void Function(
     Pointer<aiPropertyStore> store,
     Pointer<Utf8> name,
@@ -109,11 +83,6 @@ typedef aiSetImportPropertyMatrix_f = void Function(
     Pointer<aiPropertyStore> store,
     Pointer<Utf8> name,
     Pointer<aiMatrix4x4> value);
-
-aiSetImportPropertyMatrix_f _aiSetImportPropertyMatrix;
-get aiSetImportPropertyMatrix => _aiSetImportPropertyMatrix ??= libassimp
-    .lookupFunction<aiSetImportPropertyMatrix_t, aiSetImportPropertyMatrix_f>(
-        'aiSetImportPropertyMatrix');
 
 // pahole libassimpd.so -M -C aiPropertyStore
 class aiPropertyStore extends Struct {

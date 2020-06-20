@@ -44,17 +44,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 
 import 'ai_scene.dart';
-import 'dylib.dart';
 
 typedef aiGetMemoryRequirements_t = Void Function(
     Pointer<aiScene> scene, Pointer<aiMemoryInfo> mem);
 typedef aiGetMemoryRequirements_f = void Function(
     Pointer<aiScene> scene, Pointer<aiMemoryInfo> mem);
-
-aiGetMemoryRequirements_f _aiGetMemoryRequirements;
-get aiGetMemoryRequirements => _aiGetMemoryRequirements ??= libassimp
-    .lookupFunction<aiGetMemoryRequirements_t, aiGetMemoryRequirements_f>(
-        'aiGetMemoryRequirements');
 
 // pahole libassimpd.so -M -C aiMemoryInfo
 class aiMemoryInfo extends Struct {

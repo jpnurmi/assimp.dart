@@ -43,14 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 
 import 'ai_scene.dart';
-import 'dylib.dart';
 
 typedef aiApplyPostProcessing_t = Pointer<aiScene> Function(
     Pointer<aiScene> scene, Uint32 flags);
 typedef aiApplyPostProcessing_f = Pointer<aiScene> Function(
     Pointer<aiScene> scene, int flags);
-
-aiApplyPostProcessing_f _aiApplyPostProcessing;
-get aiApplyPostProcessing => _aiApplyPostProcessing ??=
-    libassimp.lookupFunction<aiApplyPostProcessing_t, aiApplyPostProcessing_f>(
-        'aiApplyPostProcessing');

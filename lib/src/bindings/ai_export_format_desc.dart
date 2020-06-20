@@ -43,37 +43,18 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
-
 typedef aiGetExportFormatCount_t = Uint32 Function();
 typedef aiGetExportFormatCount_f = int Function();
-
-aiGetExportFormatCount_f _aiGetExportFormatCount;
-get aiGetExportFormatCount => _aiGetExportFormatCount ??= libassimp
-    .lookupFunction<aiGetExportFormatCount_t, aiGetExportFormatCount_f>(
-        'aiGetExportFormatCount');
 
 typedef aiGetExportFormatDescription_t = Pointer<aiExportFormatDesc> Function(
     Uint32 index);
 typedef aiGetExportFormatDescription_f = Pointer<aiExportFormatDesc> Function(
     int index);
 
-aiGetExportFormatDescription_f _aiGetExportFormatDescription;
-get aiGetExportFormatDescription =>
-    _aiGetExportFormatDescription ??= libassimp.lookupFunction<
-        aiGetExportFormatDescription_t,
-        aiGetExportFormatDescription_f>('aiGetExportFormatDescription');
-
 typedef aiReleaseExportFormatDescription_t = Void Function(
     Pointer<aiExportFormatDesc> desc);
 typedef aiReleaseExportFormatDescription_f = void Function(
     Pointer<aiExportFormatDesc> desc);
-
-aiReleaseExportFormatDescription_f _aiReleaseExportFormatDescription;
-get aiReleaseExportFormatDescription =>
-    _aiReleaseExportFormatDescription ??= libassimp.lookupFunction<
-        aiReleaseExportFormatDescription_t,
-        aiReleaseExportFormatDescription_f>('aiReleaseExportFormatDescription');
 
 // pahole libassimpd.so -M -C aiExportFormatDesc
 class aiExportFormatDesc extends Struct {

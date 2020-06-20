@@ -45,7 +45,6 @@ import 'dart:ffi';
 
 import 'ai_vector.dart';
 import 'ai_quaternion.dart';
-import 'dylib.dart';
 
 typedef aiDecomposeMatrix_t = Void Function(
     Pointer<aiMatrix4x4> mat,
@@ -61,66 +60,31 @@ typedef aiDecomposeMatrix_f = void Function(
 typedef aiTransposeMatrix3_t = Void Function(Pointer<aiMatrix3x3> mat);
 typedef aiTransposeMatrix3_f = void Function(Pointer<aiMatrix3x3> mat);
 
-aiTransposeMatrix3_f _aiTransposeMatrix3;
-get aiTransposeMatrix3 => _aiTransposeMatrix3 ??=
-    libassimp.lookupFunction<aiTransposeMatrix3_t, aiTransposeMatrix3_f>(
-        'aiTransposeMatrix3');
-
 typedef aiTransformVecByMatrix3_t = Void Function(
     Pointer<aiVector3D> vec, Pointer<aiMatrix3x3> mat);
 typedef aiTransformVecByMatrix3_f = void Function(
     Pointer<aiVector3D> vec, Pointer<aiMatrix3x3> mat);
-
-aiTransformVecByMatrix3_f _aiTransformVecByMatrix3;
-get aiTransformVecByMatrix3 => _aiTransformVecByMatrix3 ??= libassimp
-    .lookupFunction<aiTransformVecByMatrix3_t, aiTransformVecByMatrix3_f>(
-        'aiTransformVecByMatrix3');
 
 typedef aiTransformVecByMatrix4_t = Void Function(
     Pointer<aiVector3D> vec, Pointer<aiMatrix4x4> mat);
 typedef aiTransformVecByMatrix4_f = void Function(
     Pointer<aiVector3D> vec, Pointer<aiMatrix4x4> mat);
 
-aiTransformVecByMatrix4_f _aiTransformVecByMatrix4;
-get aiTransformVecByMatrix4 => _aiTransformVecByMatrix4 ??= libassimp
-    .lookupFunction<aiTransformVecByMatrix4_t, aiTransformVecByMatrix4_f>(
-        'aiTransformVecByMatrix4');
-
 typedef aiMultiplyMatrix4_t = Void Function(
     Pointer<aiMatrix4x4> dst, Pointer<aiMatrix4x4> src);
 typedef aiMultiplyMatrix4_f = void Function(
     Pointer<aiMatrix4x4> dst, Pointer<aiMatrix4x4> src);
-
-aiMultiplyMatrix4_f _aiMultiplyMatrix4;
-get aiMultiplyMatrix4 => _aiMultiplyMatrix4 ??=
-    libassimp.lookupFunction<aiMultiplyMatrix4_t, aiMultiplyMatrix4_f>(
-        'aiMultiplyMatrix4');
 
 typedef aiMultiplyMatrix3_t = Void Function(
     Pointer<aiMatrix3x3> dst, Pointer<aiMatrix3x3> src);
 typedef aiMultiplyMatrix3_f = void Function(
     Pointer<aiMatrix3x3> dst, Pointer<aiMatrix3x3> src);
 
-aiMultiplyMatrix3_f _aiMultiplyMatrix3;
-get aiMultiplyMatrix3 => _aiMultiplyMatrix3 ??=
-    libassimp.lookupFunction<aiMultiplyMatrix3_t, aiMultiplyMatrix3_f>(
-        'aiMultiplyMatrix3');
-
 typedef aiIdentityMatrix3_t = Void Function(Pointer<aiMatrix3x3> mat);
 typedef aiIdentityMatrix3_f = void Function(Pointer<aiMatrix3x3> mat);
 
-aiIdentityMatrix3_f _aiIdentityMatrix3;
-get aiIdentityMatrix3 => _aiIdentityMatrix3 ??=
-    libassimp.lookupFunction<aiIdentityMatrix3_t, aiIdentityMatrix3_f>(
-        'aiIdentityMatrix3');
-
 typedef aiIdentityMatrix4_t = Void Function(Pointer<aiMatrix4x4> mat);
 typedef aiIdentityMatrix4_f = void Function(Pointer<aiMatrix4x4> mat);
-
-aiIdentityMatrix4_f _aiIdentityMatrix4;
-get aiIdentityMatrix4 => _aiIdentityMatrix4 ??=
-    libassimp.lookupFunction<aiIdentityMatrix4_t, aiIdentityMatrix4_f>(
-        'aiIdentityMatrix4');
 
 class aiMatrix3x3 extends Struct {
   @Float() // ai_real

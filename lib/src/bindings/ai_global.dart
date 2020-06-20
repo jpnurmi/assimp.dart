@@ -45,74 +45,31 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'dylib.dart';
 import 'ai_string.dart';
 
 typedef aiGetLegalString_t = Pointer<Utf8> Function();
 typedef aiGetLegalString_f = Pointer<Utf8> Function();
 
-aiGetLegalString_f _aiGetLegalString;
-get aiGetLegalString => _aiGetLegalString ??= libassimp
-    .lookupFunction<aiGetLegalString_t, aiGetLegalString_f>('aiGetLegalString');
-
 typedef aiGetVersionMinor_t = Uint32 Function();
 typedef aiGetVersionMinor_f = int Function();
-
-aiGetVersionMinor_f _aiGetVersionMinor;
-get aiGetVersionMinor => _aiGetVersionMinor ??=
-    libassimp.lookupFunction<aiGetVersionMinor_t, aiGetVersionMinor_f>(
-        'aiGetVersionMinor');
 
 typedef aiGetVersionMajor_t = Uint32 Function();
 typedef aiGetVersionMajor_f = int Function();
 
-aiGetVersionMajor_f _aiGetVersionMajor;
-get aiGetVersionMajor => _aiGetVersionMajor ??=
-    libassimp.lookupFunction<aiGetVersionMajor_t, aiGetVersionMajor_f>(
-        'aiGetVersionMajor');
-
 typedef aiGetVersionRevision_t = Uint32 Function();
 typedef aiGetVersionRevision_f = int Function();
-
-aiGetVersionRevision_f _aiGetVersionRevision;
-get aiGetVersionRevision => _aiGetVersionRevision ??=
-    libassimp.lookupFunction<aiGetVersionRevision_t, aiGetVersionRevision_f>(
-        'aiGetVersionRevision');
 
 typedef aiGetBranchName_t = Pointer<Utf8> Function();
 typedef aiGetBranchName_f = Pointer<Utf8> Function();
 
-aiGetBranchName_f _aiGetBranchName;
-get aiGetBranchName => _aiGetBranchName ??= libassimp
-    .lookupFunction<aiGetBranchName_t, aiGetBranchName_f>('aiGetBranchName');
-
 typedef aiGetCompileFlags_t = Uint32 Function();
 typedef aiGetCompileFlags_f = int Function();
-
-aiGetCompileFlags_f _aiGetCompileFlags;
-get aiGetCompileFlags => _aiGetCompileFlags ??=
-    libassimp.lookupFunction<aiGetCompileFlags_t, aiGetCompileFlags_f>(
-        'aiGetCompileFlags');
 
 typedef aiGetErrorString_t = Pointer<Utf8> Function();
 typedef aiGetErrorString_f = Pointer<Utf8> Function();
 
-aiGetErrorString_f _aiGetErrorString;
-get aiGetErrorString => _aiGetErrorString ??= libassimp
-    .lookupFunction<aiGetErrorString_t, aiGetErrorString_f>('aiGetErrorString');
-
 typedef aiIsExtensionSupported_t = Int32 Function(Pointer<Utf8> extension);
 typedef aiIsExtensionSupported_f = int Function(Pointer<Utf8> extension);
 
-aiIsExtensionSupported_f _aiIsExtensionSupported;
-get aiIsExtensionSupported => _aiIsExtensionSupported ??= libassimp
-    .lookupFunction<aiIsExtensionSupported_t, aiIsExtensionSupported_f>(
-        'aiIsExtensionSupported');
-
 typedef aiGetExtensionList_t = Void Function(Pointer<aiString> out);
 typedef aiGetExtensionList_f = void Function(Pointer<aiString> out);
-
-aiGetExtensionList_f _aiGetExtensionList;
-get aiGetExtensionList => _aiGetExtensionList ??=
-    libassimp.lookupFunction<aiGetExtensionList_t, aiGetExtensionList_f>(
-        'aiGetExtensionList');

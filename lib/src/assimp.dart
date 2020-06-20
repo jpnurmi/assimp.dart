@@ -43,21 +43,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'package:ffi/ffi.dart';
 
-import 'bindings.dart' as b;
+import 'dylib.dart';
 
 class Assimp {
   Assimp._();
 
   static void enableVerboseLogging(bool enable) =>
-      b.aiEnableVerboseLogging(enable ? 1 : 0);
+      aiEnableVerboseLogging(enable ? 1 : 0);
 
-  static String get errorString => Utf8.fromUtf8(b.aiGetErrorString());
-  static String get legalString => Utf8.fromUtf8(b.aiGetLegalString());
+  static String get errorString => Utf8.fromUtf8(aiGetErrorString());
+  static String get legalString => Utf8.fromUtf8(aiGetLegalString());
 
-  static int get versionMajor => b.aiGetVersionMajor();
-  static int get versionMinor => b.aiGetVersionMinor();
-  static int get versionRevision => b.aiGetVersionRevision();
+  static int get versionMajor => aiGetVersionMajor();
+  static int get versionMinor => aiGetVersionMinor();
+  static int get versionRevision => aiGetVersionRevision();
 
-  static int get compileFlags => b.aiGetCompileFlags();
-  static String get branchName => Utf8.fromUtf8(b.aiGetBranchName());
+  static int get compileFlags => aiGetCompileFlags();
+  static String get branchName => Utf8.fromUtf8(aiGetBranchName());
 }

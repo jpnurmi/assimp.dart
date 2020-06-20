@@ -43,18 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 
 import 'ai_matrix.dart';
-import 'dylib.dart';
 
 typedef aiCreateQuaternionFromMatrix_t = Void Function(
     Pointer<aiQuaternion> quat, Pointer<aiMatrix3x3> mat);
 typedef aiCreateQuaternionFromMatrix_f = void Function(
     Pointer<aiQuaternion> quat, Pointer<aiMatrix3x3> mat);
-
-aiCreateQuaternionFromMatrix_f _aiCreateQuaternionFromMatrix;
-get aiCreateQuaternionFromMatrix =>
-    _aiCreateQuaternionFromMatrix ??= libassimp.lookupFunction<
-        aiCreateQuaternionFromMatrix_t,
-        aiCreateQuaternionFromMatrix_f>('aiCreateQuaternionFromMatrix');
 
 class aiQuaternion extends Struct {
   @Float() // ai_real
