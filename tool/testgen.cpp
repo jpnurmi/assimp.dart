@@ -191,19 +191,49 @@ static void generateMeshTest(const QString &fileName)
     });
 }
 
-static void testNodes(const QString &fileName)
+static void writeNodeTester(QTextStream &out, const QString &fileName = QString())
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    QTextStream(stdout)
-            << "testNodes('" << fileName << "', (rootNode) {\n"
-            << "  expect(rootNode.name, " << equalsToString(scene->mRootNode->mName) << ");\n"
-//            << "  expect(rootNode.transformation, " << isNullOrNot(scene->mRootNode->mTransformation) << ");\n"
-            << "  expect(rootNode.parent, " << isNullOrNot(scene->mRootNode->mParent) << ");\n"
-            << "  expect(rootNode.children.length, " << equalsToInt(scene->mRootNode->mNumChildren) << ");\n"
-            << "  expect(rootNode.meshes.length, " << equalsToInt(scene->mRootNode->mNumMeshes) << ");\n"
-            << "  expect(rootNode.metaData, " << isNullOrNot(scene->mRootNode->mMetaData) << ");\n"
-            << "});\n\n";
-    aiReleaseImport(scene);
+    if (fileName.isNull()) {
+        out << "    testNodes(null, (node) {\n"
+            << "      expect(node.isNull, isTrue);\n"
+            << "      expect(node.name, isNull);\n"
+            << "      expect(node.transformation, isNull);\n"
+            << "      expect(node.parent, isNull);\n"
+            << "      expect(node.children, isEmpty);\n"
+            << "      expect(node.meshes, isEmpty);\n"
+            << "      expect(node.metaData, isNull);\n"
+            << "    });\n";
+    } else {
+        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+        out << "    testNodes('" << fileName << "', (rootNode) {\n"
+            << "      expect(rootNode.name, " << equalsToString(scene->mRootNode->mName) << ");\n"
+//            << "      expect(rootNode.transformation, " << isNullOrNot(scene->mRootNode->mTransformation) << ");\n"
+            << "      expect(rootNode.parent, " << isNullOrNot(scene->mRootNode->mParent) << ");\n"
+            << "      expect(rootNode.children.length, " << equalsToInt(scene->mRootNode->mNumChildren) << ");\n"
+            << "      expect(rootNode.meshes.length, " << equalsToInt(scene->mRootNode->mNumMeshes) << ");\n"
+            << "      expect(rootNode.metaData, " << isNullOrNot(scene->mRootNode->mMetaData) << ");\n"
+            << "    });\n\n";
+        aiReleaseImport(scene);
+    }
+}
+
+static void generateNodeTest(const QString &fileName)
+{
+    generateTest<aiNode>("aiNode", fileName, [&](QTextStream &out) {
+        writeGroup(out, "null", [&]() {
+            writeNodeTester(out);
+        });
+        writeGroup(out, "3mf", [&]() {
+            writeNodeTester(out, "3mf/box.3mf");
+            writeNodeTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeNodeTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeNodeTester(out, "Obj/Spider/spider.obj");
+        });
+    });
 }
 
 int main(int argc, char *argv[])
@@ -212,11 +242,7 @@ int main(int argc, char *argv[])
 
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
-    generateSceneTest("scene_test.dart");
     generateMeshTest("mesh_test.dart");
-
-    testNodes("3mf/box.3mf");
-    testNodes("3mf/spider.3mf");
-    testNodes("fbx/huesitos.fbx");
-    testNodes("Obj/Spider/spider.obj");
+    generateNodeTest("node_test.dart");
+    generateSceneTest("scene_test.dart");
 }

@@ -75,3 +75,14 @@ void testMeshes(String fileName, void tester(meshes)) {
     scene.dispose();
   }
 }
+
+void testNodes(String fileName, void tester(rootNode)) {
+  if (fileName == null) {
+    tester(Node.fromNative(null));
+  } else {
+    final filePath = testModelPath(fileName);
+    final scene = Scene.fromFile(filePath);
+    tester(scene.rootNode);
+    scene.dispose();
+  }
+}
