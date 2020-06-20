@@ -67,16 +67,6 @@ class aiMaterial extends Struct {
   /* size: 16, members: 3 */
 }
 
-/** @brief Retrieve a material property with a specific key from the material
- *
- * @param pMat Pointer to the input material. May not be NULL
- * @param pKey Key to search for. One of the AI_MATKEY_XXX constants.
- * @param type Specifies the type of the texture to be retrieved (
- *    e.g. diffuse, specular, height map ...)
- * @param index Index of the texture to be retrieved.
- * @param pPropOut Pointer to receive a pointer to a valid aiMaterialProperty
- *        structure or NULL if the key has not been found. */
-// ---------------------------------------------------------------------------
 typedef aiGetMaterialProperty_t = Uint32 Function(
   Pointer<aiMaterial> mat,
   Pointer<Utf8> key,
@@ -97,32 +87,6 @@ get aiGetMaterialProperty => _aiGetMaterialProperty ??=
     libassimp.lookupFunction<aiGetMaterialProperty_t, aiGetMaterialProperty_f>(
         'aiGetMaterialProperty');
 
-// ---------------------------------------------------------------------------
-/** @brief Retrieve an array of float values with a specific key
- *  from the material
- *
- * Pass one of the AI_MATKEY_XXX constants for the last three parameters (the
- * example reads the #AI_MATKEY_UVTRANSFORM property of the first diffuse texture)
- * @code
- * aiUVTransform trafo;
- * unsigned int max = sizeof(aiUVTransform);
- * if (AI_SUCCESS != aiGetMaterialFloatArray(mat, AI_MATKEY_UVTRANSFORM(aiTextureType_DIFFUSE,0),
- *    (float*)&trafo, &max) || sizeof(aiUVTransform) != max)
- * {
- *   // error handling
- * }
- * @endcode
- *
- * @param pMat Pointer to the input material. May not be NULL
- * @param pKey Key to search for. One of the AI_MATKEY_XXX constants.
- * @param pOut Pointer to a buffer to receive the result.
- * @param pMax Specifies the size of the given buffer, in float's.
- *        Receives the number of values (not bytes!) read.
- * @param type (see the code sample above)
- * @param index (see the code sample above)
- * @return Specifies whether the key has been found. If not, the output
- *   arrays remains unmodified and pMax is set to 0.*/
-// ---------------------------------------------------------------------------
 typedef aiGetMaterialFloatArray_t = Uint32 Function(
     Pointer<aiMaterial> mat,
     Pointer<Utf8> key,
@@ -143,15 +107,6 @@ get aiGetMaterialFloatArray => _aiGetMaterialFloatArray ??= libassimp
     .lookupFunction<aiGetMaterialFloatArray_t, aiGetMaterialFloatArray_f>(
         'aiGetMaterialFloatArray');
 
-//// Use our friend, the C preprocessor
-//#define aiGetMaterialFloat (pMat, type, index, pKey, pOut) \
-//    aiGetMaterialFloatArray(pMat, type, index, pKey, pOut, NULL)
-
-// ---------------------------------------------------------------------------
-/** @brief Retrieve an array of integer values with a specific key
- *  from a material
- *
- * See the sample for aiGetMaterialFloatArray for more information.*/
 typedef aiGetMaterialIntegerArray_t = Uint32 Function(
     Pointer<aiMaterial> mat,
     Pointer<Utf8> key,
@@ -172,15 +127,6 @@ get aiGetMaterialIntegerArray => _aiGetMaterialIntegerArray ??= libassimp
     .lookupFunction<aiGetMaterialIntegerArray_t, aiGetMaterialIntegerArray_f>(
         'aiGetMaterialIntegerArray');
 
-//// use our friend, the C preprocessor
-//#define aiGetMaterialInteger (pMat, type, index, pKey, pOut) \
-//    aiGetMaterialIntegerArray(pMat, type, index, pKey, pOut, NULL)
-
-// ---------------------------------------------------------------------------
-/** @brief Retrieve a color value from the material property table
-*
-* See the sample for aiGetMaterialFloat for more information*/
-// ---------------------------------------------------------------------------
 typedef aiGetMaterialColor_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiColor4D> out);
 typedef aiGetMaterialColor_f = int Function(Pointer<aiMaterial> mat,
@@ -191,11 +137,6 @@ get aiGetMaterialColor => _aiGetMaterialColor ??=
     libassimp.lookupFunction<aiGetMaterialColor_t, aiGetMaterialColor_f>(
         'aiGetMaterialColor');
 
-// ---------------------------------------------------------------------------
-/** @brief Retrieve a aiUVTransform value from the material property table
-*
-* See the sample for aiGetMaterialFloat for more information*/
-// ---------------------------------------------------------------------------
 typedef aiGetMaterialUVTransform_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiUVTransform> out);
 typedef aiGetMaterialUVTransform_f = int Function(Pointer<aiMaterial> mat,
@@ -206,11 +147,6 @@ get aiGetMaterialUVTransform => _aiGetMaterialUVTransform ??= libassimp
     .lookupFunction<aiGetMaterialUVTransform_t, aiGetMaterialUVTransform_f>(
         'aiGetMaterialUVTransform');
 
-// ---------------------------------------------------------------------------
-/** @brief Retrieve a string from the material property table
-*
-* See the sample for aiGetMaterialFloat for more information.*/
-// ---------------------------------------------------------------------------
 typedef aiGetMaterialString_t = Uint32 Function(Pointer<aiMaterial> mat,
     Pointer<Utf8> key, Uint32 type, Uint32 index, Pointer<aiString> out);
 typedef aiGetMaterialString_f = int Function(Pointer<aiMaterial> mat,
@@ -221,13 +157,6 @@ get aiGetMaterialString => _aiGetMaterialString ??=
     libassimp.lookupFunction<aiGetMaterialString_t, aiGetMaterialString_f>(
         'aiGetMaterialString');
 
-// ---------------------------------------------------------------------------
-/** Get the number of textures for a particular texture type.
- *  @param[in] pMat Pointer to the input material. May not be NULL
- *  @param type Texture type to check for
- *  @return Number of textures for this type.
- *  @note A texture can be easily queried using #aiGetMaterialTexture() */
-// ---------------------------------------------------------------------------
 typedef aiGetMaterialTextureCount_t = Uint32 Function(
   Pointer<aiMaterial> mat,
   Uint32 type, // aiTextureType
@@ -242,43 +171,6 @@ get aiGetMaterialTextureCount => _aiGetMaterialTextureCount ??= libassimp
     .lookupFunction<aiGetMaterialTextureCount_t, aiGetMaterialTextureCount_f>(
         'aiGetMaterialTextureCount');
 
-// ---------------------------------------------------------------------------
-/** @brief Helper function to get all values pertaining to a particular
- *  texture slot from a material structure.
- *
- *  This function is provided just for convenience. You could also read the
- *  texture by parsing all of its properties manually. This function bundles
- *  all of them in a huge function monster.
- *
- *  @param[in] mat Pointer to the input material. May not be NULL
- *  @param[in] type Specifies the texture stack to read from (e.g. diffuse,
- *     specular, height map ...).
- *  @param[in] index Index of the texture. The function fails if the
- *     requested index is not available for this texture type.
- *     #aiGetMaterialTextureCount() can be used to determine the number of
- *     textures in a particular texture stack.
- *  @param[out] path Receives the output path
- *     If the texture is embedded, receives a '*' followed by the id of
- *     the texture (for the textures stored in the corresponding scene) which
- *     can be converted to an int using a function like atoi.
- *     This parameter must be non-null.
- *  @param mapping The texture mapping mode to be used.
- *      Pass NULL if you're not interested in this information.
- *  @param[out] uvindex For UV-mapped textures: receives the index of the UV
- *      source channel. Unmodified otherwise.
- *      Pass NULL if you're not interested in this information.
- *  @param[out] blend Receives the blend factor for the texture
- *      Pass NULL if you're not interested in this information.
- *  @param[out] op Receives the texture blend operation to be perform between
- *      this texture and the previous texture.
- *      Pass NULL if you're not interested in this information.
- *  @param[out] mapmode Receives the mapping modes to be used for the texture.
- *      Pass NULL if you're not interested in this information. Otherwise,
- *      pass a pointer to an array of two aiTextureMapMode's (one for each
- *      axis, UV order).
- *  @param[out] flags Receives the the texture flags.
- *  @return AI_SUCCESS on success, otherwise something else. Have fun.*/
-// ---------------------------------------------------------------------------
 typedef aiGetMaterialTexture_t = Uint32 Function(
   Pointer<aiMaterial> mat,
   Uint32 type, // aiTextureType
