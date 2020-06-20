@@ -43,13 +43,70 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings/ai_animation.dart' as bindings;
-import 'utils.dart';
+import 'ai_quaternion.dart';
+import 'ai_vector.dart';
 
-class Animation {
-  Pointer<bindings.aiAnimation> _ptr;
+// pahole libassimpd.so -M -C aiVectorKey
+class aiVectorKey extends Struct {
+  // double                     mTime;                /*     0     8 */
+  @Double()
+  double mTime;
 
-  Animation.fromNative(this._ptr);
+  // aiVector3D                 mValue;               /*     8    12 */
+  Pointer<aiVector3D> mValue;
 
-  bool get isNull => Utils.isNull(_ptr);
+  /* size: 24, members: 2 */
+  /* padding: 4 */
+  @Uint32()
+  int _mPadding0;
+}
+
+// pahole libassimpd.so -M -C aiQuatKey
+class aiQuatKey extends Struct {
+  // double                     mTime;                /*     0     8 */
+  @Double()
+  double mTime;
+
+  // aiQuaternion               mValue;               /*     8    16 */
+  Pointer<aiQuaternion> mValue;
+
+  /* size: 24, members: 2 */
+}
+
+// pahole libassimpd.so -M -C aiMeshKey
+class aiMeshKey extends Struct {
+  // double                     mTime;                /*     0     8 */
+  @Double()
+  double mTime;
+
+  // unsigned int               mValue;               /*     8     4 */
+  @Uint32()
+  int mValue;
+
+  /* size: 16, members: 2 */
+  /* padding: 4 */
+  @Uint32()
+  int _mPadding0;
+}
+
+// pahole libassimpd.so -M -C aiMeshMorphKey
+class aiMeshMorphKey extends Struct {
+  // double                     mTime;                /*     0     8 */
+  @Double()
+  double mTime;
+
+  // unsigned int *             mValues;              /*     8     8 */
+  Pointer<Uint32> mValues;
+
+  // double *                   mWeights;             /*    16     8 */
+  Pointer<Double> mWeights;
+
+  // unsigned int               mNumValuesAndWeights; /*    24     4 */
+  @Uint32()
+  int mNumValuesAndWeights;
+
+  /* size: 32, members: 4 */
+  /* padding: 4 */
+  @Uint32()
+  int _mPadding0;
 }

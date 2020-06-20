@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'ai_anim.dart';
+import 'ai_animation.dart';
 import 'ai_camera.dart';
 import 'ai_light.dart';
 import 'ai_material.dart';
