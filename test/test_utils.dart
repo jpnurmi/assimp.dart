@@ -59,50 +59,34 @@ void testSceneFromString(String fileName, void tester(scene)) {
 
 void testScene(String fileName,
     {int from = TestFrom.file, void tester(scene)}) {
-  if (fileName == null) {
-    tester(Scene.fromNative(null));
-  } else {
-    if (from & TestFrom.file != 0) {
-      testSceneFromFile(fileName, tester);
-    }
-    if (from & TestFrom.bytes != 0) {
-      testSceneFromBytes(fileName, tester);
-    }
-    if (from & TestFrom.string != 0) {
-      testSceneFromString(fileName, tester);
-    }
+  if (from & TestFrom.file != 0) {
+    testSceneFromFile(fileName, tester);
+  }
+  if (from & TestFrom.bytes != 0) {
+    testSceneFromBytes(fileName, tester);
+  }
+  if (from & TestFrom.string != 0) {
+    testSceneFromString(fileName, tester);
   }
 }
 
 void testMaterials(String fileName, void tester(meshes)) {
-  if (fileName == null) {
-    tester(Material.fromNative(null));
-  } else {
-    final filePath = testModelPath(fileName);
-    final scene = Scene.fromFile(filePath);
-    tester(scene.materials);
-    scene.dispose();
-  }
+  final filePath = testModelPath(fileName);
+  final scene = Scene.fromFile(filePath);
+  tester(scene.materials);
+  scene.dispose();
 }
 
 void testMeshes(String fileName, void tester(meshes)) {
-  if (fileName == null) {
-    tester(Mesh.fromNative(null));
-  } else {
-    final filePath = testModelPath(fileName);
-    final scene = Scene.fromFile(filePath);
-    tester(scene.meshes);
-    scene.dispose();
-  }
+  final filePath = testModelPath(fileName);
+  final scene = Scene.fromFile(filePath);
+  tester(scene.meshes);
+  scene.dispose();
 }
 
 void testNodes(String fileName, void tester(nodes)) {
-  if (fileName == null) {
-    tester(Node.fromNative(null));
-  } else {
-    final filePath = testModelPath(fileName);
-    final scene = Scene.fromFile(filePath);
-    tester(scene.rootNode);
-    scene.dispose();
-  }
+  final filePath = testModelPath(fileName);
+  final scene = Scene.fromFile(filePath);
+  tester(scene.rootNode);
+  scene.dispose();
 }

@@ -49,22 +49,24 @@ import 'extensions.dart';
 class MetaData {
   Pointer<b.aiMetadata> _ptr;
 
-  MetaData.fromNative(this._ptr);
-
-  bool get isNull => AssimpPointer.isNull(_ptr);
+  MetaData._(this._ptr);
+  factory MetaData.fromNative(Pointer<b.aiMetadata> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return MetaData._(ptr);
+  }
 
   Map<String, dynamic> get properties => Map.fromIterables(keys, values);
 
   Iterable<String> get keys {
     return Iterable.generate(
-      _ptr?.ref?.mNumProperties ?? 0,
+      _ptr.ref.mNumProperties,
       (i) => AssimpString.fromNative(_ptr.ref.mKeys.elementAt(i)),
     );
   }
 
   Iterable<dynamic> get values {
     return Iterable.generate(
-      _ptr?.ref?.mNumProperties ?? 0,
+      _ptr.ref.mNumProperties,
       (i) => _toValue(_ptr.ref.mValues.elementAt(i)),
     );
   }

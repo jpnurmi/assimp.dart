@@ -49,16 +49,18 @@ import 'extensions.dart';
 class MemoryInfo {
   Pointer<b.aiMemoryInfo> _ptr;
 
-  MemoryInfo.fromNative(this._ptr);
+  MemoryInfo._(this._ptr);
+  factory MemoryInfo.fromNative(Pointer<b.aiMemoryInfo> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return MemoryInfo._(ptr);
+  }
 
-  bool get isNull => AssimpPointer.isNull(_ptr);
-
-  int get textures => _ptr?.ref?.textures ?? 0;
-  int get materials => _ptr?.ref?.materials ?? 0;
-  int get meshes => _ptr?.ref?.meshes ?? 0;
-  int get nodes => _ptr?.ref?.nodes ?? 0;
-  int get animations => _ptr?.ref?.animations ?? 0;
-  int get cameras => _ptr?.ref?.cameras ?? 0;
-  int get lights => _ptr?.ref?.lights ?? 0;
-  int get total => _ptr?.ref?.total ?? 0;
+  int get textures => _ptr.ref.textures;
+  int get materials => _ptr.ref.materials;
+  int get meshes => _ptr.ref.meshes;
+  int get nodes => _ptr.ref.nodes;
+  int get animations => _ptr.ref.animations;
+  int get cameras => _ptr.ref.cameras;
+  int get lights => _ptr.ref.lights;
+  int get total => _ptr.ref.total;
 }

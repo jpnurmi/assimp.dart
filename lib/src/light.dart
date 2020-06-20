@@ -49,7 +49,9 @@ import 'extensions.dart';
 class Light {
   Pointer<b.aiLight> _ptr;
 
-  Light.fromNative(this._ptr);
-
-  bool get isNull => AssimpPointer.isNull(_ptr);
+  Light._(this._ptr);
+  factory Light.fromNative(Pointer<b.aiLight> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Light._(ptr);
+  }
 }

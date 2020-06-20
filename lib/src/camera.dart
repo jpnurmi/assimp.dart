@@ -49,7 +49,9 @@ import 'extensions.dart';
 class Camera {
   Pointer<b.aiCamera> _ptr;
 
-  Camera.fromNative(this._ptr);
-
-  bool get isNull => AssimpPointer.isNull(_ptr);
+  Camera._(this._ptr);
+  factory Camera.fromNative(Pointer<b.aiCamera> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Camera._(ptr);
+  }
 }

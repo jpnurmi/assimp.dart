@@ -49,7 +49,9 @@ import 'extensions.dart';
 class Animation {
   Pointer<b.aiAnimation> _ptr;
 
-  Animation.fromNative(this._ptr);
-
-  bool get isNull => AssimpPointer.isNull(_ptr);
+  Animation._(this._ptr);
+  factory Animation.fromNative(Pointer<b.aiAnimation> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Animation._(ptr);
+  }
 }

@@ -61,6 +61,13 @@ static void writeGroup(QTextStream &out, const QString &name, std::function<void
     out << "  });\n\n";
 }
 
+static void writeNullTest(QTextStream &out, const QString &name)
+{
+    writeGroup(out, "null", [&]() {
+        out << QString("    expect(%1.fromNative(null), isNull);\n").arg(name.mid(2));
+    });
+}
+
 static void writeSizeTest(QTextStream &out, const QString &name, size_t size)
 {
     writeGroup(out, "size", [&]() {
@@ -77,6 +84,7 @@ static void generateTest(const QString &typeName, const QString &fileName, std::
 
     QTextStream out(&file);
     writeHeader(out, fileName);
+    writeNullTest(out, typeName);
     writeSizeTest(out, typeName, sizeof(T));
     writer(out);
     writeFooter(out, fileName);
@@ -84,61 +92,51 @@ static void generateTest(const QString &typeName, const QString &fileName, std::
 
 static void writeMaterialTester(QTextStream &out, const QString &fileName = QString())
 {
-    if (fileName.isNull()) {
-        out << "    testMaterials(null, (material) {\n"
-            << "      expect(material.isNull, isTrue);\n"
-            << "      expect(material.properties, isEmpty);\n"
-            << "    });\n";
-    } else {
-        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-        out << "    testMaterials('" << fileName << "', (materials) {\n"
-            << "      expect(materials.length, " << equalsToInt(scene->mNumMaterials) << ");\n";
-        for (uint i = 0; i < scene->mNumMaterials; ++i) {
-            const aiMaterial *material = scene->mMaterials[i];
-            out << "      expect(materials.elementAt(" << i << ").properties.length, " << equalsToInt(material->mNumProperties) << ");\n";
-            for (uint j = 0; j < material->mNumProperties; ++j) {
-                const aiMaterialProperty *property = material->mProperties[j];
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").key, " << equalsToString(property->mKey) << ");\n";
-                switch (property->mType) {
-                case aiPropertyTypeInfo::aiPTI_Float:
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, double);\n";
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToFloat(*reinterpret_cast<float*>(property->mData)) << ");\n";
-                    break;
-                case aiPropertyTypeInfo::aiPTI_Double:
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, double);\n";
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToDouble(*reinterpret_cast<double*>(property->mData)) << ");\n";
-                    break;
-                case aiPropertyTypeInfo::aiPTI_String:
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, String);\n";
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToString(*reinterpret_cast<aiString*>(property->mData)) << ");\n";
-                    break;
-                case aiPropertyTypeInfo::aiPTI_Integer:
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, int);\n";
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToInt(*reinterpret_cast<int*>(property->mData)) << ");\n";
-                    break;
-                case aiPropertyTypeInfo::aiPTI_Buffer:
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType.toString(), 'Uint8List');\n";
-                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToByteArray(property->mData, property->mDataLength) << ");\n";
-                    break;
-                default:
-                    break;
-                }
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").index, " << equalsToInt(property->mIndex) << ");\n";
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").semantic, " << equalsToInt(property->mSemantic) << ");\n";
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testMaterials('" << fileName << "', (materials) {\n"
+        << "      expect(materials.length, " << equalsToInt(scene->mNumMaterials) << ");\n";
+    for (uint i = 0; i < scene->mNumMaterials; ++i) {
+        const aiMaterial *material = scene->mMaterials[i];
+        out << "      expect(materials.elementAt(" << i << ").properties.length, " << equalsToInt(material->mNumProperties) << ");\n";
+        for (uint j = 0; j < material->mNumProperties; ++j) {
+            const aiMaterialProperty *property = material->mProperties[j];
+            out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").key, " << equalsToString(property->mKey) << ");\n";
+            switch (property->mType) {
+            case aiPropertyTypeInfo::aiPTI_Float:
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, double);\n";
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToFloat(*reinterpret_cast<float*>(property->mData)) << ");\n";
+                break;
+            case aiPropertyTypeInfo::aiPTI_Double:
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, double);\n";
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToDouble(*reinterpret_cast<double*>(property->mData)) << ");\n";
+                break;
+            case aiPropertyTypeInfo::aiPTI_String:
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, String);\n";
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToString(*reinterpret_cast<aiString*>(property->mData)) << ");\n";
+                break;
+            case aiPropertyTypeInfo::aiPTI_Integer:
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, int);\n";
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToInt(*reinterpret_cast<int*>(property->mData)) << ");\n";
+                break;
+            case aiPropertyTypeInfo::aiPTI_Buffer:
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType.toString(), 'Uint8List');\n";
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToByteArray(property->mData, property->mDataLength) << ");\n";
+                break;
+            default:
+                break;
             }
-            out << (i < scene->mNumMaterials - 1 ? "\n" : "");
+            out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").index, " << equalsToInt(property->mIndex) << ");\n";
+            out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").semantic, " << equalsToInt(property->mSemantic) << ");\n";
         }
-        out << "    });\n";
-        aiReleaseImport(scene);
+        out << (i < scene->mNumMaterials - 1 ? "\n" : "");
     }
+    out << "    });\n";
+    aiReleaseImport(scene);
 }
 
 static void generateMaterialTest(const QString &fileName)
 {
     generateTest<aiMaterial>("aiMaterial", fileName, [&](QTextStream &out) {
-        writeGroup(out, "null", [&]() {
-            writeMaterialTester(out);
-        });
         writeGroup(out, "3mf", [&]() {
             writeMaterialTester(out, "3mf/box.3mf");
             writeMaterialTester(out, "3mf/spider.3mf");
@@ -154,59 +152,35 @@ static void generateMaterialTest(const QString &fileName)
 
 static void writeMeshTester(QTextStream &out, const QString &fileName = QString())
 {
-    if (fileName.isNull()) {
-        out << "    testMeshes(null, (mesh) {\n"
-            << "      expect(mesh.isNull, isTrue);\n"
-            << "      expect(mesh.primitiveTypes, isZero);\n"
-            << "      expect(mesh.vertices, isEmpty);\n"
-            << "      expect(mesh.normals, isEmpty);\n"
-            << "      expect(mesh.tangents, isEmpty);\n"
-            << "      expect(mesh.bitangents, isEmpty);\n"
-            << "      expect(mesh.colors, isEmpty);\n"
-            << "      expect(mesh.textureCoords, isEmpty);\n"
-            << "      expect(mesh.uvComponents, isEmpty);\n"
-            << "      expect(mesh.faces, isEmpty);\n"
-            << "      expect(mesh.bones, isEmpty);\n"
-            << "      expect(mesh.materialIndex, isZero);\n"
-            << "      expect(mesh.name, isNull);\n"
-            << "      expect(mesh.animMeshes, isEmpty);\n"
-            << "      expect(mesh.morphingMethod, isZero);\n"
-            << "      expect(mesh.aabb, isNull);\n"
-            << "    });\n";
-    } else {
-        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-        out << "    testMeshes('" << fileName << "', (meshes) {\n"
-            << "      expect(meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n";
-        for (uint i = 0; i < scene->mNumMeshes; ++i) {
-            const aiMesh *mesh = scene->mMeshes[i];
-            out << "      expect(meshes.elementAt(" << i << ").primitiveTypes, " << equalsToInt(mesh->mPrimitiveTypes) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").vertices.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").normals.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").tangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").bitangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").colors.length, " << equalsToInt(arraySize(mesh->mColors)) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").textureCoords.length, " << equalsToInt(arraySize(mesh->mTextureCoords)) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").uvComponents.length, " << equalsToInt(arraySize(mesh->mNumUVComponents)) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").faces.length, " << equalsToInt(mesh->mNumFaces) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").bones.length, " << equalsToInt(mesh->mNumBones) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").materialIndex, " << equalsToInt(mesh->mMaterialIndex) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").name, " << equalsToString(mesh->mName) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").animMeshes.length, " << equalsToInt(mesh->mNumAnimMeshes) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").morphingMethod, " << equalsToInt(mesh->mMethod) << ");\n"
-                << "      expect(meshes.elementAt(" << i << ").aabb, isNull);\n" // ### TODO
-                << (i < scene->mNumMeshes - 1 ? "\n" : "");
-        }
-        out << "    });\n";
-        aiReleaseImport(scene);
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testMeshes('" << fileName << "', (meshes) {\n"
+        << "      expect(meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n";
+    for (uint i = 0; i < scene->mNumMeshes; ++i) {
+        const aiMesh *mesh = scene->mMeshes[i];
+        out << "      expect(meshes.elementAt(" << i << ").primitiveTypes, " << equalsToInt(mesh->mPrimitiveTypes) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").vertices.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").normals.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").tangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").bitangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").colors.length, " << equalsToInt(arraySize(mesh->mColors)) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").textureCoords.length, " << equalsToInt(arraySize(mesh->mTextureCoords)) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").uvComponents.length, " << equalsToInt(arraySize(mesh->mNumUVComponents)) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").faces.length, " << equalsToInt(mesh->mNumFaces) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").bones.length, " << equalsToInt(mesh->mNumBones) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").materialIndex, " << equalsToInt(mesh->mMaterialIndex) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").name, " << equalsToString(mesh->mName) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").animMeshes.length, " << equalsToInt(mesh->mNumAnimMeshes) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").morphingMethod, " << equalsToInt(mesh->mMethod) << ");\n"
+            << "      expect(meshes.elementAt(" << i << ").aabb, isNull);\n" // ### TODO
+            << (i < scene->mNumMeshes - 1 ? "\n" : "");
     }
+    out << "    });\n";
+    aiReleaseImport(scene);
 }
 
 static void generateMeshTest(const QString &fileName)
 {
     generateTest<aiMesh>("aiMesh", fileName, [&](QTextStream &out) {
-        writeGroup(out, "null", [&]() {
-            writeMeshTester(out);
-        });
         writeGroup(out, "3mf", [&]() {
             writeMeshTester(out, "3mf/box.3mf");
             writeMeshTester(out, "3mf/spider.3mf");
@@ -222,45 +196,30 @@ static void generateMeshTest(const QString &fileName)
 
 static void writeNodeTester(QTextStream &out, const QString &fileName = QString())
 {
-    if (fileName.isNull()) {
-        out << "    testNodes(null, (node) {\n"
-            << "      expect(node.isNull, isTrue);\n"
-            << "      expect(node.name, isNull);\n"
-            << "      expect(node.transformation, isNull);\n"
-            << "      expect(node.parent, isNull);\n"
-            << "      expect(node.children, isEmpty);\n"
-            << "      expect(node.meshes, isEmpty);\n"
-            << "      expect(node.metaData, isNull);\n"
-            << "    });\n";
-    } else {
-        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-        out << "    testNodes('" << fileName << "', (rootNode) {\n"
-            << "      expect(rootNode.name, " << equalsToString(scene->mRootNode->mName) << ");\n"
-            << "      expect(rootNode.transformation, " << equalsToMatrix4(scene->mRootNode->mTransformation) << ");\n"
-            << "      expect(rootNode.parent, " << isNullOrNot(scene->mRootNode->mParent) << ");\n"
-            << "      expect(rootNode.children.length, " << equalsToInt(scene->mRootNode->mNumChildren) << ");\n";
-        for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
-            const aiNode *node = scene->mRootNode->mChildren[i];
-            out << "      expect(rootNode.children.elementAt(" << i << ").name, " << equalsToString(node->mName) << ");\n"
-                << "      expect(rootNode.children.elementAt(" << i << ").transformation, " << equalsToMatrix4(node->mTransformation) << ");\n"
-                << "      expect(rootNode.children.elementAt(" << i << ").parent, " << isNullOrNot(node->mParent) << ");\n"
-                << "      expect(rootNode.children.elementAt(" << i << ").children.length, " << equalsToInt(node->mNumChildren) << ");\n"
-                << "      expect(rootNode.children.elementAt(" << i << ").meshes, " << equalsToIntArray(node->mMeshes, node->mNumMeshes) << ");\n"
-                << "      expect(rootNode.children.elementAt(" << i << ").metaData, " << isNullOrNot(node->mMetaData) << ");\n";
-        }
-        out << "      expect(rootNode.meshes, " << equalsToIntArray(scene->mRootNode->mMeshes, scene->mRootNode->mNumMeshes) << ");\n"
-            << "      expect(rootNode.metaData, " << isNullOrNot(scene->mRootNode->mMetaData) << ");\n"
-            << "    });\n\n";
-        aiReleaseImport(scene);
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testNodes('" << fileName << "', (rootNode) {\n"
+        << "      expect(rootNode.name, " << equalsToString(scene->mRootNode->mName) << ");\n"
+        << "      expect(rootNode.transformation, " << equalsToMatrix4(scene->mRootNode->mTransformation) << ");\n"
+        << "      expect(rootNode.parent, " << isNullOrNot(scene->mRootNode->mParent) << ");\n"
+        << "      expect(rootNode.children.length, " << equalsToInt(scene->mRootNode->mNumChildren) << ");\n";
+    for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
+        const aiNode *node = scene->mRootNode->mChildren[i];
+        out << "      expect(rootNode.children.elementAt(" << i << ").name, " << equalsToString(node->mName) << ");\n"
+            << "      expect(rootNode.children.elementAt(" << i << ").transformation, " << equalsToMatrix4(node->mTransformation) << ");\n"
+            << "      expect(rootNode.children.elementAt(" << i << ").parent, " << isNullOrNot(node->mParent) << ");\n"
+            << "      expect(rootNode.children.elementAt(" << i << ").children.length, " << equalsToInt(node->mNumChildren) << ");\n"
+            << "      expect(rootNode.children.elementAt(" << i << ").meshes, " << equalsToIntArray(node->mMeshes, node->mNumMeshes) << ");\n"
+            << "      expect(rootNode.children.elementAt(" << i << ").metaData, " << isNullOrNot(node->mMetaData) << ");\n";
     }
+    out << "      expect(rootNode.meshes, " << equalsToIntArray(scene->mRootNode->mMeshes, scene->mRootNode->mNumMeshes) << ");\n"
+        << "      expect(rootNode.metaData, " << isNullOrNot(scene->mRootNode->mMetaData) << ");\n"
+        << "    });\n\n";
+    aiReleaseImport(scene);
 }
 
 static void generateNodeTest(const QString &fileName)
 {
     generateTest<aiNode>("aiNode", fileName, [&](QTextStream &out) {
-        writeGroup(out, "null", [&]() {
-            writeNodeTester(out);
-        });
         writeGroup(out, "3mf", [&]() {
             writeNodeTester(out, "3mf/box.3mf");
             writeNodeTester(out, "3mf/spider.3mf");
@@ -276,41 +235,24 @@ static void generateNodeTest(const QString &fileName)
 
 static void writeSceneTester(QTextStream &out, const QString &fileName = QString())
 {
-    if (fileName.isNull()) {
-        out << "    testScene(null, tester: (scene) {\n"
-            << "      expect(scene.flags, isZero);\n"
-            << "      expect(scene.rootNode, isNullPointer);\n"
-            << "      expect(scene.meshes, isEmpty);\n"
-            << "      expect(scene.materials, isEmpty);\n"
-            << "      expect(scene.animations, isEmpty);\n"
-            << "      expect(scene.textures, isEmpty);\n"
-            << "      expect(scene.lights, isEmpty);\n"
-            << "      expect(scene.cameras, isEmpty);\n"
-            << "      expect(scene.metaData, isNullPointer);\n"
-            << "    });\n";
-    } else {
-        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-        out << "    testScene('" << fileName << "', tester: (scene) {\n"
-            << "      expect(scene.flags, " << isZeroOrNot(scene->mFlags) << ");\n"
-            << "      expect(scene.rootNode, " << isNullPointerOrNot(scene->mRootNode) << ");\n"
-            << "      expect(scene.meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n"
-            << "      expect(scene.materials.length, " << equalsToInt(scene->mNumMaterials) << ");\n"
-            << "      expect(scene.animations.length, " << equalsToInt(scene->mNumAnimations) << ");\n"
-            << "      expect(scene.textures.length, " << equalsToInt(scene->mNumTextures) << ");\n"
-            << "      expect(scene.lights.length, " << equalsToInt(scene->mNumLights) << ");\n"
-            << "      expect(scene.cameras.length, " << equalsToInt(scene->mNumCameras) << ");\n"
-            << "      expect(scene.metaData, " << isNullPointerOrNot(scene->mMetaData) << ");\n"
-            << "    });\n";
-        aiReleaseImport(scene);
-    }
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testScene('" << fileName << "', tester: (scene) {\n"
+        << "      expect(scene.flags, " << isZeroOrNot(scene->mFlags) << ");\n"
+        << "      expect(scene.rootNode, " << isNullOrNot(scene->mRootNode) << ");\n"
+        << "      expect(scene.meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n"
+        << "      expect(scene.materials.length, " << equalsToInt(scene->mNumMaterials) << ");\n"
+        << "      expect(scene.animations.length, " << equalsToInt(scene->mNumAnimations) << ");\n"
+        << "      expect(scene.textures.length, " << equalsToInt(scene->mNumTextures) << ");\n"
+        << "      expect(scene.lights.length, " << equalsToInt(scene->mNumLights) << ");\n"
+        << "      expect(scene.cameras.length, " << equalsToInt(scene->mNumCameras) << ");\n"
+        << "      expect(scene.metaData, " << isNullOrNot(scene->mMetaData) << ");\n"
+        << "    });\n";
+    aiReleaseImport(scene);
 }
 
 static void generateSceneTest(const QString &fileName)
 {
     generateTest<aiScene>("aiScene", fileName, [&](QTextStream &out) {
-        writeGroup(out, "null", [&]() {
-            writeSceneTester(out);
-        });
         writeGroup(out, "3mf", [&]() {
             writeSceneTester(out, "3mf/box.3mf");
             writeSceneTester(out, "3mf/spider.3mf");

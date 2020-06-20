@@ -11,15 +11,12 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('size', () {
-    expect(sizeOf<aiMaterial>(), equals(16));
+  test('null', () {
+    expect(Material.fromNative(null), isNull);
   });
 
-  test('null', () {
-    testMaterials(null, (material) {
-      expect(material.isNull, isTrue);
-      expect(material.properties, isEmpty);
-    });
+  test('size', () {
+    expect(sizeOf<aiMaterial>(), equals(16));
   });
 
   test('3mf', () {

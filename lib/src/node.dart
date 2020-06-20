@@ -52,34 +52,36 @@ import 'extensions.dart';
 class Node {
   Pointer<b.aiNode> _ptr;
 
-  Node.fromNative(this._ptr);
+  Node._(this._ptr);
+  factory Node.fromNative(Pointer<b.aiNode> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Node._(ptr);
+  }
 
-  bool get isNull => AssimpPointer.isNull(_ptr);
-
-  String get name => AssimpString.fromNative(_ptr?.ref?.mName);
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
 
   Matrix4 get transformation =>
-      AssimpMatrix4.fromNative(_ptr?.ref?.mTransformation);
+      AssimpMatrix4.fromNative(_ptr.ref.mTransformation);
 
-  Node get parent => AssimpPointer.isNotNull(_ptr?.ref?.mParent)
+  Node get parent => AssimpPointer.isNotNull(_ptr.ref.mParent)
       ? Node.fromNative(_ptr.ref.mParent)
       : null;
 
   Iterable<Node> get children {
     return Iterable.generate(
-      _ptr?.ref?.mNumChildren ?? 0,
+      _ptr.ref.mNumChildren,
       (i) => Node.fromNative(_ptr.ref.mChildren[i]),
     );
   }
 
   Iterable<int> get meshes {
     return Iterable.generate(
-      _ptr?.ref?.mNumMeshes ?? 0,
+      _ptr.ref.mNumMeshes,
       (i) => _ptr.ref.mMeshes[i],
     );
   }
 
-  MetaData get metaData => AssimpPointer.isNotNull(_ptr?.ref?.mMetaData)
+  MetaData get metaData => AssimpPointer.isNotNull(_ptr.ref.mMetaData)
       ? MetaData.fromNative(_ptr.ref.mMetaData)
       : null;
 }

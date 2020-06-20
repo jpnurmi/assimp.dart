@@ -11,20 +11,12 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('size', () {
-    expect(sizeOf<aiNode>(), equals(1144));
+  test('null', () {
+    expect(Node.fromNative(null), isNull);
   });
 
-  test('null', () {
-    testNodes(null, (node) {
-      expect(node.isNull, isTrue);
-      expect(node.name, isNull);
-      expect(node.transformation, isNull);
-      expect(node.parent, isNull);
-      expect(node.children, isEmpty);
-      expect(node.meshes, isEmpty);
-      expect(node.metaData, isNull);
-    });
+  test('size', () {
+    expect(sizeOf<aiNode>(), equals(1144));
   });
 
   test('3mf', () {

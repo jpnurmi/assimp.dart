@@ -49,7 +49,9 @@ import 'extensions.dart';
 class Texture {
   Pointer<b.aiTexture> _ptr;
 
-  Texture.fromNative(this._ptr);
-
-  bool get isNull => AssimpPointer.isNull(_ptr);
+  Texture._(this._ptr);
+  factory Texture.fromNative(Pointer<b.aiTexture> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Texture._(ptr);
+  }
 }

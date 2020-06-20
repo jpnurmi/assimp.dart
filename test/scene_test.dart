@@ -11,22 +11,12 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('size', () {
-    expect(sizeOf<aiScene>(), equals(128));
+  test('null', () {
+    expect(Scene.fromNative(null), isNull);
   });
 
-  test('null', () {
-    testScene(null, tester: (scene) {
-      expect(scene.flags, isZero);
-      expect(scene.rootNode, isNullPointer);
-      expect(scene.meshes, isEmpty);
-      expect(scene.materials, isEmpty);
-      expect(scene.animations, isEmpty);
-      expect(scene.textures, isEmpty);
-      expect(scene.lights, isEmpty);
-      expect(scene.cameras, isEmpty);
-      expect(scene.metaData, isNullPointer);
-    });
+  test('size', () {
+    expect(sizeOf<aiScene>(), equals(128));
   });
 
   test('3mf', () {
@@ -39,7 +29,7 @@ void main() {
       expect(scene.textures.length, isZero);
       expect(scene.lights.length, isZero);
       expect(scene.cameras.length, isZero);
-      expect(scene.metaData, isNullPointer);
+      expect(scene.metaData, isNull);
     });
     testScene('3mf/spider.3mf', tester: (scene) {
       expect(scene.flags, isZero);
@@ -50,7 +40,7 @@ void main() {
       expect(scene.textures.length, isZero);
       expect(scene.lights.length, isZero);
       expect(scene.cameras.length, isZero);
-      expect(scene.metaData, isNullPointer);
+      expect(scene.metaData, isNull);
     });
   });
 
@@ -78,7 +68,7 @@ void main() {
       expect(scene.textures.length, isZero);
       expect(scene.lights.length, isZero);
       expect(scene.cameras.length, isZero);
-      expect(scene.metaData, isNullPointer);
+      expect(scene.metaData, isNull);
     });
   });
 

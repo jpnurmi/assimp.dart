@@ -49,13 +49,15 @@ import 'extensions.dart';
 class Face {
   Pointer<b.aiFace> _ptr;
 
-  Face.fromNative(this._ptr);
-
-  bool get isNull => AssimpPointer.isNull(_ptr);
+  Face._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
+  factory Face.fromNative(Pointer<b.aiFace> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Face._(ptr);
+  }
 
   Iterable<int> get indices {
     return Iterable.generate(
-      _ptr?.ref?.mNumIndices ?? 0,
+      _ptr.ref.mNumIndices,
       (i) => _ptr.ref.mIndices[i],
     );
   }
@@ -64,67 +66,73 @@ class Face {
 class VertexWeight {
   Pointer<b.aiVertexWeight> _ptr;
 
-  VertexWeight.fromNative(this._ptr);
+  VertexWeight._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
+  factory VertexWeight.fromNative(Pointer<b.aiVertexWeight> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return VertexWeight._(ptr);
+  }
 
-  bool get isNull => AssimpPointer.isNull(_ptr);
+  int get vertexId => _ptr.ref.mVertexId;
 
-  int get vertexId => _ptr?.ref?.mVertexId ?? 0;
-
-  double get weight => _ptr?.ref?.mWeight ?? 0;
+  double get weight => _ptr.ref.mWeight;
 }
 
 class Bone {
   Pointer<b.aiBone> _ptr;
 
-  Bone.fromNative(this._ptr);
+  Bone._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
+  factory Bone.fromNative(Pointer<b.aiBone> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Bone._(ptr);
+  }
 
-  bool get isNull => AssimpPointer.isNull(_ptr);
-
-  String get name => AssimpString.fromNative(_ptr?.ref?.mName);
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
 
   Iterable<VertexWeight> get weights {
     return Iterable.generate(
-      _ptr?.ref?.mNumWeights ?? 0,
+      _ptr.ref.mNumWeights,
       (i) => VertexWeight.fromNative(_ptr.ref.mWeights.elementAt(i)),
     );
   }
 
-  Matrix4 get offset => AssimpMatrix4.fromNative(_ptr?.ref?.mOffset);
+  Matrix4 get offset => AssimpMatrix4.fromNative(_ptr.ref.mOffset);
 }
 
 class AnimMesh {
   Pointer<b.aiAnimMesh> _ptr;
 
-  AnimMesh.fromNative(this._ptr);
+  AnimMesh._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
+  factory AnimMesh.fromNative(Pointer<b.aiAnimMesh> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return AnimMesh._(ptr);
+  }
 
-  bool get isNull => AssimpPointer.isNull(_ptr);
-
-  String get name => AssimpString.fromNative(_ptr?.ref?.mName);
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
 
   Iterable<Vector3> get vertices {
     return Iterable.generate(
-      _ptr?.ref?.mNumVertices ?? 0,
+      _ptr.ref.mNumVertices,
       (i) => AssimpVector3.fromNative(_ptr.ref.mVertices.elementAt(i)),
     );
   }
 
   Iterable<Vector3> get normals {
     return Iterable.generate(
-      _ptr?.ref?.mNumVertices ?? 0,
+      _ptr.ref.mNumVertices,
       (i) => AssimpVector3.fromNative(_ptr.ref.mNormals.elementAt(i)),
     );
   }
 
   Iterable<Vector3> get tangents {
     return Iterable.generate(
-      _ptr?.ref?.mNumVertices ?? 0,
+      _ptr.ref.mNumVertices,
       (i) => AssimpVector3.fromNative(_ptr.ref.mTangents.elementAt(i)),
     );
   }
 
   Iterable<Vector3> get bitangents {
     return Iterable.generate(
-      _ptr?.ref?.mNumVertices ?? 0,
+      _ptr.ref.mNumVertices,
       (i) => AssimpVector3.fromNative(_ptr.ref.mBitangents.elementAt(i)),
     );
   }
@@ -132,7 +140,7 @@ class AnimMesh {
   Iterable<Iterable<Color>> get colors {
     var n = 0;
     while (n < b.AI_MAX_NUMBER_OF_COLOR_SETS &&
-        AssimpPointer.isNotNull(_ptr?.ref?.mColors?.elementAt(n))) ++n;
+        AssimpPointer.isNotNull(_ptr.ref.mColors?.elementAt(n))) ++n;
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
@@ -145,7 +153,7 @@ class AnimMesh {
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
     while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        AssimpPointer.isNotNull(_ptr?.ref?.mTextureCoords?.elementAt(n))) ++n;
+        AssimpPointer.isNotNull(_ptr.ref.mTextureCoords?.elementAt(n))) ++n;
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
@@ -156,7 +164,7 @@ class AnimMesh {
     );
   }
 
-  double get weight => _ptr?.ref?.mWeight ?? 0;
+  double get weight => _ptr.ref.mWeight;
 }
 
 class MorphingMethod {
@@ -175,36 +183,38 @@ class PrimitiveType {
 class Mesh {
   Pointer<b.aiMesh> _ptr;
 
-  Mesh.fromNative(this._ptr);
+  Mesh._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
+  factory Mesh.fromNative(Pointer<b.aiMesh> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Mesh._(ptr);
+  }
 
-  bool get isNull => AssimpPointer.isNull(_ptr);
-
-  int get primitiveTypes => _ptr?.ref?.mPrimitiveTypes ?? 0;
+  int get primitiveTypes => _ptr.ref.mPrimitiveTypes;
 
   Iterable<Vector3> get vertices {
     return Iterable.generate(
-      _ptr?.ref?.mNumVertices ?? 0,
+      _ptr.ref.mNumVertices,
       (i) => AssimpVector3.fromNative(_ptr.ref.mVertices.elementAt(i)),
     );
   }
 
   Iterable<Vector3> get normals {
     return Iterable.generate(
-      _ptr?.ref?.mNumVertices ?? 0,
+      _ptr.ref.mNumVertices,
       (i) => AssimpVector3.fromNative(_ptr.ref.mNormals.elementAt(i)),
     );
   }
 
   Iterable<Vector3> get tangents {
     return Iterable.generate(
-      _ptr?.ref?.mNumVertices ?? 0,
+      _ptr.ref.mNumVertices,
       (i) => AssimpVector3.fromNative(_ptr.ref.mTangents.elementAt(i)),
     );
   }
 
   Iterable<Vector3> get bitangents {
     return Iterable.generate(
-      _ptr?.ref?.mNumVertices ?? 0,
+      _ptr.ref.mNumVertices,
       (i) => AssimpVector3.fromNative(_ptr.ref.mBitangents.elementAt(i)),
     );
   }
@@ -212,7 +222,7 @@ class Mesh {
   Iterable<Iterable<Color>> get colors {
     var n = 0;
     while (n < b.AI_MAX_NUMBER_OF_COLOR_SETS &&
-        _ptr?.ref?.mColors != null &&
+        _ptr.ref.mColors != null &&
         AssimpPointer.isNotNull(_ptr.ref.mColors[n])) ++n;
     return Iterable.generate(
       n,
@@ -226,7 +236,7 @@ class Mesh {
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
     while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        _ptr?.ref?.mTextureCoords != null &&
+        _ptr.ref.mTextureCoords != null &&
         AssimpPointer.isNotNull(_ptr.ref.mTextureCoords[n])) ++n;
     return Iterable.generate(
       n,
@@ -241,37 +251,37 @@ class Mesh {
   Iterable<int> get uvComponents {
     var n = 0;
     while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        _ptr?.ref?.mNumUVComponents != null &&
+        _ptr.ref.mNumUVComponents != null &&
         _ptr.ref.mNumUVComponents.elementAt(n).value > 0) ++n;
     return n > 0 ? _ptr.ref.mNumUVComponents.asTypedList(n) : [];
   }
 
   Iterable<Face> get faces {
     return Iterable.generate(
-      _ptr?.ref?.mNumFaces ?? 0,
+      _ptr.ref.mNumFaces,
       (i) => Face.fromNative(_ptr.ref.mFaces.elementAt(i)),
     );
   }
 
   Iterable<Bone> get bones {
     return Iterable.generate(
-      _ptr?.ref?.mNumBones ?? 0,
+      _ptr.ref.mNumBones,
       (i) => Bone.fromNative(_ptr.ref.mBones[i]),
     );
   }
 
-  int get materialIndex => _ptr?.ref?.mMaterialIndex ?? 0;
+  int get materialIndex => _ptr.ref.mMaterialIndex;
 
-  String get name => AssimpString.fromNative(_ptr?.ref?.mName);
+  String get name => AssimpString.fromNative(_ptr.ref.mName);
 
   Iterable<AnimMesh> get animMeshes {
     return Iterable.generate(
-      _ptr?.ref?.mNumAnimMeshes ?? 0,
+      _ptr.ref.mNumAnimMeshes,
       (i) => AnimMesh.fromNative(_ptr.ref.mAnimMeshes[i]),
     );
   }
 
-  int get morphingMethod => _ptr?.ref?.mMethod ?? 0;
+  int get morphingMethod => _ptr.ref.mMethod;
 
-  Aabb3 get aabb => AssimpAabb3.fromNative(null); // _ptr?.ref?.mAABB);
+  Aabb3 get aabb => AssimpAabb3.fromNative(null); // _ptr.ref.mAABB);
 }

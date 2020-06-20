@@ -61,7 +61,11 @@ import 'extensions.dart';
 class Scene {
   Pointer<b.aiScene> _ptr;
 
-  Scene.fromNative(this._ptr);
+  Scene._(this._ptr);
+  factory Scene.fromNative(Pointer<b.aiScene> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return Scene._(ptr);
+  }
 
   factory Scene.fromFile(String path, {int flags = 0}) {
     final cpath = Utf8.toUtf8(path);
@@ -93,55 +97,53 @@ class Scene {
     return Scene._fromBuffer(cbuffer.cast(), bytes.length, flags, hint);
   }
 
-  bool get isNull => AssimpPointer.isNull(_ptr);
+  int get flags => _ptr.ref.mFlags;
 
-  int get flags => _ptr?.ref?.mFlags ?? 0;
-
-  Node get rootNode => Node.fromNative(_ptr?.ref?.mRootNode);
+  Node get rootNode => Node.fromNative(_ptr.ref.mRootNode);
 
   Iterable<Mesh> get meshes {
     return Iterable.generate(
-      _ptr?.ref?.mNumMeshes ?? 0,
+      _ptr.ref.mNumMeshes,
       (i) => Mesh.fromNative(_ptr.ref.mMeshes[i]),
     );
   }
 
   Iterable<Material> get materials {
     return Iterable.generate(
-      _ptr?.ref?.mNumMaterials ?? 0,
+      _ptr.ref.mNumMaterials,
       (i) => Material.fromNative(_ptr.ref.mMaterials[i]),
     );
   }
 
   Iterable<Animation> get animations {
     return Iterable.generate(
-      _ptr?.ref?.mNumAnimations ?? 0,
+      _ptr.ref.mNumAnimations,
       (i) => Animation.fromNative(_ptr.ref.mAnimations[i]),
     );
   }
 
   Iterable<Texture> get textures {
     return Iterable.generate(
-      _ptr?.ref?.mNumTextures ?? 0,
+      _ptr.ref.mNumTextures,
       (i) => Texture.fromNative(_ptr.ref.mTextures[i]),
     );
   }
 
   Iterable<Light> get lights {
     return Iterable.generate(
-      _ptr?.ref?.mNumLights ?? 0,
+      _ptr.ref.mNumLights,
       (i) => Light.fromNative(_ptr.ref.mLights[i]),
     );
   }
 
   Iterable<Camera> get cameras {
     return Iterable.generate(
-      _ptr?.ref?.mNumCameras ?? 0,
+      _ptr.ref.mNumCameras,
       (i) => Camera.fromNative(_ptr.ref.mCameras[i]),
     );
   }
 
-  MetaData get metaData => MetaData.fromNative(_ptr?.ref?.mMetaData);
+  MetaData get metaData => MetaData.fromNative(_ptr.ref.mMetaData);
 
   void applyPostProcessing(int flags) {
     aiApplyPostProcessing(_ptr, flags);

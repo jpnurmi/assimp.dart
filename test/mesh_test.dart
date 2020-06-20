@@ -11,29 +11,12 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('size', () {
-    expect(sizeOf<aiMesh>(), equals(1312));
+  test('null', () {
+    expect(Mesh.fromNative(null), isNull);
   });
 
-  test('null', () {
-    testMeshes(null, (mesh) {
-      expect(mesh.isNull, isTrue);
-      expect(mesh.primitiveTypes, isZero);
-      expect(mesh.vertices, isEmpty);
-      expect(mesh.normals, isEmpty);
-      expect(mesh.tangents, isEmpty);
-      expect(mesh.bitangents, isEmpty);
-      expect(mesh.colors, isEmpty);
-      expect(mesh.textureCoords, isEmpty);
-      expect(mesh.uvComponents, isEmpty);
-      expect(mesh.faces, isEmpty);
-      expect(mesh.bones, isEmpty);
-      expect(mesh.materialIndex, isZero);
-      expect(mesh.name, isNull);
-      expect(mesh.animMeshes, isEmpty);
-      expect(mesh.morphingMethod, isZero);
-      expect(mesh.aabb, isNull);
-    });
+  test('size', () {
+    expect(sizeOf<aiMesh>(), equals(1312));
   });
 
   test('3mf', () {
