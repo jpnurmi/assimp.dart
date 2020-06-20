@@ -87,3 +87,10 @@ void testNodes(String fileName, void tester(nodes)) {
   tester(scene.rootNode);
   scene.dispose();
 }
+
+void testTextures(String fileName, void tester(textures)) {
+  final filePath = testModelPath(fileName);
+  final scene = Scene.fromFile(filePath);
+  tester(scene.textures);
+  scene.dispose();
+}

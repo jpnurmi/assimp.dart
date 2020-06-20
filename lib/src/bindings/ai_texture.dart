@@ -59,7 +59,7 @@ class aiTexture extends Struct {
   int mHeight;
 
   // char                       achFormatHint[9];     /*     8     9 */
-  Pointer<Utf8> get mName => Pointer.fromAddress(addressOf.address + 8);
+  Pointer<Utf8> get achFormatHint => Pointer.fromAddress(addressOf.address + 8);
   Pointer _mPadding0;
 
   /* XXX 7 bytes hole, try to pack */

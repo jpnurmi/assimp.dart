@@ -357,6 +357,48 @@ static void generateSceneTest(const QString &fileName)
     });
 }
 
+static void writeTextureTester(QTextStream &out, const QString &fileName = QString())
+{
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testTextures('" << fileName << "', (textures) {\n"
+        << "      expect(textures.length, " << isZeroOrNot(scene->mNumTextures) << ");\n";
+    for (uint i = 0; i < scene->mNumTextures; ++i) {
+        const aiTexture *texture = scene->mTextures[i];
+        out << "      expect(textures.elementAt(" << i << ").width, " << equalsToInt(texture->mWidth) << ");\n"
+            << "      expect(textures.elementAt(" << i << ").height, " << equalsToInt(texture->mHeight) << ");\n"
+            << "      expect(textures.elementAt(" << i << ").data.length, " << equalsToInt(texture->mWidth * texture->mHeight) << ");\n"
+            << "      expect(textures.elementAt(" << i << ").formatHint, " << equalsToString(texture->achFormatHint, HINTMAXTEXTURELEN) << ");\n"
+            << "      expect(textures.elementAt(" << i << ").fileName, " << equalsToString(texture->mFilename) << ");\n";
+        for (uint h = 0; h < texture->mHeight; ++h) {
+            for (uint w = 0; w < texture->mWidth; ++w) {
+                const aiTexel *texel = texture->pcData + h * w + w;
+                out << "      expect(textures.elementAt(" << i << ").b, " << equalsToInt(texel->b) << ");\n"
+                    << "      expect(textures.elementAt(" << i << ").g, " << equalsToInt(texel->g) << ");\n"
+                    << "      expect(textures.elementAt(" << i << ").r, " << equalsToInt(texel->r) << ");\n"
+                    << "      expect(textures.elementAt(" << i << ").a, " << equalsToInt(texel->a) << ");\n";
+            }
+        }
+    }
+    out << "    });\n";
+    aiReleaseImport(scene);
+}
+
+static void generateTextureTest(const QString &fileName)
+{
+    generateTest<aiTexture>("aiTexture", fileName, [&](QTextStream &out) {
+        writeGroup(out, "3mf", [&]() {
+            writeTextureTester(out, "3mf/box.3mf");
+            writeTextureTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeTextureTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeTextureTester(out, "Obj/Spider/spider.obj");
+        });
+    });
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
@@ -368,4 +410,5 @@ int main(int argc, char *argv[])
     generateMeshTest("mesh_test.dart");
     generateNodeTest("node_test.dart");
     generateSceneTest("scene_test.dart");
+    generateTextureTest("texture_test.dart");
 }
