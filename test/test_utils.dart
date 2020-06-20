@@ -4,6 +4,8 @@ import 'package:path/path.dart' hide equals;
 import 'package:test/test.dart';
 import 'package:assimp/assimp.dart';
 
+export 'third_party/matchers.dart';
+
 String testModelPath(String fileName) => 'test/models/model-db/' + fileName;
 
 const Matcher isNullPointer = _IsNullPointer();
@@ -76,7 +78,7 @@ void testMeshes(String fileName, void tester(meshes)) {
   }
 }
 
-void testNodes(String fileName, void tester(rootNode)) {
+void testNodes(String fileName, void tester(nodes)) {
   if (fileName == null) {
     tester(Node.fromNative(null));
   } else {

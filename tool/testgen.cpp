@@ -17,7 +17,8 @@ static QString isNullPointerOrNot(void *ptr) { return !ptr ? "isNullPointer" : "
 
 static QString equalsToInt(int count) { return count ? QString("equals(%1)").arg(count) : "isZero"; }
 static QString equalsToString(const aiString str) { return str.length ? QString("equals('%1')").arg(QString::fromLatin1(str.data, str.length)) : "isEmpty"; }
-static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("equals(Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16))").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
+static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("matrix4MoreOrLessEquals(Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16))").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
+static QString equalsToIntArray(const uint *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
 
 template <typename T>
 static int arraySize(T *array)
@@ -209,10 +210,19 @@ static void writeNodeTester(QTextStream &out, const QString &fileName = QString(
         const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
         out << "    testNodes('" << fileName << "', (rootNode) {\n"
             << "      expect(rootNode.name, " << equalsToString(scene->mRootNode->mName) << ");\n"
-            << "      expect(rootNode.transformation,\n          " << equalsToMatrix4(scene->mRootNode->mTransformation) << ");\n"
+            << "      expect(rootNode.transformation, " << equalsToMatrix4(scene->mRootNode->mTransformation) << ");\n"
             << "      expect(rootNode.parent, " << isNullOrNot(scene->mRootNode->mParent) << ");\n"
-            << "      expect(rootNode.children.length, " << equalsToInt(scene->mRootNode->mNumChildren) << ");\n"
-            << "      expect(rootNode.meshes.length, " << equalsToInt(scene->mRootNode->mNumMeshes) << ");\n"
+            << "      expect(rootNode.children.length, " << equalsToInt(scene->mRootNode->mNumChildren) << ");\n";
+        for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
+            const aiNode *node = scene->mRootNode->mChildren[i];
+            out << "      expect(rootNode.children.elementAt(" << i << ").name, " << equalsToString(node->mName) << ");\n"
+                << "      expect(rootNode.children.elementAt(" << i << ").transformation, " << equalsToMatrix4(node->mTransformation) << ");\n"
+                << "      expect(rootNode.children.elementAt(" << i << ").parent, " << isNullOrNot(node->mParent) << ");\n"
+                << "      expect(rootNode.children.elementAt(" << i << ").children.length, " << equalsToInt(node->mNumChildren) << ");\n"
+                << "      expect(rootNode.children.elementAt(" << i << ").meshes, " << equalsToIntArray(node->mMeshes, node->mNumMeshes) << ");\n"
+                << "      expect(rootNode.children.elementAt(" << i << ").metaData, " << isNullOrNot(node->mMetaData) << ");\n";
+        }
+        out << "      expect(rootNode.meshes, " << equalsToIntArray(scene->mRootNode->mMeshes, scene->mRootNode->mNumMeshes) << ");\n"
             << "      expect(rootNode.metaData, " << isNullOrNot(scene->mRootNode->mMetaData) << ");\n"
             << "    });\n\n";
         aiReleaseImport(scene);
