@@ -74,6 +74,17 @@ void testScene(String fileName,
   }
 }
 
+void testMaterials(String fileName, void tester(meshes)) {
+  if (fileName == null) {
+    tester(Material.fromNative(null));
+  } else {
+    final filePath = testModelPath(fileName);
+    final scene = Scene.fromFile(filePath);
+    tester(scene.materials);
+    scene.dispose();
+  }
+}
+
 void testMeshes(String fileName, void tester(meshes)) {
   if (fileName == null) {
     tester(Mesh.fromNative(null));

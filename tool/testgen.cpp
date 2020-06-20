@@ -15,9 +15,13 @@ static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 static QString isNullPointerOrNot(void *ptr) { return !ptr ? "isNullPointer" : "isNotNull"; }
 
-static QString equalsToInt(int count) { return count ? QString("equals(%1)").arg(count) : "isZero"; }
-static QString equalsToString(const aiString str) { return str.length ? QString("equals('%1')").arg(QString::fromLatin1(str.data, str.length)) : "isEmpty"; }
+static QString equalsToInt(int value) { return value ? QString("equals(%1)").arg(value) : "isZero"; }
+static QString equalsToFloat(float value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
+static QString equalsToDouble(double value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
+static QString equalsToString(const char *str, uint len) { return len ? QString("equals('%1')").arg(QString::fromUtf8(str, len).replace("\\", "\\\\").replace("$", "\\$")) : "isEmpty"; }
+static QString equalsToString(const aiString &str) { return equalsToString(str.data, str.length); }
 static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("matrix4MoreOrLessEquals(Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16))").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
+static QString equalsToByteArray(const char *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
 static QString equalsToIntArray(const uint *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return QString("equals([%1])").arg(v.join(", ")); }
 
 template <typename T>
@@ -33,6 +37,7 @@ static void writeHeader(QTextStream &out, const QString &fileName)
 {
     Q_UNUSED(fileName);
     out << import("dart:ffi") << "\n"
+        << import("dart:typed_data") << "\n"
         << import("package:ffi/ffi.dart") << "\n"
         << import("package:test/test.dart") << "\n"
         << import("package:assimp/assimp.dart") << "\n"
@@ -63,37 +68,6 @@ static void writeSizeTest(QTextStream &out, const QString &name, size_t size)
     });
 }
 
-static void writeSceneTester(QTextStream &out, const QString &fileName = QString())
-{
-    if (fileName.isNull()) {
-        out << "    testScene(null, tester: (scene) {\n"
-            << "      expect(scene.flags, isZero);\n"
-            << "      expect(scene.rootNode, isNullPointer);\n"
-            << "      expect(scene.meshes, isEmpty);\n"
-            << "      expect(scene.materials, isEmpty);\n"
-            << "      expect(scene.animations, isEmpty);\n"
-            << "      expect(scene.textures, isEmpty);\n"
-            << "      expect(scene.lights, isEmpty);\n"
-            << "      expect(scene.cameras, isEmpty);\n"
-            << "      expect(scene.metaData, isNullPointer);\n"
-            << "    });\n";
-    } else {
-        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-        out << "    testScene('" << fileName << "', tester: (scene) {\n"
-            << "      expect(scene.flags, " << isZeroOrNot(scene->mFlags) << ");\n"
-            << "      expect(scene.rootNode, " << isNullPointerOrNot(scene->mRootNode) << ");\n"
-            << "      expect(scene.meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n"
-            << "      expect(scene.materials.length, " << equalsToInt(scene->mNumMaterials) << ");\n"
-            << "      expect(scene.animations.length, " << equalsToInt(scene->mNumAnimations) << ");\n"
-            << "      expect(scene.textures.length, " << equalsToInt(scene->mNumTextures) << ");\n"
-            << "      expect(scene.lights.length, " << equalsToInt(scene->mNumLights) << ");\n"
-            << "      expect(scene.cameras.length, " << equalsToInt(scene->mNumCameras) << ");\n"
-            << "      expect(scene.metaData, " << isNullPointerOrNot(scene->mMetaData) << ");\n"
-            << "    });\n";
-        aiReleaseImport(scene);
-    }
-}
-
 template <typename T>
 static void generateTest(const QString &typeName, const QString &fileName, std::function<void(QTextStream &out)> writer)
 {
@@ -108,21 +82,72 @@ static void generateTest(const QString &typeName, const QString &fileName, std::
     writeFooter(out, fileName);
 }
 
-static void generateSceneTest(const QString &fileName)
+static void writeMaterialTester(QTextStream &out, const QString &fileName = QString())
 {
-    generateTest<aiScene>("aiScene", fileName, [&](QTextStream &out) {
+    if (fileName.isNull()) {
+        out << "    testMaterials(null, (material) {\n"
+            << "      expect(material.isNull, isTrue);\n"
+            << "      expect(material.properties, isEmpty);\n"
+            << "    });\n";
+    } else {
+        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+        out << "    testMaterials('" << fileName << "', (materials) {\n"
+            << "      expect(materials.length, " << equalsToInt(scene->mNumMaterials) << ");\n";
+        for (uint i = 0; i < scene->mNumMaterials; ++i) {
+            const aiMaterial *material = scene->mMaterials[i];
+            out << "      expect(materials.elementAt(" << i << ").properties.length, " << equalsToInt(material->mNumProperties) << ");\n";
+            for (uint j = 0; j < material->mNumProperties; ++j) {
+                const aiMaterialProperty *property = material->mProperties[j];
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").key, " << equalsToString(property->mKey) << ");\n";
+                switch (property->mType) {
+                case aiPropertyTypeInfo::aiPTI_Float:
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, double);\n";
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToFloat(*reinterpret_cast<float*>(property->mData)) << ");\n";
+                    break;
+                case aiPropertyTypeInfo::aiPTI_Double:
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, double);\n";
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToDouble(*reinterpret_cast<double*>(property->mData)) << ");\n";
+                    break;
+                case aiPropertyTypeInfo::aiPTI_String:
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, String);\n";
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToString(*reinterpret_cast<aiString*>(property->mData)) << ");\n";
+                    break;
+                case aiPropertyTypeInfo::aiPTI_Integer:
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, int);\n";
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToInt(*reinterpret_cast<int*>(property->mData)) << ");\n";
+                    break;
+                case aiPropertyTypeInfo::aiPTI_Buffer:
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType.toString(), 'Uint8List');\n";
+                    out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToByteArray(property->mData, property->mDataLength) << ");\n";
+                    break;
+                default:
+                    break;
+                }
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").index, " << equalsToInt(property->mIndex) << ");\n";
+                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").semantic, " << equalsToInt(property->mSemantic) << ");\n";
+            }
+            out << (i < scene->mNumMaterials - 1 ? "\n" : "");
+        }
+        out << "    });\n";
+        aiReleaseImport(scene);
+    }
+}
+
+static void generateMaterialTest(const QString &fileName)
+{
+    generateTest<aiMaterial>("aiMaterial", fileName, [&](QTextStream &out) {
         writeGroup(out, "null", [&]() {
-            writeSceneTester(out);
+            writeMaterialTester(out);
         });
         writeGroup(out, "3mf", [&]() {
-            writeSceneTester(out, "3mf/box.3mf");
-            writeSceneTester(out, "3mf/spider.3mf");
+            writeMaterialTester(out, "3mf/box.3mf");
+            writeMaterialTester(out, "3mf/spider.3mf");
         });
         writeGroup(out, "fbx", [&]() {
-            writeSceneTester(out, "fbx/huesitos.fbx");
+            writeMaterialTester(out, "fbx/huesitos.fbx");
         });
         writeGroup(out, "obj", [&]() {
-            writeSceneTester(out, "Obj/Spider/spider.obj");
+            writeMaterialTester(out, "Obj/Spider/spider.obj");
         });
     });
 }
@@ -249,12 +274,63 @@ static void generateNodeTest(const QString &fileName)
     });
 }
 
+static void writeSceneTester(QTextStream &out, const QString &fileName = QString())
+{
+    if (fileName.isNull()) {
+        out << "    testScene(null, tester: (scene) {\n"
+            << "      expect(scene.flags, isZero);\n"
+            << "      expect(scene.rootNode, isNullPointer);\n"
+            << "      expect(scene.meshes, isEmpty);\n"
+            << "      expect(scene.materials, isEmpty);\n"
+            << "      expect(scene.animations, isEmpty);\n"
+            << "      expect(scene.textures, isEmpty);\n"
+            << "      expect(scene.lights, isEmpty);\n"
+            << "      expect(scene.cameras, isEmpty);\n"
+            << "      expect(scene.metaData, isNullPointer);\n"
+            << "    });\n";
+    } else {
+        const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+        out << "    testScene('" << fileName << "', tester: (scene) {\n"
+            << "      expect(scene.flags, " << isZeroOrNot(scene->mFlags) << ");\n"
+            << "      expect(scene.rootNode, " << isNullPointerOrNot(scene->mRootNode) << ");\n"
+            << "      expect(scene.meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n"
+            << "      expect(scene.materials.length, " << equalsToInt(scene->mNumMaterials) << ");\n"
+            << "      expect(scene.animations.length, " << equalsToInt(scene->mNumAnimations) << ");\n"
+            << "      expect(scene.textures.length, " << equalsToInt(scene->mNumTextures) << ");\n"
+            << "      expect(scene.lights.length, " << equalsToInt(scene->mNumLights) << ");\n"
+            << "      expect(scene.cameras.length, " << equalsToInt(scene->mNumCameras) << ");\n"
+            << "      expect(scene.metaData, " << isNullPointerOrNot(scene->mMetaData) << ");\n"
+            << "    });\n";
+        aiReleaseImport(scene);
+    }
+}
+
+static void generateSceneTest(const QString &fileName)
+{
+    generateTest<aiScene>("aiScene", fileName, [&](QTextStream &out) {
+        writeGroup(out, "null", [&]() {
+            writeSceneTester(out);
+        });
+        writeGroup(out, "3mf", [&]() {
+            writeSceneTester(out, "3mf/box.3mf");
+            writeSceneTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeSceneTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeSceneTester(out, "Obj/Spider/spider.obj");
+        });
+    });
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
+    generateMaterialTest("material_test.dart");
     generateMeshTest("mesh_test.dart");
     generateNodeTest("node_test.dart");
     generateSceneTest("scene_test.dart");

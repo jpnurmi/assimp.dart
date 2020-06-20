@@ -250,6 +250,14 @@ extension AssimpString on String {
         ptr.ref.data.cast<Uint8>().asTypedList(len).buffer, 0, len);
     return utf8.decode(str);
   }
+
+  static String fromUtf8(Pointer<Utf8> ptr, int len) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    if (len <= 0) return '';
+    final str =
+        Uint8List.view(ptr.cast<Uint8>().asTypedList(len).buffer, 0, len);
+    return utf8.decode(str);
+  }
 }
 
 extension AssimpVector2 on Vector2 {

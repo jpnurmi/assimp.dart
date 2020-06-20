@@ -46,10 +46,47 @@ import 'dart:ffi';
 import 'bindings.dart' as b;
 import 'extensions.dart';
 
+class MaterialProperty {
+  Pointer<b.aiMaterialProperty> _ptr;
+
+  MaterialProperty.fromNative(this._ptr);
+
+  bool get isNull => AssimpPointer.isNull(_ptr);
+
+  String get key => AssimpString.fromNative(_ptr?.ref?.mKey);
+
+  dynamic get value {
+    switch (_ptr?.ref?.mType) {
+      case b.aiPropertyTypeInfo.float:
+        return _ptr.ref.mData.cast<Float>().value;
+      case b.aiPropertyTypeInfo.double:
+        return _ptr.ref.mData.cast<Double>().value;
+      case b.aiPropertyTypeInfo.string:
+        return AssimpString.fromNative(_ptr.ref.mData.cast<b.aiString>());
+      case b.aiPropertyTypeInfo.integer:
+        return _ptr.ref.mData.cast<Uint32>().value;
+      case b.aiPropertyTypeInfo.buffer:
+        return _ptr.ref.mData.cast<Uint8>().asTypedList(_ptr.ref.mDataLength);
+      default:
+        return null;
+    }
+  }
+
+  int get index => _ptr?.ref?.mIndex ?? 0;
+  int get semantic => _ptr?.ref?.mSemantic ?? 0;
+}
+
 class Material {
   Pointer<b.aiMaterial> _ptr;
 
   Material.fromNative(this._ptr);
 
   bool get isNull => AssimpPointer.isNull(_ptr);
+
+  Iterable<MaterialProperty> get properties {
+    return Iterable.generate(
+      _ptr?.ref?.mNumProperties ?? 0,
+      (i) => MaterialProperty.fromNative(_ptr.ref.mProperties[i]),
+    );
+  }
 }

@@ -16,22 +16,24 @@ import 'package:flutter/painting.dart';
 
 import 'package:vector_math/vector_math.dart';
 
-Matcher matrix3MoreOrLessEquals(Matrix3 value,
-    {double epsilon = precisionErrorTolerance}) {
-  return _IsWithinDistance<Matrix3>(relativeError, value, 1e-6);
-}
-
-Matcher matrix4MoreOrLessEquals(Matrix4 value,
-    {double epsilon = precisionErrorTolerance}) {
-  return _IsWithinDistance<Matrix4>(relativeError, value, 1e-6);
-}
-
-/// The epsilon of tolerable double precision error.
+/// The epsilon of tolerable floating point precision error.
 ///
 /// This is used in various places in the framework to allow for floating point
 /// precision loss in calculations. Differences below this threshold are safe to
 /// disregard.
-const double precisionErrorTolerance = 1e-10;
+const double precisionErrorTolerance = 1e-5;
+
+Matcher matrix3MoreOrLessEquals(Matrix3 value,
+    {double epsilon = precisionErrorTolerance}) {
+  return _IsWithinDistance<Matrix3>(
+      relativeError, value, precisionErrorTolerance);
+}
+
+Matcher matrix4MoreOrLessEquals(Matrix4 value,
+    {double epsilon = precisionErrorTolerance}) {
+  return _IsWithinDistance<Matrix4>(
+      relativeError, value, precisionErrorTolerance);
+}
 
 /// Asserts that the object represents the same color as [color] when used to paint.
 ///
