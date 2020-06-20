@@ -43,12 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings/ai_memory_info.dart' as bindings;
-
+import 'bindings.dart' as b;
 import 'extensions.dart';
 
 class MemoryInfo {
-  Pointer<bindings.aiMemoryInfo> _ptr;
+  Pointer<b.aiMemoryInfo> _ptr;
 
   MemoryInfo.fromNative(this._ptr);
 

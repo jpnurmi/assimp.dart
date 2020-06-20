@@ -43,14 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:assimp/assimp.dart';
-
-import 'bindings/ai_metadata.dart' as bindings;
-
+import 'bindings.dart' as b;
 import 'extensions.dart';
 
 class MetaData {
-  Pointer<bindings.aiMetadata> _ptr;
+  Pointer<b.aiMetadata> _ptr;
 
   MetaData.fromNative(this._ptr);
 
@@ -72,17 +69,17 @@ class MetaData {
     );
   }
 
-  static dynamic _toValue(Pointer<bindings.aiMetadataEntry> entry) {
+  static dynamic _toValue(Pointer<b.aiMetadataEntry> entry) {
     switch (entry.ref.mType) {
-      case bindings.aiMetadataType.AI_BOOL:
-      case bindings.aiMetadataType.AI_INT32:
-      case bindings.aiMetadataType.AI_UINT64:
-      case bindings.aiMetadataType.AI_FLOAT:
-      case bindings.aiMetadataType.AI_DOUBLE:
+      case b.aiMetadataType.AI_BOOL:
+      case b.aiMetadataType.AI_INT32:
+      case b.aiMetadataType.AI_UINT64:
+      case b.aiMetadataType.AI_FLOAT:
+      case b.aiMetadataType.AI_DOUBLE:
         return 0; // ### TODO
-      case bindings.aiMetadataType.AI_AISTRING:
+      case b.aiMetadataType.AI_AISTRING:
         return ''; // ### TODO
-      case bindings.aiMetadataType.AI_AIVECTOR3D:
+      case b.aiMetadataType.AI_AIVECTOR3D:
         return Vector3.zero(); // ### TODO
       default:
         throw UnimplementedError(entry.ref.mType.toString());

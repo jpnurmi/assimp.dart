@@ -41,45 +41,43 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-import 'dart:ffi';
-
-import 'package:vector_math/vector_math.dart';
-
-import 'bindings.dart' as b;
-import 'meta_data.dart';
-import 'extensions.dart';
-
-class Node {
-  Pointer<b.aiNode> _ptr;
-
-  Node.fromNative(this._ptr);
-
-  bool get isNull => AssimpPointer.isNull(_ptr);
-
-  String get name => AssimpString.fromNative(_ptr?.ref?.mName);
-
-  Matrix4 get transformation =>
-      AssimpMatrix4.fromNative(_ptr?.ref?.mTransformation);
-
-  Node get parent => AssimpPointer.isNotNull(_ptr?.ref?.mParent)
-      ? Node.fromNative(_ptr.ref.mParent)
-      : null;
-
-  Iterable<Node> get children {
-    return Iterable.generate(
-      _ptr?.ref?.mNumChildren ?? 0,
-      (i) => Node.fromNative(_ptr.ref.mChildren[i]),
-    );
-  }
-
-  Iterable<int> get meshes {
-    return Iterable.generate(
-      _ptr?.ref?.mNumMeshes ?? 0,
-      (i) => _ptr.ref.mMeshes[i],
-    );
-  }
-
-  MetaData get metaData => AssimpPointer.isNotNull(_ptr?.ref?.mMetaData)
-      ? MetaData.fromNative(_ptr.ref.mMetaData)
-      : null;
-}
+export 'bindings/ai_aabb.dart';
+export 'bindings/ai_animation.dart';
+export 'bindings/ai_anim_mesh.dart';
+export 'bindings/ai_bone.dart';
+export 'bindings/ai_camera.dart';
+export 'bindings/ai_color.dart';
+export 'bindings/ai_export.dart';
+export 'bindings/ai_export_data_blob.dart';
+export 'bindings/ai_export_format_desc.dart';
+export 'bindings/ai_face.dart';
+export 'bindings/ai_file.dart';
+export 'bindings/ai_file_io.dart';
+export 'bindings/ai_global.dart';
+export 'bindings/ai_import.dart';
+export 'bindings/ai_import_format_desc.dart';
+export 'bindings/ai_key.dart';
+export 'bindings/ai_light.dart';
+export 'bindings/ai_log_stream.dart';
+export 'bindings/ai_material.dart';
+export 'bindings/ai_material_property.dart';
+export 'bindings/ai_matrix.dart';
+export 'bindings/ai_memory_info.dart';
+export 'bindings/ai_mesh_anim.dart';
+export 'bindings/ai_mesh.dart';
+export 'bindings/ai_mesh_morph_anim.dart';
+export 'bindings/ai_metadata.dart';
+export 'bindings/ai_node_anim.dart';
+export 'bindings/ai_node.dart';
+export 'bindings/ai_plane.dart';
+export 'bindings/ai_post_processing.dart';
+export 'bindings/ai_property_store.dart';
+export 'bindings/ai_quaternion.dart';
+export 'bindings/ai_ray.dart';
+export 'bindings/ai_scene.dart';
+export 'bindings/ai_string.dart';
+export 'bindings/ai_texel.dart';
+export 'bindings/ai_texture.dart';
+export 'bindings/ai_uv_transform.dart';
+export 'bindings/ai_vector.dart';
+export 'bindings/ai_vertex_weight.dart';

@@ -52,17 +52,10 @@ import 'package:vector_math/vector_math.dart';
 export 'package:vector_math/vector_math.dart'
     show Aabb3, Matrix3, Matrix4, Plane, Quaternion, Ray, Vector2, Vector3;
 
-import 'bindings/ai_aabb.dart' as bindings;
-import 'bindings/ai_color.dart' as bindings;
-import 'bindings/ai_matrix.dart' as bindings;
-import 'bindings/ai_plane.dart' as bindings;
-import 'bindings/ai_quaternion.dart' as bindings;
-import 'bindings/ai_ray.dart' as bindings;
-import 'bindings/ai_string.dart' as bindings;
-import 'bindings/ai_vector.dart' as bindings;
+import 'bindings.dart' as b;
 
 extension AssimpAabb3 on Aabb3 {
-  static Aabb3 fromNative(Pointer<bindings.aiAABB> ptr) {
+  static Aabb3 fromNative(Pointer<b.aiAABB> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Aabb3.minMax(
       AssimpVector3.fromNative(ptr.ref.mMin),
@@ -79,7 +72,7 @@ extension AssimpAabb3 on Aabb3 {
 }
 
 extension AssimpColor3 on Color {
-  static Color fromNative(Pointer<bindings.aiColor3D> ptr) {
+  static Color fromNative(Pointer<b.aiColor3D> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Color.fromARGB(
       255,
@@ -89,8 +82,8 @@ extension AssimpColor3 on Color {
     );
   }
 
-  static Pointer<bindings.aiColor3D> toNative(Color color) {
-    final Pointer<bindings.aiColor3D> ptr = allocate();
+  static Pointer<b.aiColor3D> toNative(Color color) {
+    final Pointer<b.aiColor3D> ptr = allocate();
     ptr.ref.r = color.red / 255.0;
     ptr.ref.g = color.green / 255.0;
     ptr.ref.b = color.blue / 255.0;
@@ -99,7 +92,7 @@ extension AssimpColor3 on Color {
 }
 
 extension AssimpColor4 on Color {
-  static Color fromNative(Pointer<bindings.aiColor4D> ptr) {
+  static Color fromNative(Pointer<b.aiColor4D> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Color.fromARGB(
       (ptr.ref.a * 255).round(),
@@ -109,8 +102,8 @@ extension AssimpColor4 on Color {
     );
   }
 
-  static Pointer<bindings.aiColor4D> toNative(Color color) {
-    final Pointer<bindings.aiColor4D> ptr = allocate();
+  static Pointer<b.aiColor4D> toNative(Color color) {
+    final Pointer<b.aiColor4D> ptr = allocate();
     ptr.ref.a = color.alpha / 255.0;
     ptr.ref.r = color.red / 255.0;
     ptr.ref.g = color.green / 255.0;
@@ -120,7 +113,7 @@ extension AssimpColor4 on Color {
 }
 
 extension AssimpMatrix3 on Matrix3 {
-  static Matrix3 fromNative(Pointer<bindings.aiMatrix3x3> ptr) {
+  static Matrix3 fromNative(Pointer<b.aiMatrix3x3> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Matrix3(
       ptr.ref.a1,
@@ -135,8 +128,8 @@ extension AssimpMatrix3 on Matrix3 {
     );
   }
 
-  static Pointer<bindings.aiMatrix3x3> toNative(Matrix3 matrix) {
-    final Pointer<bindings.aiMatrix3x3> ptr = allocate();
+  static Pointer<b.aiMatrix3x3> toNative(Matrix3 matrix) {
+    final Pointer<b.aiMatrix3x3> ptr = allocate();
     ptr.ref.a1 = matrix.row0.x;
     ptr.ref.a2 = matrix.row0.y;
     ptr.ref.a3 = matrix.row0.z;
@@ -151,7 +144,7 @@ extension AssimpMatrix3 on Matrix3 {
 }
 
 extension AssimpMatrix4 on Matrix4 {
-  static Matrix4 fromNative(Pointer<bindings.aiMatrix4x4> ptr) {
+  static Matrix4 fromNative(Pointer<b.aiMatrix4x4> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Matrix4(
       ptr.ref.a1,
@@ -173,8 +166,8 @@ extension AssimpMatrix4 on Matrix4 {
     );
   }
 
-  static Pointer<bindings.aiMatrix4x4> toNative(Matrix4 matrix) {
-    final Pointer<bindings.aiMatrix4x4> ptr = allocate();
+  static Pointer<b.aiMatrix4x4> toNative(Matrix4 matrix) {
+    final Pointer<b.aiMatrix4x4> ptr = allocate();
     ptr.ref.a1 = matrix.row0.x;
     ptr.ref.a2 = matrix.row0.y;
     ptr.ref.a3 = matrix.row0.z;
@@ -196,13 +189,13 @@ extension AssimpMatrix4 on Matrix4 {
 }
 
 extension AssimpPlane on Plane {
-  static Plane fromNative(Pointer<bindings.aiPlane> ptr) {
+  static Plane fromNative(Pointer<b.aiPlane> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Plane.components(ptr.ref.a, ptr.ref.b, ptr.ref.c, ptr.ref.d);
   }
 
-  static Pointer<bindings.aiPlane> toNative(Plane plane) {
-    final Pointer<bindings.aiPlane> ptr = allocate();
+  static Pointer<b.aiPlane> toNative(Plane plane) {
+    final Pointer<b.aiPlane> ptr = allocate();
     ptr.ref.a = plane.normal.x;
     ptr.ref.b = plane.normal.y;
     ptr.ref.c = plane.normal.z;
@@ -217,13 +210,13 @@ extension AssimpPointer on Pointer {
 }
 
 extension AssimpQuaternion on Quaternion {
-  static Quaternion fromNative(Pointer<bindings.aiQuaternion> ptr) {
+  static Quaternion fromNative(Pointer<b.aiQuaternion> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Quaternion(ptr.ref.x, ptr.ref.y, ptr.ref.z, ptr.ref.z);
   }
 
-  static Pointer<bindings.aiQuaternion> toNative(Quaternion quaternion) {
-    final Pointer<bindings.aiQuaternion> ptr = allocate();
+  static Pointer<b.aiQuaternion> toNative(Quaternion quaternion) {
+    final Pointer<b.aiQuaternion> ptr = allocate();
     ptr.ref.x = quaternion.x;
     ptr.ref.y = quaternion.y;
     ptr.ref.z = quaternion.z;
@@ -233,7 +226,7 @@ extension AssimpQuaternion on Quaternion {
 }
 
 extension AssimpRay on Ray {
-  static Ray fromNative(Pointer<bindings.aiRay> ptr) {
+  static Ray fromNative(Pointer<b.aiRay> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     final pos = AssimpVector3.fromNative(ptr.ref.pos);
     final dir = AssimpVector3.fromNative(ptr.ref.dir);
@@ -249,7 +242,7 @@ extension AssimpRay on Ray {
 }
 
 extension AssimpString on String {
-  static String fromNative(Pointer<bindings.aiString> ptr) {
+  static String fromNative(Pointer<b.aiString> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     final len = ptr.ref.length;
     if (len <= 0) return '';
@@ -260,13 +253,13 @@ extension AssimpString on String {
 }
 
 extension AssimpVector2 on Vector2 {
-  static Vector2 fromNative(Pointer<bindings.aiVector2D> ptr) {
+  static Vector2 fromNative(Pointer<b.aiVector2D> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Vector2(ptr.ref.x, ptr.ref.y);
   }
 
-  static Pointer<bindings.aiVector2D> toNative(Vector2 vec) {
-    final Pointer<bindings.aiVector2D> ptr = allocate();
+  static Pointer<b.aiVector2D> toNative(Vector2 vec) {
+    final Pointer<b.aiVector2D> ptr = allocate();
     ptr.ref.x = vec.x;
     ptr.ref.y = vec.y;
     return ptr;
@@ -274,13 +267,13 @@ extension AssimpVector2 on Vector2 {
 }
 
 extension AssimpVector3 on Vector3 {
-  static Vector3 fromNative(Pointer<bindings.aiVector3D> ptr) {
+  static Vector3 fromNative(Pointer<b.aiVector3D> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Vector3(ptr.ref.x, ptr.ref.y, ptr.ref.z);
   }
 
-  static Pointer<bindings.aiVector3D> toNative(Vector3 vec) {
-    final Pointer<bindings.aiVector3D> ptr = allocate();
+  static Pointer<b.aiVector3D> toNative(Vector3 vec) {
+    final Pointer<b.aiVector3D> ptr = allocate();
     ptr.ref.x = vec.x;
     ptr.ref.y = vec.y;
     ptr.ref.z = vec.z;

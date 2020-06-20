@@ -47,9 +47,7 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 
 import 'animation.dart';
-import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_post_processing.dart' as bindings;
-import 'bindings/ai_scene.dart' as bindings;
+import 'bindings.dart' as b;
 import 'camera.dart';
 import 'light.dart';
 import 'material.dart';
@@ -60,13 +58,13 @@ import 'texture.dart';
 import 'extensions.dart';
 
 class Scene {
-  Pointer<bindings.aiScene> _ptr;
+  Pointer<b.aiScene> _ptr;
 
   Scene.fromNative(this._ptr);
 
   factory Scene.fromFile(String path, {int flags = 0}) {
     final cpath = Utf8.toUtf8(path);
-    final ptr = bindings.aiImportFile(cpath, flags);
+    final ptr = b.aiImportFile(cpath, flags);
     free(cpath);
     return AssimpPointer.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
   }
@@ -74,7 +72,7 @@ class Scene {
   factory Scene._fromBuffer(
       Pointer<Utf8> cstr, int length, flags, String hint) {
     final chint = Utf8.toUtf8(hint);
-    final ptr = bindings.aiImportFileFromMemory(cstr, length, flags, chint);
+    final ptr = b.aiImportFileFromMemory(cstr, length, flags, chint);
     free(cstr);
     free(chint);
     return AssimpPointer.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
@@ -145,11 +143,11 @@ class Scene {
   MetaData get metaData => MetaData.fromNative(_ptr?.ref?.mMetaData);
 
   void applyPostProcessing(int flags) {
-    bindings.aiApplyPostProcessing(_ptr, flags);
+    b.aiApplyPostProcessing(_ptr, flags);
   }
 
   void dispose() {
-    bindings.aiReleaseImport(_ptr);
+    b.aiReleaseImport(_ptr);
     _ptr = null;
   }
 }

@@ -43,11 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings/ai_animation.dart' as bindings;
+import 'bindings.dart' as b;
 import 'extensions.dart';
 
 class Animation {
-  Pointer<bindings.aiAnimation> _ptr;
+  Pointer<b.aiAnimation> _ptr;
 
   Animation.fromNative(this._ptr);
 

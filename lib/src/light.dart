@@ -43,11 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings/ai_light.dart' as bindings;
+import 'bindings.dart' as b;
 import 'extensions.dart';
 
 class Light {
-  Pointer<bindings.aiLight> _ptr;
+  Pointer<b.aiLight> _ptr;
 
   Light.fromNative(this._ptr);
 

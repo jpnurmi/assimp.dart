@@ -43,11 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings/ai_material.dart' as bindings;
+import 'bindings.dart' as b;
 import 'extensions.dart';
 
 class Material {
-  Pointer<bindings.aiMaterial> _ptr;
+  Pointer<b.aiMaterial> _ptr;
 
   Material.fromNative(this._ptr);
 

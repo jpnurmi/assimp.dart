@@ -43,16 +43,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings/ai_anim_mesh.dart' as bindings;
-import 'bindings/ai_bone.dart' as bindings;
-import 'bindings/ai_face.dart' as bindings;
-import 'bindings/ai_mesh.dart' as bindings;
-import 'bindings/ai_vertex_weight.dart' as bindings;
-
+import 'bindings.dart' as b;
 import 'extensions.dart';
 
 class Face {
-  Pointer<bindings.aiFace> _ptr;
+  Pointer<b.aiFace> _ptr;
 
   Face.fromNative(this._ptr);
 
@@ -67,7 +62,7 @@ class Face {
 }
 
 class VertexWeight {
-  Pointer<bindings.aiVertexWeight> _ptr;
+  Pointer<b.aiVertexWeight> _ptr;
 
   VertexWeight.fromNative(this._ptr);
 
@@ -79,7 +74,7 @@ class VertexWeight {
 }
 
 class Bone {
-  Pointer<bindings.aiBone> _ptr;
+  Pointer<b.aiBone> _ptr;
 
   Bone.fromNative(this._ptr);
 
@@ -98,7 +93,7 @@ class Bone {
 }
 
 class AnimMesh {
-  Pointer<bindings.aiAnimMesh> _ptr;
+  Pointer<b.aiAnimMesh> _ptr;
 
   AnimMesh.fromNative(this._ptr);
 
@@ -136,7 +131,7 @@ class AnimMesh {
 
   Iterable<Iterable<Color>> get colors {
     var n = 0;
-    while (n < bindings.AI_MAX_NUMBER_OF_COLOR_SETS &&
+    while (n < b.AI_MAX_NUMBER_OF_COLOR_SETS &&
         AssimpPointer.isNotNull(_ptr?.ref?.mColors?.elementAt(n))) ++n;
     return Iterable.generate(
       n,
@@ -149,7 +144,7 @@ class AnimMesh {
 
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
-    while (n < bindings.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
+    while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
         AssimpPointer.isNotNull(_ptr?.ref?.mTextureCoords?.elementAt(n))) ++n;
     return Iterable.generate(
       n,
@@ -178,7 +173,7 @@ class PrimitiveType {
 }
 
 class Mesh {
-  Pointer<bindings.aiMesh> _ptr;
+  Pointer<b.aiMesh> _ptr;
 
   Mesh.fromNative(this._ptr);
 
@@ -216,7 +211,7 @@ class Mesh {
 
   Iterable<Iterable<Color>> get colors {
     var n = 0;
-    while (n < bindings.AI_MAX_NUMBER_OF_COLOR_SETS &&
+    while (n < b.AI_MAX_NUMBER_OF_COLOR_SETS &&
         _ptr?.ref?.mColors != null &&
         AssimpPointer.isNotNull(_ptr.ref.mColors[n])) ++n;
     return Iterable.generate(
@@ -230,7 +225,7 @@ class Mesh {
 
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
-    while (n < bindings.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
+    while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
         _ptr?.ref?.mTextureCoords != null &&
         AssimpPointer.isNotNull(_ptr.ref.mTextureCoords[n])) ++n;
     return Iterable.generate(
@@ -245,7 +240,7 @@ class Mesh {
 
   Iterable<int> get uvComponents {
     var n = 0;
-    while (n < bindings.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
+    while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
         _ptr?.ref?.mNumUVComponents != null &&
         _ptr.ref.mNumUVComponents.elementAt(n).value > 0) ++n;
     return n > 0 ? _ptr.ref.mNumUVComponents.asTypedList(n) : [];
