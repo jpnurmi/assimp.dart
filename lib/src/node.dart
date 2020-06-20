@@ -48,7 +48,7 @@ import 'package:vector_math/vector_math.dart';
 import 'bindings/ai_node.dart' as bindings;
 import 'bindings/ai_scene.dart' as bindings;
 
-import 'metadata.dart';
+import 'meta_data.dart';
 import 'extensions.dart';
 
 class Node {

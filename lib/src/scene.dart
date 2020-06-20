@@ -54,7 +54,7 @@ import 'camera.dart';
 import 'light.dart';
 import 'material.dart';
 import 'mesh.dart';
-import 'metadata.dart';
+import 'meta_data.dart';
 import 'node.dart';
 import 'texture.dart';
 import 'extensions.dart';
