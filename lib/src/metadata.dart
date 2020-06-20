@@ -45,22 +45,23 @@ import 'dart:ffi';
 
 import 'package:assimp/assimp.dart';
 
-import 'utils.dart';
 import 'bindings/ai_metadata.dart' as bindings;
+
+import 'extensions.dart';
 
 class MetaData {
   Pointer<bindings.aiMetadata> _ptr;
 
   MetaData.fromNative(this._ptr);
 
-  bool get isNull => Utils.isNull(_ptr);
+  bool get isNull => AssimpPointer.isNull(_ptr);
 
   Map<String, dynamic> get properties => Map.fromIterables(keys, values);
 
   Iterable<String> get keys {
     return Iterable.generate(
       _ptr?.ref?.mNumProperties ?? 0,
-      (i) => Utils.fromString(_ptr.ref.mKeys.elementAt(i)),
+      (i) => AssimpString.fromNative(_ptr.ref.mKeys.elementAt(i)),
     );
   }
 

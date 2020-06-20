@@ -44,12 +44,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 
 import 'bindings/ai_material.dart' as bindings;
-import 'utils.dart';
+import 'extensions.dart';
 
 class Material {
   Pointer<bindings.aiMaterial> _ptr;
 
   Material.fromNative(this._ptr);
 
-  bool get isNull => Utils.isNull(_ptr);
+  bool get isNull => AssimpPointer.isNull(_ptr);
 }

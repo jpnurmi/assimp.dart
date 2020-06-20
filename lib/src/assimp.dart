@@ -41,8 +41,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-import 'dart:ffi';
-
 import 'package:ffi/ffi.dart';
 
 import 'bindings/ai_global.dart' as bindings;

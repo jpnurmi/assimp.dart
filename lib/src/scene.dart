@@ -48,8 +48,8 @@ import 'package:ffi/ffi.dart';
 
 import 'animation.dart';
 import 'bindings/ai_import.dart' as bindings;
-import 'bindings/ai_scene.dart' as bindings;
 import 'bindings/ai_post_processing.dart' as bindings;
+import 'bindings/ai_scene.dart' as bindings;
 import 'camera.dart';
 import 'light.dart';
 import 'material.dart';
@@ -57,7 +57,7 @@ import 'mesh.dart';
 import 'metadata.dart';
 import 'node.dart';
 import 'texture.dart';
-import 'utils.dart';
+import 'extensions.dart';
 
 class Scene {
   Pointer<bindings.aiScene> _ptr;
@@ -68,7 +68,7 @@ class Scene {
     final cpath = Utf8.toUtf8(path);
     final ptr = bindings.aiImportFile(cpath, flags);
     free(cpath);
-    return Utils.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
+    return AssimpPointer.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
   }
 
   factory Scene._fromBuffer(
@@ -77,7 +77,7 @@ class Scene {
     final ptr = bindings.aiImportFileFromMemory(cstr, length, flags, chint);
     free(cstr);
     free(chint);
-    return Utils.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
+    return AssimpPointer.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
   }
 
   factory Scene.fromString(String str, {int flags = 0, String hint = ''}) {
@@ -94,7 +94,7 @@ class Scene {
     return Scene._fromBuffer(cbuffer.cast(), bytes.length, flags, hint);
   }
 
-  bool get isNull => Utils.isNull(_ptr);
+  bool get isNull => AssimpPointer.isNull(_ptr);
 
   int get flags => _ptr?.ref?.mFlags ?? 0;
 

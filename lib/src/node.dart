@@ -49,24 +49,21 @@ import 'bindings/ai_node.dart' as bindings;
 import 'bindings/ai_scene.dart' as bindings;
 
 import 'metadata.dart';
-import 'types.dart';
-import 'utils.dart';
+import 'extensions.dart';
 
 class Node {
   Pointer<bindings.aiNode> _ptr;
 
   Node.fromNative(this._ptr);
 
-  bool get isNull => Utils.isNull(_ptr);
+  bool get isNull => AssimpPointer.isNull(_ptr);
 
-  //String get name => Utils.fromUtf8(_ptr?.ref?.mName);
-  String get name =>
-      null; //Utils.fromString(_ptr?.ref?.mName, _ptr?.ref?.mNameLength);
+  String get name => AssimpString.fromNative(_ptr?.ref?.mName);
 
   Matrix4 get transformation =>
       AssimpMatrix4.fromNative(_ptr?.ref?.mTransformation);
 
-  Node get parent => Utils.isNotNull(_ptr?.ref?.mParent)
+  Node get parent => AssimpPointer.isNull(_ptr?.ref?.mParent)
       ? Node.fromNative(_ptr.ref.mParent)
       : null;
 

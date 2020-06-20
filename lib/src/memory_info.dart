@@ -41,32 +41,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-import 'dart:convert';
 import 'dart:ffi';
-import 'dart:typed_data';
 
-import 'package:ffi/ffi.dart';
+import 'bindings/ai_memory_info.dart' as bindings;
 
-import 'bindings/ai_string.dart' as bindings;
+import 'extensions.dart';
 
-class Utils {
-  static bool isNull(Pointer ptr) => ptr == null || ptr.address == 0;
-  static bool isNotNull(Pointer ptr) => ptr != null && ptr.address != 0;
+class MemoryInfo {
+  Pointer<bindings.aiMemoryInfo> _ptr;
 
-  static String fromString(Pointer<bindings.aiString> str) {
-    if (isNull(str)) return null;
-    final len = str.ref.length;
-    if (len <= 0) return '';
-    final data = Uint8List.view(
-        str.ref.data.cast<Uint8>().asTypedList(len).buffer, 0, len);
-    return utf8.decode(data);
-  }
+  MemoryInfo.fromNative(this._ptr);
 
-  static String fromUtf8(Pointer<Utf8> str, int len) {
-    if (isNull(str)) return null;
-    if (len <= 0) return '';
-    final data =
-        Uint8List.view(str.cast<Uint8>().asTypedList(len).buffer, 0, len);
-    return utf8.decode(data);
-  }
+  bool get isNull => AssimpPointer.isNull(_ptr);
+
+  int get textures => _ptr?.ref?.textures ?? 0;
+  int get materials => _ptr?.ref?.materials ?? 0;
+  int get meshes => _ptr?.ref?.meshes ?? 0;
+  int get nodes => _ptr?.ref?.nodes ?? 0;
+  int get animations => _ptr?.ref?.animations ?? 0;
+  int get cameras => _ptr?.ref?.cameras ?? 0;
+  int get lights => _ptr?.ref?.lights ?? 0;
+  int get total => _ptr?.ref?.total ?? 0;
 }

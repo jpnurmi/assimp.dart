@@ -53,4 +53,4 @@ export 'src/mesh.dart';
 export 'src/node.dart';
 export 'src/scene.dart';
 export 'src/texture.dart';
-export 'src/types.dart';
+export 'src/extensions.dart';

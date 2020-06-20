@@ -44,12 +44,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 
 import 'bindings/ai_camera.dart' as bindings;
-import 'utils.dart';
+import 'extensions.dart';
 
 class Camera {
   Pointer<bindings.aiCamera> _ptr;
 
   Camera.fromNative(this._ptr);
 
-  bool get isNull => Utils.isNull(_ptr);
+  bool get isNull => AssimpPointer.isNull(_ptr);
 }

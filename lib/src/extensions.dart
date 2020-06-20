@@ -41,7 +41,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
+import 'dart:convert';
 import 'dart:ffi';
+import 'dart:typed_data';
 import 'dart:ui';
 export 'dart:ui' show Color;
 
@@ -59,11 +61,9 @@ import 'bindings/ai_ray.dart' as bindings;
 import 'bindings/ai_string.dart' as bindings;
 import 'bindings/ai_vector.dart' as bindings;
 
-import 'utils.dart';
-
 extension AssimpAabb3 on Aabb3 {
   static Aabb3 fromNative(Pointer<bindings.aiAABB> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Aabb3.minMax(
       AssimpVector3.fromNative(ptr.ref.mMin),
       AssimpVector3.fromNative(ptr.ref.mMax),
@@ -80,7 +80,7 @@ extension AssimpAabb3 on Aabb3 {
 
 extension AssimpColor3 on Color {
   static Color fromNative(Pointer<bindings.aiColor3D> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Color.fromARGB(
       255,
       (ptr.ref.r * 255).round(),
@@ -100,7 +100,7 @@ extension AssimpColor3 on Color {
 
 extension AssimpColor4 on Color {
   static Color fromNative(Pointer<bindings.aiColor4D> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Color.fromARGB(
       (ptr.ref.a * 255).round(),
       (ptr.ref.r * 255).round(),
@@ -121,7 +121,7 @@ extension AssimpColor4 on Color {
 
 extension AssimpMatrix3 on Matrix3 {
   static Matrix3 fromNative(Pointer<bindings.aiMatrix3x3> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Matrix3(
       ptr.ref.a1,
       ptr.ref.a2,
@@ -152,7 +152,7 @@ extension AssimpMatrix3 on Matrix3 {
 
 extension AssimpMatrix4 on Matrix4 {
   static Matrix4 fromNative(Pointer<bindings.aiMatrix4x4> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Matrix4(
       ptr.ref.a1,
       ptr.ref.a2,
@@ -197,7 +197,7 @@ extension AssimpMatrix4 on Matrix4 {
 
 extension AssimpPlane on Plane {
   static Plane fromNative(Pointer<bindings.aiPlane> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Plane.components(ptr.ref.a, ptr.ref.b, ptr.ref.c, ptr.ref.d);
   }
 
@@ -211,25 +211,14 @@ extension AssimpPlane on Plane {
   }
 }
 
-extension AssimpRay on Ray {
-  static Ray fromNative(Pointer<bindings.aiRay> ptr) {
-    if (Utils.isNull(ptr)) return null;
-    final pos = AssimpVector3.fromNative(ptr.ref.pos);
-    final dir = AssimpVector3.fromNative(ptr.ref.dir);
-    return Ray.originDirection(pos, dir);
-  }
-
-//  static Pointer<bindings.aiRay> toNative(Ray ray) {
-//    final Pointer<bindings.aiRay> ptr = allocate();
-//    ptr.ref.pos = AssimpVector3.toNative(ray.origin);
-//    ptr.ref.dir = AssimpVector3.toNative(ray.direction);
-//    return ptr;
-//  }
+extension AssimpPointer on Pointer {
+  static bool isNull(Pointer ptr) => ptr == null || ptr.address == 0;
+  static bool isNotNull(Pointer ptr) => ptr != null && ptr.address != 0;
 }
 
 extension AssimpQuaternion on Quaternion {
   static Quaternion fromNative(Pointer<bindings.aiQuaternion> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Quaternion(ptr.ref.x, ptr.ref.y, ptr.ref.z, ptr.ref.z);
   }
 
@@ -243,9 +232,36 @@ extension AssimpQuaternion on Quaternion {
   }
 }
 
+extension AssimpRay on Ray {
+  static Ray fromNative(Pointer<bindings.aiRay> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    final pos = AssimpVector3.fromNative(ptr.ref.pos);
+    final dir = AssimpVector3.fromNative(ptr.ref.dir);
+    return Ray.originDirection(pos, dir);
+  }
+
+//  static Pointer<bindings.aiRay> toNative(Ray ray) {
+//    final Pointer<bindings.aiRay> ptr = allocate();
+//    ptr.ref.pos = AssimpVector3.toNative(ray.origin);
+//    ptr.ref.dir = AssimpVector3.toNative(ray.direction);
+//    return ptr;
+//  }
+}
+
+extension AssimpString on String {
+  static String fromNative(Pointer<bindings.aiString> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    final len = ptr.ref.length;
+    if (len <= 0) return '';
+    final str = Uint8List.view(
+        ptr.ref.data.cast<Uint8>().asTypedList(len).buffer, 0, len);
+    return utf8.decode(str);
+  }
+}
+
 extension AssimpVector2 on Vector2 {
   static Vector2 fromNative(Pointer<bindings.aiVector2D> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Vector2(ptr.ref.x, ptr.ref.y);
   }
 
@@ -259,7 +275,7 @@ extension AssimpVector2 on Vector2 {
 
 extension AssimpVector3 on Vector3 {
   static Vector3 fromNative(Pointer<bindings.aiVector3D> ptr) {
-    if (Utils.isNull(ptr)) return null;
+    if (AssimpPointer.isNull(ptr)) return null;
     return Vector3(ptr.ref.x, ptr.ref.y, ptr.ref.z);
   }
 
@@ -271,19 +287,3 @@ extension AssimpVector3 on Vector3 {
     return ptr;
   }
 }
-
-//class MemoryInfo {
-//  Pointer<bindings.aiMemoryInfo> _ptr;
-//
-//  MemoryInfo._();
-//  MemoryInfo.fromNative(this._ptr);
-//
-//  int get textures => _ptr?.ref?.textures ?? 0;
-//  int get materials => _ptr?.ref?.materials ?? 0;
-//  int get meshes => _ptr?.ref?.meshes ?? 0;
-//  int get nodes => _ptr?.ref?.nodes ?? 0;
-//  int get animations => _ptr?.ref?.animations ?? 0;
-//  int get cameras => _ptr?.ref?.cameras ?? 0;
-//  int get lights => _ptr?.ref?.lights ?? 0;
-//  int get total => _ptr?.ref?.total ?? 0;
-//}
