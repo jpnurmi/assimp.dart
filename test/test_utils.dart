@@ -95,6 +95,13 @@ void testMeshes(String fileName, void tester(meshes)) {
   scene.dispose();
 }
 
+void testMetaData(String fileName, void tester(metaData)) {
+  final filePath = testModelPath(fileName);
+  final scene = Scene.fromFile(filePath);
+  tester(scene.metaData);
+  scene.dispose();
+}
+
 void testNodes(String fileName, void tester(nodes)) {
   final filePath = testModelPath(fileName);
   final scene = Scene.fromFile(filePath);

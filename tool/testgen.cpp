@@ -11,6 +11,7 @@ static QString testModelPath(const QString &fileName) { return testModelDir().fi
 
 static QString import(const QString &package) { return QString("import '%1';").arg(package); }
 
+static QString isTrueOrFalse(bool val) { return val ? "isTrue" : "isFalse"; }
 static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 
@@ -89,10 +90,10 @@ static void writeGroup(QTextStream &out, const QString &name, std::function<void
     out << "  });\n\n";
 }
 
-static void writeNullTest(QTextStream &out, const QString &name)
+static void writeNullTest(QTextStream &out, const QString &typeName)
 {
     writeGroup(out, "null", [&]() {
-        out << QString("    expect(%1.fromNative(null), isNull);\n").arg(name.mid(2));
+        out << QString("    expect(%1.fromNative(null), isNull);\n").arg(typeName);
     });
 }
 
@@ -112,7 +113,7 @@ static void generateTest(const QString &typeName, const QString &fileName, std::
 
     QTextStream out(&file);
     writeHeader(out, fileName);
-    writeNullTest(out, typeName);
+    writeNullTest(out, typeName == "aiMetadata" ? "MetaData" : typeName.mid(2));
     writeSizeTest(out, typeName, sizeof(T));
     writer(out);
     writeFooter(out, fileName);
@@ -380,6 +381,71 @@ static void generateMeshTest(const QString &fileName)
     });
 }
 
+static void writeMetaDataTester(QTextStream &out, const QString &fileName = QString())
+{
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testMetaData('" << fileName << "', (metaData) {\n";
+    if (scene->mMetaData) {
+        out << "      expect(metaData.keys.length, " << equalsToInt(scene->mMetaData->mNumProperties) << ");\n"
+            << "      expect(metaData.values.length, " << equalsToInt(scene->mMetaData->mNumProperties) << ");\n"
+            << "      expect(metaData.properties.length, " << equalsToInt(scene->mMetaData->mNumProperties) << ");\n";
+        for (uint i = 0; i < scene->mMetaData->mNumProperties; ++i) {
+            out << "      expect(metaData.keys.elementAt(" << i << "), " << equalsToString(scene->mMetaData->mKeys[i]) << ");\n";
+            const aiMetadataEntry *entry = scene->mMetaData->mValues + i;
+            switch (entry->mType) {
+            case aiMetadataType::AI_BOOL:
+                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, bool);\n";
+                out << "      expect(metaData.values.elementAt(" << i << "), " << isTrueOrFalse(*reinterpret_cast<bool*>(entry->mData)) << ");\n";
+                break;
+            case aiMetadataType::AI_INT32:
+                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, int);\n";
+                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToInt(*reinterpret_cast<int*>(entry->mData)) << ");\n";
+                break;
+            case aiMetadataType::AI_UINT64:
+                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, int);\n";
+                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToInt(*reinterpret_cast<qint64*>(entry->mData)) << ");\n";
+                break;
+            case aiMetadataType::AI_FLOAT:
+                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, double);\n";
+                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToFloat(*reinterpret_cast<float*>(entry->mData)) << ");\n";
+                break;
+            case aiMetadataType::AI_DOUBLE:
+                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, double);\n";
+                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToDouble(*reinterpret_cast<double*>(entry->mData)) << ");\n";
+                break;
+            case aiMetadataType::AI_AISTRING:
+                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, String);\n";
+                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToString(*reinterpret_cast<aiString*>(entry->mData)) << ");\n";
+                break;
+            case aiMetadataType::AI_AIVECTOR3D:
+                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, Vector3);\n";
+                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToVector3(*reinterpret_cast<aiVector3D*>(entry->mData)) << ");\n";
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    out << "    });\n";
+    aiReleaseImport(scene);
+}
+
+static void generateMetaDataTest(const QString &fileName)
+{
+    generateTest<aiMetadata>("aiMetadata", fileName, [&](QTextStream &out) {
+        writeGroup(out, "3mf", [&]() {
+            writeMetaDataTester(out, "3mf/box.3mf");
+            writeMetaDataTester(out, "3mf/spider.3mf");
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeMetaDataTester(out, "fbx/huesitos.fbx");
+        });
+        writeGroup(out, "obj", [&]() {
+            writeMetaDataTester(out, "Obj/Spider/spider.obj");
+        });
+    });
+}
+
 static void writeNodeTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
@@ -505,6 +571,7 @@ int main(int argc, char *argv[])
     generateLightTest("light_test.dart");
     generateMaterialTest("material_test.dart");
     generateMeshTest("mesh_test.dart");
+    generateMetaDataTest("meta_data_test.dart");
     generateNodeTest("node_test.dart");
     generateSceneTest("scene_test.dart");
     generateTextureTest("texture_test.dart");

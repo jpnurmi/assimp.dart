@@ -71,20 +71,24 @@ class MetaData {
     );
   }
 
-  static dynamic _toValue(Pointer<b.aiMetadataEntry> entry) {
-    switch (entry.ref.mType) {
+  static dynamic _toValue(Pointer<b.aiMetadataEntry> ptr) {
+    switch (ptr.ref.mType) {
       case b.aiMetadataType.AI_BOOL:
+        return ptr.ref.mData.cast<Int8>().value;
       case b.aiMetadataType.AI_INT32:
+        return ptr.ref.mData.cast<Int32>().value;
       case b.aiMetadataType.AI_UINT64:
+        return ptr.ref.mData.cast<Uint64>().value;
       case b.aiMetadataType.AI_FLOAT:
+        return ptr.ref.mData.cast<Float>().value;
       case b.aiMetadataType.AI_DOUBLE:
-        return 0; // ### TODO
+        return ptr.ref.mData.cast<Double>().value;
       case b.aiMetadataType.AI_AISTRING:
-        return ''; // ### TODO
+        return AssimpString.fromNative(ptr.ref.mData.cast<b.aiString>());
       case b.aiMetadataType.AI_AIVECTOR3D:
-        return Vector3.zero(); // ### TODO
+        return AssimpVector3.fromNative(ptr.ref.mData.cast<b.aiVector3D>());
       default:
-        throw UnimplementedError(entry.ref.mType.toString());
+        throw UnimplementedError(ptr.ref.mType.toString());
     }
   }
 }
