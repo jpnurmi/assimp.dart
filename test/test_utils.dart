@@ -48,14 +48,19 @@ void testSceneFromString(String fileName, void tester(scene)) {
   scene.dispose();
 }
 
-void testScene(String fileName, int testFrom, void tester(scene)) {
-  if (testFrom & TestFrom.file != 0) {
-    testSceneFromFile(fileName, tester);
-  }
-  if (testFrom & TestFrom.bytes != 0) {
-    testSceneFromBytes(fileName, tester);
-  }
-  if (testFrom & TestFrom.string != 0) {
-    testSceneFromString(fileName, tester);
+void testScene(String fileName,
+    {int from = TestFrom.file, void tester(scene)}) {
+  if (fileName == null) {
+    tester(Scene.fromNative(null));
+  } else {
+    if (from & TestFrom.file != 0) {
+      testSceneFromFile(fileName, tester);
+    }
+    if (from & TestFrom.bytes != 0) {
+      testSceneFromBytes(fileName, tester);
+    }
+    if (from & TestFrom.string != 0) {
+      testSceneFromString(fileName, tester);
+    }
   }
 }
