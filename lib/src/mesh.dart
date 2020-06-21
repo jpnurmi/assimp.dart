@@ -133,7 +133,7 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
     );
   }
 
-  Iterable<Iterable<Color>> get colors {
+  Iterable<Iterable<Vector4>> get colors {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
         AssimpPointer.isNotNull(_animMesh.mColors?.elementAt(n))) ++n;
@@ -215,7 +215,7 @@ class Mesh extends AssimpType<aiMesh> {
     );
   }
 
-  Iterable<Iterable<Color>> get colors {
+  Iterable<Iterable<Vector4>> get colors {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
         _mesh.mColors != null &&

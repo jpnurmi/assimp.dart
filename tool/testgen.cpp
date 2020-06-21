@@ -20,8 +20,8 @@ static QString isEmptyOrNot(int num) { return num ? "isNotEmpty" : "isEmpty"; }
 static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(const void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 
-static QString color4ToString(const aiColor4D &c) { return QString("Color.fromARGB(%1, %2, %3, %4)").arg(std::round(c.a * 255)).arg(std::round(c.r * 255)).arg(std::round(c.g * 255)).arg(std::round(c.b * 255)); }
-static QString color3ToString(const aiColor3D &c) { return color4ToString(aiColor4D(c.r, c.g, c.b, 1.0)); }
+static QString color3ToString(const aiColor3D &c) { return QString("Vector3(%1, %2, %3)").arg(c.r).arg(c.g).arg(c.b); }
+static QString color4ToString(const aiColor4D &c) { return QString("Vector4(%1, %2, %3, %4)").arg(c.r).arg(c.g).arg(c.b).arg(c.a); }
 static QString matrix4ToString(const aiMatrix4x4 &m) { return QString("Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16)").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
 static QString quaternionToString(const aiQuaternion &q) { return QString("Quaternion(%1, %2, %3, %4)").arg(q.x).arg(q.y).arg(q.z).arg(q.z); }
 static QString vector3ToString(const aiVector3D &v) { return QString("Vector3(%1, %2, %3)").arg(v.x).arg(v.y).arg(v.z); }
@@ -34,8 +34,8 @@ static QString equalsToDouble(double value) { return qFuzzyIsNull(value) ? "isZe
 static QString equalsToString(const char *str, uint len) { return len ? equalsTo(QString("'%1'").arg(QString::fromUtf8(str, len).replace("\\", "\\\\").replace("$", "\\$"))) : "isEmpty"; }
 static QString equalsToString(const aiString &str) { return equalsToString(str.data, str.length); }
 static QString equalsToAabb(const aiAABB &a) { return QString("aabb3MoreOrLessEquals(%1)").arg(aabbToString(a)); }
-static QString equalsToColor3(const aiColor3D &c) { return QString("isSameColorAs(%1)").arg(color3ToString(c)); }
-static QString equalsToColor4(const aiColor4D &c) { return QString("isSameColorAs(%1)").arg(color4ToString(c)); }
+static QString equalsToColor3(const aiColor3D &c) { return QString("vector3MoreOrLessEquals(%1)").arg(color3ToString(c)); }
+static QString equalsToColor4(const aiColor4D &c) { return QString("vector3MoreOrLessEquals(%1)").arg(color4ToString(c)); }
 static QString equalsToQuaternion(const aiQuaternion &q) { return QString("quaternionMoreOrLessEquals(%1)").arg(quaternionToString(q)); }
 static QString equalsToVector3(const aiVector3D &v) { return QString("vector3MoreOrLessEquals(%1)").arg(vector3ToString(v)); }
 static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("matrix4MoreOrLessEquals(%1)").arg(matrix4ToString(m)); }
@@ -291,8 +291,8 @@ static void writeLightTester(QTextStream &out, const aiScene *scene, const QStri
             << "      expect(" << indexed("light", i) << ".colorAmbient, " << equalsToColor3(light->mColorAmbient) << ");\n"
             << "      expect(" << indexed("light", i) << ".angleInnerCone, " << equalsToFloat(light->mAngleInnerCone) << ");\n"
             << "      expect(" << indexed("light", i) << ".angleOuterCone, " << equalsToFloat(light->mAngleOuterCone) << ");\n"
-            << "      expect(" << indexed("light", i) << ".size.width, " << equalsToFloat(light->mSize.x) << ");\n"
-            << "      expect(" << indexed("light", i) << ".size.height, " << equalsToFloat(light->mSize.y) << ");\n"
+            << "      expect(" << indexed("light", i) << ".size.x, " << equalsToFloat(light->mSize.x) << ");\n" // ### TODO: width
+            << "      expect(" << indexed("light", i) << ".size.y, " << equalsToFloat(light->mSize.y) << ");\n" // ### TODO: height
             << (i < scene->mNumLights - 1 ? "\n" : "");
     }
     out << "    });\n";

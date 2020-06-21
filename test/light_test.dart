@@ -59,13 +59,13 @@ void main() {
       expect(light_0.attenuationConstant, isZero);
       expect(light_0.attenuationLinear, moreOrLessEquals(0.000666667));
       expect(light_0.attenuationQuadratic, isZero);
-      expect(light_0.colorDiffuse, isSameColorAs(Color.fromARGB(255, 255, 255, 255)));
-      expect(light_0.colorSpecular, isSameColorAs(Color.fromARGB(255, 255, 255, 255)));
-      expect(light_0.colorAmbient, isSameColorAs(Color.fromARGB(255, 0, 0, 0)));
+      expect(light_0.colorDiffuse, vector3MoreOrLessEquals(Vector3(1, 1, 1)));
+      expect(light_0.colorSpecular, vector3MoreOrLessEquals(Vector3(1, 1, 1)));
+      expect(light_0.colorAmbient, vector3MoreOrLessEquals(Vector3(0, 0, 0)));
       expect(light_0.angleInnerCone, moreOrLessEquals(6.28319));
       expect(light_0.angleOuterCone, moreOrLessEquals(6.28319));
-      expect(light_0.size.width, isZero);
-      expect(light_0.size.height, isZero);
+      expect(light_0.size.x, isZero);
+      expect(light_0.size.y, isZero);
     });
   });
 

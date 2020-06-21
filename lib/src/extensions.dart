@@ -44,13 +44,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
-import 'dart:ui';
-export 'dart:ui' show Color, Size;
 
 import 'package:ffi/ffi.dart';
 import 'package:vector_math/vector_math.dart';
 export 'package:vector_math/vector_math.dart'
-    show Aabb3, Matrix3, Matrix4, Plane, Quaternion, Ray, Vector2, Vector3;
+    show
+        Aabb3,
+        Matrix3,
+        Matrix4,
+        Plane,
+        Quaternion,
+        Ray,
+        Vector2,
+        Vector3,
+        Vector4;
 
 import 'bindings.dart';
 
@@ -71,15 +78,10 @@ extension AssimpAabb3 on Aabb3 {
 //  }
 }
 
-extension AssimpColor3 on Color {
-  static Color fromNative(Pointer<aiColor3D> ptr) {
+extension AssimpColor3 on Vector3 {
+  static Vector3 fromNative(Pointer<aiColor3D> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
-    return Color.fromARGB(
-      255,
-      (ptr.ref.r * 255).round(),
-      (ptr.ref.g * 255).round(),
-      (ptr.ref.b * 255).round(),
-    );
+    return Vector3(ptr.ref.r, ptr.ref.g, ptr.ref.b);
   }
 
 //  static Pointer<aiColor3D> toNative(Color color) {
@@ -91,14 +93,14 @@ extension AssimpColor3 on Color {
 //  }
 }
 
-extension AssimpColor4 on Color {
-  static Color fromNative(Pointer<aiColor4D> ptr) {
+extension AssimpColor4 on Vector4 {
+  static Vector4 fromNative(Pointer<aiColor4D> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
-    return Color.fromARGB(
-      (ptr.ref.a * 255).round(),
-      (ptr.ref.r * 255).round(),
-      (ptr.ref.g * 255).round(),
-      (ptr.ref.b * 255).round(),
+    return Vector4(
+      ptr.ref.a,
+      ptr.ref.r,
+      ptr.ref.g,
+      ptr.ref.b,
     );
   }
 
@@ -241,18 +243,9 @@ extension AssimpRay on Ray {
 //  }
 }
 
-extension AssimpSize on Size {
-  static Size fromNative(Pointer<aiVector2D> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Size(ptr.ref.x, ptr.ref.y);
-  }
-
-//  static Pointer<aiVector2D> toNative(Size size) {
-//    final Pointer<aiVector2D> ptr = allocate();
-//    ptr.ref.x = size.width;
-//    ptr.ref.y = size.height;
-//    return ptr;
-//  }
+extension AssimpSize on Vector2 {
+  double get width => x;
+  double get height => y;
 }
 
 extension AssimpString on String {

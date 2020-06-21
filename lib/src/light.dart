@@ -69,12 +69,12 @@ class Light extends AssimpType<aiLight> {
   double get attenuationLinear => _light.mAttenuationLinear;
   double get attenuationQuadratic => _light.mAttenuationQuadratic;
 
-  Color get colorDiffuse => AssimpColor3.fromNative(_light.mColorDiffuse);
-  Color get colorSpecular => AssimpColor3.fromNative(_light.mColorSpecular);
-  Color get colorAmbient => AssimpColor3.fromNative(_light.mColorAmbient);
+  Vector3 get colorDiffuse => AssimpColor3.fromNative(_light.mColorDiffuse);
+  Vector3 get colorSpecular => AssimpColor3.fromNative(_light.mColorSpecular);
+  Vector3 get colorAmbient => AssimpColor3.fromNative(_light.mColorAmbient);
 
   double get angleInnerCone => _light.mAngleInnerCone;
   double get angleOuterCone => _light.mAngleOuterCone;
 
-  Size get size => AssimpSize.fromNative(_light.mSize);
+  Vector2 get size => AssimpVector2.fromNative(_light.mSize);
 }

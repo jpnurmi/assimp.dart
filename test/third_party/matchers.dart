@@ -5,15 +5,11 @@
 // found in the LICENSE file.
 
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 // ignore: deprecated_member_use
 import 'package:test_api/test_api.dart' hide TypeMatcher, isInstanceOf;
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/painting.dart';
 
 import 'package:vector_math/vector_math.dart';
 
@@ -65,12 +61,6 @@ Matcher vector3MoreOrLessEquals(Vector3 value,
       relativeError, value, precisionErrorTolerance);
 }
 
-/// Asserts that the object represents the same color as [color] when used to paint.
-///
-/// Specifically this matcher checks the object is of type [Color] and its [Color.value]
-/// equals to that of the given [color].
-Matcher isSameColorAs(Color color) => _ColorMatcher(targetColor: color);
-
 /// Asserts that two [double]s are equal, within some tolerated error.
 ///
 /// {@template flutter.flutter_test.moreOrLessEquals.epsilon}
@@ -95,36 +85,6 @@ Matcher moreOrLessEquals(double value,
   return _MoreOrLessEquals(value, epsilon);
 }
 
-/// Asserts that two [Rect]s are equal, within some tolerated error.
-///
-/// {@macro flutter.flutter_test.moreOrLessEquals.epsilon}
-///
-/// See also:
-///
-///  * [moreOrLessEquals], which is for [double]s.
-///  * [offsetMoreOrLessEquals], which is for [Offset]s.
-///  * [within], which offers a generic version of this functionality that can
-///    be used to match [Rect]s as well as other types.
-Matcher rectMoreOrLessEquals(Rect value,
-    {double epsilon = precisionErrorTolerance}) {
-  return _IsWithinDistance<Rect>(_rectDistance, value, epsilon);
-}
-
-/// Asserts that two [Offset]s are equal, within some tolerated error.
-///
-/// {@macro flutter.flutter_test.moreOrLessEquals.epsilon}
-///
-/// See also:
-///
-///  * [moreOrLessEquals], which is for [double]s.
-///  * [rectMoreOrLessEquals], which is for [Rect]s.
-///  * [within], which offers a generic version of this functionality that can
-///    be used to match [Offset]s as well as other types.
-Matcher offsetMoreOrLessEquals(Offset value,
-    {double epsilon = precisionErrorTolerance}) {
-  return _IsWithinDistance<Offset>(_offsetDistance, value, epsilon);
-}
-
 /// Computes the distance between two values.
 ///
 /// The distance should be a metric in a metric space (see
@@ -136,7 +96,7 @@ Matcher offsetMoreOrLessEquals(Offset value,
 /// - f(a, b) == f(b, a)
 /// - f(a, c) <= f(a, b) + f(b, c), known as triangle inequality
 ///
-/// This makes it useful for comparing numbers, [Color]s, [Offset]s and other
+/// This makes it useful for comparing numbers, [Offset]s and other
 /// sets of value for which a metric space is defined.
 typedef DistanceFunction<T> = num Function(T a, T b);
 
@@ -155,59 +115,12 @@ typedef AnyDistanceFunction = num Function(Null a, Null b);
 
 const Map<Type, AnyDistanceFunction> _kStandardDistanceFunctions =
     <Type, AnyDistanceFunction>{
-  Color: _maxComponentColorDistance,
-  HSVColor: _maxComponentHSVColorDistance,
-  HSLColor: _maxComponentHSLColorDistance,
-  Offset: _offsetDistance,
   int: _intDistance,
   double: _doubleDistance,
-  Rect: _rectDistance,
-  Size: _sizeDistance,
 };
 
 int _intDistance(int a, int b) => (b - a).abs();
 double _doubleDistance(double a, double b) => (b - a).abs();
-double _offsetDistance(Offset a, Offset b) => (b - a).distance;
-
-double _maxComponentColorDistance(Color a, Color b) {
-  int delta = math.max<int>((a.red - b.red).abs(), (a.green - b.green).abs());
-  delta = math.max<int>(delta, (a.blue - b.blue).abs());
-  delta = math.max<int>(delta, (a.alpha - b.alpha).abs());
-  return delta.toDouble();
-}
-
-// Compares hue by converting it to a 0.0 - 1.0 range, so that the comparison
-// can be a similar error percentage per component.
-double _maxComponentHSVColorDistance(HSVColor a, HSVColor b) {
-  double delta = math.max<double>(
-      (a.saturation - b.saturation).abs(), (a.value - b.value).abs());
-  delta = math.max<double>(delta, ((a.hue - b.hue) / 360.0).abs());
-  return math.max<double>(delta, (a.alpha - b.alpha).abs());
-}
-
-// Compares hue by converting it to a 0.0 - 1.0 range, so that the comparison
-// can be a similar error percentage per component.
-double _maxComponentHSLColorDistance(HSLColor a, HSLColor b) {
-  double delta = math.max<double>(
-      (a.saturation - b.saturation).abs(), (a.lightness - b.lightness).abs());
-  delta = math.max<double>(delta, ((a.hue - b.hue) / 360.0).abs());
-  return math.max<double>(delta, (a.alpha - b.alpha).abs());
-}
-
-double _rectDistance(Rect a, Rect b) {
-  double delta =
-      math.max<double>((a.left - b.left).abs(), (a.top - b.top).abs());
-  delta = math.max<double>(delta, (a.right - b.right).abs());
-  delta = math.max<double>(delta, (a.bottom - b.bottom).abs());
-  return delta;
-}
-
-double _sizeDistance(Size a, Size b) {
-  // TODO(a14n): remove ignore when lint is updated, https://github.com/dart-lang/linter/issues/1843
-  // ignore: unnecessary_parenthesis
-  final Offset delta = (b - a) as Offset;
-  return delta.distance;
-}
 
 /// Asserts that two values are within a certain distance from each other.
 ///
@@ -217,7 +130,6 @@ double _sizeDistance(Size a, Size b) {
 /// `T` generic argument. Standard functions are defined for the following
 /// types:
 ///
-///  * [Color], whose distance is the maximum component-wise delta.
 ///  * [Offset], whose distance is the Euclidean distance computed using the
 ///    method [Offset.distance].
 ///  * [Rect], whose distance is the maximum component-wise delta.
@@ -315,23 +227,4 @@ class _MoreOrLessEquals extends Matcher {
         .describeMismatch(item, mismatchDescription, matchState, verbose)
           ..add('$item is not in the range of $value (±$epsilon).');
   }
-}
-
-class _ColorMatcher extends Matcher {
-  const _ColorMatcher({
-    @required this.targetColor,
-  }) : assert(targetColor != null);
-
-  final Color targetColor;
-
-  @override
-  bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
-    if (item is Color)
-      return item == targetColor || item.value == targetColor.value;
-    return false;
-  }
-
-  @override
-  Description describe(Description description) =>
-      description.add('matches color $targetColor');
 }
