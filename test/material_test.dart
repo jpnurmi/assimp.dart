@@ -39,8 +39,10 @@ void main() {
   });
 
   test('3mf', () {
-    testMaterials('3mf/box.3mf', (materials) {
-      expect(materials.length, equals(1));
+    testScene('3mf/box.3mf', (scene) {
+      final materials = scene.materials;
+      expect(materials, isNotEmpty);
+      expect(materials.length, isNonZero);
       expect(materials.elementAt(0).properties.length, equals(2));
         expect(materials.elementAt(0).properties.elementAt(0).key, equals('\$clr.diffuse'));
         expect(materials.elementAt(0).properties.elementAt(0).value.runtimeType, double);
@@ -53,8 +55,10 @@ void main() {
         expect(materials.elementAt(0).properties.elementAt(1).index, isZero);
         expect(materials.elementAt(0).properties.elementAt(1).semantic, isZero);
     });
-    testMaterials('3mf/spider.3mf', (materials) {
-      expect(materials.length, equals(4));
+    testScene('3mf/spider.3mf', (scene) {
+      final materials = scene.materials;
+      expect(materials, isNotEmpty);
+      expect(materials.length, isNonZero);
       expect(materials.elementAt(0).properties.length, equals(1));
         expect(materials.elementAt(0).properties.elementAt(0).key, equals('?mat.name'));
         expect(materials.elementAt(0).properties.elementAt(0).value.runtimeType, String);
@@ -86,8 +90,10 @@ void main() {
   });
 
   test('fbx', () {
-    testMaterials('fbx/huesitos.fbx', (materials) {
-      expect(materials.length, equals(1));
+    testScene('fbx/huesitos.fbx', (scene) {
+      final materials = scene.materials;
+      expect(materials, isNotEmpty);
+      expect(materials.length, isNonZero);
       expect(materials.elementAt(0).properties.length, equals(16));
         expect(materials.elementAt(0).properties.elementAt(0).key, equals('?mat.name'));
         expect(materials.elementAt(0).properties.elementAt(0).value.runtimeType, String);
@@ -173,8 +179,10 @@ void main() {
   });
 
   test('obj', () {
-    testMaterials('Obj/Spider/spider.obj', (materials) {
-      expect(materials.length, equals(6));
+    testScene('Obj/Spider/spider.obj', (scene) {
+      final materials = scene.materials;
+      expect(materials, isNotEmpty);
+      expect(materials.length, isNonZero);
       expect(materials.elementAt(0).properties.length, equals(10));
         expect(materials.elementAt(0).properties.elementAt(0).key, equals('?mat.name'));
         expect(materials.elementAt(0).properties.elementAt(0).value.runtimeType, String);

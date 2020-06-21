@@ -39,17 +39,23 @@ void main() {
   });
 
   test('3mf', () {
-    testAnimations('3mf/box.3mf', (animations) {
+    testScene('3mf/box.3mf', (scene) {
+      final animations = scene.animations;
+      expect(animations, isEmpty);
       expect(animations.length, isZero);
     });
-    testAnimations('3mf/spider.3mf', (animations) {
+    testScene('3mf/spider.3mf', (scene) {
+      final animations = scene.animations;
+      expect(animations, isEmpty);
       expect(animations.length, isZero);
     });
   });
 
   test('fbx', () {
-    testAnimations('fbx/huesitos.fbx', (animations) {
-      expect(animations.length, equals(1));
+    testScene('fbx/huesitos.fbx', (scene) {
+      final animations = scene.animations;
+      expect(animations, isNotEmpty);
+      expect(animations.length, isNonZero);
       expect(animations.elementAt(0).name, equals('Armature|Action'));
       expect(animations.elementAt(0).duration, moreOrLessEquals(39));
       expect(animations.elementAt(0).ticksPerSecond, moreOrLessEquals(25));
@@ -1718,7 +1724,9 @@ void main() {
   });
 
   test('obj', () {
-    testAnimations('Obj/Spider/spider.obj', (animations) {
+    testScene('Obj/Spider/spider.obj', (scene) {
+      final animations = scene.animations;
+      expect(animations, isEmpty);
       expect(animations.length, isZero);
     });
   });

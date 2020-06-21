@@ -13,8 +13,9 @@ static QString import(const QString &package) { return QString("import '%1';").a
 static QString dartName(const QString &typeName) { return typeName == "aiMetadata" ? "MetaData" : typeName.mid(2); }
 
 static QString isTrueOrFalse(bool val) { return val ? "isTrue" : "isFalse"; }
+static QString isEmptyOrNot(int num) { return num ? "isNotEmpty" : "isEmpty"; }
 static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
-static QString isNullOrNot(void *ptr) { return ptr ? "isNotNull" : "isNull"; }
+static QString isNullOrNot(const void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 
 static QString color3ToString(const aiColor3D &c) { return QString("Color.fromARGB(255, %1, %2, %3)").arg(std::round(c.r * 255)).arg(std::round(c.g * 255)).arg(std::round(c.b * 255)); }
 static QString matrix4ToString(const aiMatrix4x4 &m) { return QString("Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16)").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
@@ -157,8 +158,10 @@ static void generateTest(const QString &typeName, const QString &fileName, std::
 static void writeAnimationTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testAnimations('" << fileName << "', (animations) {\n"
-        << "      expect(animations.length, " << equalsToInt(scene->mNumAnimations) << ");\n";
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final animations = scene.animations;\n"
+        << "      expect(animations, " << isEmptyOrNot(scene->mAnimations != nullptr) << ");\n"
+        << "      expect(animations.length, " << isZeroOrNot(scene->mNumAnimations) << ");\n";
     for (uint i = 0; i < scene->mNumAnimations; ++i) {
         const aiAnimation *animation = scene->mAnimations[i];
         out << "      expect(animations.elementAt(" << i << ").name, " << equalsToString(animation->mName) << ");\n";
@@ -234,8 +237,10 @@ static void generateAnimationTest(const QString &fileName)
 static void writeCameraTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testCameras('" << fileName << "', (cameras) {\n"
-        << "      expect(cameras.length, " << equalsToInt(scene->mNumCameras) << ");\n";
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final cameras = scene.cameras;\n"
+        << "      expect(cameras, " << isEmptyOrNot(scene->mCameras != nullptr) << ");\n"
+        << "      expect(cameras.length, " << isZeroOrNot(scene->mNumCameras) << ");\n";
     for (uint i = 0; i < scene->mNumCameras; ++i) {
         const aiCamera *camera = scene->mCameras[i];
         out << "      expect(cameras.elementAt(" << i << ").name, " << equalsToString(camera->mName) << ");\n"
@@ -271,8 +276,10 @@ static void generateCameraTest(const QString &fileName)
 static void writeLightTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testLights('" << fileName << "', (lights) {\n"
-        << "      expect(lights.length, " << equalsToInt(scene->mNumLights) << ");\n";
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final lights = scene.lights;\n"
+        << "      expect(lights, " << isEmptyOrNot(scene->mLights != nullptr) << ");\n"
+        << "      expect(lights.length, " << isZeroOrNot(scene->mNumLights) << ");\n";
     for (uint i = 0; i < scene->mNumLights; ++i) {
         const aiLight *light = scene->mLights[i];
         out << "      expect(lights.elementAt(" << i << ").name, " << equalsToString(light->mName) << ");\n"
@@ -315,8 +322,10 @@ static void generateLightTest(const QString &fileName)
 static void writeMaterialTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testMaterials('" << fileName << "', (materials) {\n"
-        << "      expect(materials.length, " << equalsToInt(scene->mNumMaterials) << ");\n";
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final materials = scene.materials;\n"
+        << "      expect(materials, " << isEmptyOrNot(scene->mMaterials != nullptr) << ");\n"
+        << "      expect(materials.length, " << isZeroOrNot(scene->mNumMaterials) << ");\n";
     for (uint i = 0; i < scene->mNumMaterials; ++i) {
         const aiMaterial *material = scene->mMaterials[i];
         out << "      expect(materials.elementAt(" << i << ").properties.length, " << equalsToInt(material->mNumProperties) << ");\n";
@@ -375,8 +384,10 @@ static void generateMaterialTest(const QString &fileName)
 static void writeMeshTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testMeshes('" << fileName << "', (meshes) {\n"
-        << "      expect(meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n";
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final meshes = scene.meshes;\n"
+        << "      expect(meshes, " << isEmptyOrNot(scene->mMeshes != nullptr) << ");\n"
+        << "      expect(meshes.length, " << isZeroOrNot(scene->mNumMeshes) << ");\n";
     for (uint i = 0; i < scene->mNumMeshes; ++i) {
         const aiMesh *mesh = scene->mMeshes[i];
         out << "      expect(meshes.elementAt(" << i << ").primitiveTypes, " << equalsToInt(mesh->mPrimitiveTypes) << ");\n"
@@ -419,7 +430,9 @@ static void generateMeshTest(const QString &fileName)
 static void writeMetaDataTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testMetaData('" << fileName << "', (metaData) {\n";
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final metaData = scene.metaData;\n"
+        << "      expect(metaData, " << isNullOrNot(scene->mMetaData) << ");\n";
     if (scene->mMetaData) {
         out << "      expect(metaData.keys.length, " << equalsToInt(scene->mMetaData->mNumProperties) << ");\n"
             << "      expect(metaData.values.length, " << equalsToInt(scene->mMetaData->mNumProperties) << ");\n"
@@ -484,7 +497,9 @@ static void generateMetaDataTest(const QString &fileName)
 static void writeNodeTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testNodes('" << fileName << "', (rootNode) {\n"
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final rootNode = scene.rootNode;\n"
+        << "      expect(rootNode, " << isNullOrNot(scene->mRootNode) << ");\n"
         << "      expect(rootNode.name, " << equalsToString(scene->mRootNode->mName) << ");\n"
         << "      expect(rootNode.transformation, " << equalsToMatrix4(scene->mRootNode->mTransformation) << ");\n"
         << "      expect(rootNode.parent, " << isNullOrNot(scene->mRootNode->mParent) << ");\n"
@@ -523,7 +538,8 @@ static void generateNodeTest(const QString &fileName)
 static void writeSceneTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testScene('" << fileName << "', tester: (scene) {\n"
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      expect(scene, " << isNullOrNot(scene) << ");\n"
         << "      expect(scene.flags, " << isZeroOrNot(scene->mFlags) << ");\n"
         << "      expect(scene.rootNode, " << isNullOrNot(scene->mRootNode) << ");\n"
         << "      expect(scene.meshes.length, " << equalsToInt(scene->mNumMeshes) << ");\n"
@@ -556,7 +572,9 @@ static void generateSceneTest(const QString &fileName)
 static void writeTextureTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
-    out << "    testTextures('" << fileName << "', (textures) {\n"
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final textures = scene.textures;\n"
+        << "      expect(textures, " << isEmptyOrNot(scene->mTextures != nullptr) << ");\n"
         << "      expect(textures.length, " << isZeroOrNot(scene->mNumTextures) << ");\n";
     for (uint i = 0; i < scene->mNumTextures; ++i) {
         const aiTexture *texture = scene->mTextures[i];

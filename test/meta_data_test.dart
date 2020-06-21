@@ -39,14 +39,20 @@ void main() {
   });
 
   test('3mf', () {
-    testMetaData('3mf/box.3mf', (metaData) {
+    testScene('3mf/box.3mf', (scene) {
+      final metaData = scene.metaData;
+      expect(metaData, isNull);
     });
-    testMetaData('3mf/spider.3mf', (metaData) {
+    testScene('3mf/spider.3mf', (scene) {
+      final metaData = scene.metaData;
+      expect(metaData, isNull);
     });
   });
 
   test('fbx', () {
-    testMetaData('fbx/huesitos.fbx', (metaData) {
+    testScene('fbx/huesitos.fbx', (scene) {
+      final metaData = scene.metaData;
+      expect(metaData, isNotNull);
       expect(metaData.keys.length, equals(15));
       expect(metaData.values.length, equals(15));
       expect(metaData.properties.length, equals(15));
@@ -99,7 +105,9 @@ void main() {
   });
 
   test('obj', () {
-    testMetaData('Obj/Spider/spider.obj', (metaData) {
+    testScene('Obj/Spider/spider.obj', (scene) {
+      final metaData = scene.metaData;
+      expect(metaData, isNull);
     });
   });
 

@@ -39,8 +39,10 @@ void main() {
   });
 
   test('3mf', () {
-    testMeshes('3mf/box.3mf', (meshes) {
-      expect(meshes.length, equals(1));
+    testScene('3mf/box.3mf', (scene) {
+      final meshes = scene.meshes;
+      expect(meshes, isNotEmpty);
+      expect(meshes.length, isNonZero);
       expect(meshes.elementAt(0).primitiveTypes, isZero);
       expect(meshes.elementAt(0).vertices.length, equals(8));
       expect(meshes.elementAt(0).normals.length, equals(8));
@@ -57,8 +59,10 @@ void main() {
       expect(meshes.elementAt(0).morphingMethod, isZero);
       expect(meshes.elementAt(0).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
     });
-    testMeshes('3mf/spider.3mf', (meshes) {
-      expect(meshes.length, equals(19));
+    testScene('3mf/spider.3mf', (scene) {
+      final meshes = scene.meshes;
+      expect(meshes, isNotEmpty);
+      expect(meshes.length, isNonZero);
       expect(meshes.elementAt(0).primitiveTypes, equals(4));
       expect(meshes.elementAt(0).vertices.length, equals(71));
       expect(meshes.elementAt(0).normals.length, equals(71));
@@ -366,8 +370,10 @@ void main() {
   });
 
   test('fbx', () {
-    testMeshes('fbx/huesitos.fbx', (meshes) {
-      expect(meshes.length, equals(1));
+    testScene('fbx/huesitos.fbx', (scene) {
+      final meshes = scene.meshes;
+      expect(meshes, isNotEmpty);
+      expect(meshes.length, isNonZero);
       expect(meshes.elementAt(0).primitiveTypes, equals(12));
       expect(meshes.elementAt(0).vertices.length, equals(256));
       expect(meshes.elementAt(0).normals.length, equals(256));
@@ -387,8 +393,10 @@ void main() {
   });
 
   test('obj', () {
-    testMeshes('Obj/Spider/spider.obj', (meshes) {
-      expect(meshes.length, equals(19));
+    testScene('Obj/Spider/spider.obj', (scene) {
+      final meshes = scene.meshes;
+      expect(meshes, isNotEmpty);
+      expect(meshes.length, isNonZero);
       expect(meshes.elementAt(0).primitiveTypes, equals(4));
       expect(meshes.elementAt(0).vertices.length, equals(240));
       expect(meshes.elementAt(0).normals.length, equals(240));

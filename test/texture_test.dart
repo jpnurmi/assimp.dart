@@ -39,22 +39,30 @@ void main() {
   });
 
   test('3mf', () {
-    testTextures('3mf/box.3mf', (textures) {
+    testScene('3mf/box.3mf', (scene) {
+      final textures = scene.textures;
+      expect(textures, isEmpty);
       expect(textures.length, isZero);
     });
-    testTextures('3mf/spider.3mf', (textures) {
+    testScene('3mf/spider.3mf', (scene) {
+      final textures = scene.textures;
+      expect(textures, isEmpty);
       expect(textures.length, isZero);
     });
   });
 
   test('fbx', () {
-    testTextures('fbx/huesitos.fbx', (textures) {
+    testScene('fbx/huesitos.fbx', (scene) {
+      final textures = scene.textures;
+      expect(textures, isEmpty);
       expect(textures.length, isZero);
     });
   });
 
   test('obj', () {
-    testTextures('Obj/Spider/spider.obj', (textures) {
+    testScene('Obj/Spider/spider.obj', (scene) {
+      final textures = scene.textures;
+      expect(textures, isEmpty);
       expect(textures.length, isZero);
     });
   });

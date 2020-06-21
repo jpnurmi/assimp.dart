@@ -39,17 +39,23 @@ void main() {
   });
 
   test('3mf', () {
-    testCameras('3mf/box.3mf', (cameras) {
+    testScene('3mf/box.3mf', (scene) {
+      final cameras = scene.cameras;
+      expect(cameras, isEmpty);
       expect(cameras.length, isZero);
     });
-    testCameras('3mf/spider.3mf', (cameras) {
+    testScene('3mf/spider.3mf', (scene) {
+      final cameras = scene.cameras;
+      expect(cameras, isEmpty);
       expect(cameras.length, isZero);
     });
   });
 
   test('fbx', () {
-    testCameras('fbx/huesitos.fbx', (cameras) {
-      expect(cameras.length, equals(1));
+    testScene('fbx/huesitos.fbx', (scene) {
+      final cameras = scene.cameras;
+      expect(cameras, isNotEmpty);
+      expect(cameras.length, isNonZero);
       expect(cameras.elementAt(0).name, equals('Camera'));
       expect(cameras.elementAt(0).position, vector3MoreOrLessEquals(Vector3(0, 0, 0)));
       expect(cameras.elementAt(0).up, vector3MoreOrLessEquals(Vector3(0, 1, 0)));
@@ -62,7 +68,9 @@ void main() {
   });
 
   test('obj', () {
-    testCameras('Obj/Spider/spider.obj', (cameras) {
+    testScene('Obj/Spider/spider.obj', (scene) {
+      final cameras = scene.cameras;
+      expect(cameras, isEmpty);
       expect(cameras.length, isZero);
     });
   });

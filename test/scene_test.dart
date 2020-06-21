@@ -39,7 +39,8 @@ void main() {
   });
 
   test('3mf', () {
-    testScene('3mf/box.3mf', tester: (scene) {
+    testScene('3mf/box.3mf', (scene) {
+      expect(scene, isNotNull);
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(1));
@@ -50,7 +51,8 @@ void main() {
       expect(scene.cameras.length, isZero);
       expect(scene.metaData, isNull);
     });
-    testScene('3mf/spider.3mf', tester: (scene) {
+    testScene('3mf/spider.3mf', (scene) {
+      expect(scene, isNotNull);
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(19));
@@ -64,7 +66,8 @@ void main() {
   });
 
   test('fbx', () {
-    testScene('fbx/huesitos.fbx', tester: (scene) {
+    testScene('fbx/huesitos.fbx', (scene) {
+      expect(scene, isNotNull);
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(1));
@@ -78,7 +81,8 @@ void main() {
   });
 
   test('obj', () {
-    testScene('Obj/Spider/spider.obj', tester: (scene) {
+    testScene('Obj/Spider/spider.obj', (scene) {
+      expect(scene, isNotNull);
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(19));

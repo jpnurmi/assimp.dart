@@ -39,7 +39,9 @@ void main() {
   });
 
   test('3mf', () {
-    testNodes('3mf/box.3mf', (rootNode) {
+    testScene('3mf/box.3mf', (scene) {
+      final rootNode = scene.rootNode;
+      expect(rootNode, isNotNull);
       expect(rootNode.name, equals('3MF'));
       expect(rootNode.transformation, matrix4MoreOrLessEquals(Matrix4(1, 0, 0, 0, 0 ,1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(rootNode.parent, isNull);
@@ -54,7 +56,9 @@ void main() {
       expect(rootNode.metaData, isNull);
     });
 
-    testNodes('3mf/spider.3mf', (rootNode) {
+    testScene('3mf/spider.3mf', (scene) {
+      final rootNode = scene.rootNode;
+      expect(rootNode, isNotNull);
       expect(rootNode.name, equals('3MF'));
       expect(rootNode.transformation, matrix4MoreOrLessEquals(Matrix4(1, 0, 0, 0, 0 ,1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(rootNode.parent, isNull);
@@ -180,7 +184,9 @@ void main() {
   });
 
   test('fbx', () {
-    testNodes('fbx/huesitos.fbx', (rootNode) {
+    testScene('fbx/huesitos.fbx', (scene) {
+      final rootNode = scene.rootNode;
+      expect(rootNode, isNotNull);
       expect(rootNode.name, equals('RootNode'));
       expect(rootNode.transformation, matrix4MoreOrLessEquals(Matrix4(1, 0, 0, 0, 0 ,1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(rootNode.parent, isNull);
@@ -216,7 +222,9 @@ void main() {
   });
 
   test('obj', () {
-    testNodes('Obj/Spider/spider.obj', (rootNode) {
+    testScene('Obj/Spider/spider.obj', (scene) {
+      final rootNode = scene.rootNode;
+      expect(rootNode, isNotNull);
       expect(rootNode.name, equals('spider.obj'));
       expect(rootNode.transformation, matrix4MoreOrLessEquals(Matrix4(1, 0, 0, 0, 0 ,1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(rootNode.parent, isNull);

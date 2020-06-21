@@ -39,17 +39,23 @@ void main() {
   });
 
   test('3mf', () {
-    testLights('3mf/box.3mf', (lights) {
+    testScene('3mf/box.3mf', (scene) {
+      final lights = scene.lights;
+      expect(lights, isEmpty);
       expect(lights.length, isZero);
     });
-    testLights('3mf/spider.3mf', (lights) {
+    testScene('3mf/spider.3mf', (scene) {
+      final lights = scene.lights;
+      expect(lights, isEmpty);
       expect(lights.length, isZero);
     });
   });
 
   test('fbx', () {
-    testLights('fbx/huesitos.fbx', (lights) {
-      expect(lights.length, equals(1));
+    testScene('fbx/huesitos.fbx', (scene) {
+      final lights = scene.lights;
+      expect(lights, isNotEmpty);
+      expect(lights.length, isNonZero);
       expect(lights.elementAt(0).name, equals('Lamp'));
       expect(lights.elementAt(0).type, equals(LightSourceType.point));
       expect(lights.elementAt(0).position, vector3MoreOrLessEquals(Vector3(0, 0, 0)));
@@ -69,7 +75,9 @@ void main() {
   });
 
   test('obj', () {
-    testLights('Obj/Spider/spider.obj', (lights) {
+    testScene('Obj/Spider/spider.obj', (scene) {
+      final lights = scene.lights;
+      expect(lights, isEmpty);
       expect(lights.length, isZero);
     });
   });

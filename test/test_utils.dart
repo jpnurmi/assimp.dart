@@ -46,8 +46,8 @@ void testSceneFromString(String fileName, void tester(scene)) {
   scene.dispose();
 }
 
-void testScene(String fileName,
-    {int from = TestFrom.file, void tester(scene)}) {
+void testScene(String fileName, void tester(scene),
+    {int from = TestFrom.file}) {
   if (from & TestFrom.file != 0) {
     testSceneFromFile(fileName, tester);
   }
@@ -57,60 +57,4 @@ void testScene(String fileName,
   if (from & TestFrom.string != 0) {
     testSceneFromString(fileName, tester);
   }
-}
-
-void testAnimations(String fileName, void tester(animations)) {
-  final filePath = testModelPath(fileName);
-  final scene = Scene.fromFile(filePath);
-  tester(scene.animations);
-  scene.dispose();
-}
-
-void testCameras(String fileName, void tester(cameras)) {
-  final filePath = testModelPath(fileName);
-  final scene = Scene.fromFile(filePath);
-  tester(scene.cameras);
-  scene.dispose();
-}
-
-void testLights(String fileName, void tester(lights)) {
-  final filePath = testModelPath(fileName);
-  final scene = Scene.fromFile(filePath);
-  tester(scene.lights);
-  scene.dispose();
-}
-
-void testMaterials(String fileName, void tester(materials)) {
-  final filePath = testModelPath(fileName);
-  final scene = Scene.fromFile(filePath);
-  tester(scene.materials);
-  scene.dispose();
-}
-
-void testMeshes(String fileName, void tester(meshes)) {
-  final filePath = testModelPath(fileName);
-  final scene = Scene.fromFile(filePath);
-  tester(scene.meshes);
-  scene.dispose();
-}
-
-void testMetaData(String fileName, void tester(metaData)) {
-  final filePath = testModelPath(fileName);
-  final scene = Scene.fromFile(filePath);
-  tester(scene.metaData);
-  scene.dispose();
-}
-
-void testNodes(String fileName, void tester(nodes)) {
-  final filePath = testModelPath(fileName);
-  final scene = Scene.fromFile(filePath);
-  tester(scene.rootNode);
-  scene.dispose();
-}
-
-void testTextures(String fileName, void tester(textures)) {
-  final filePath = testModelPath(fileName);
-  final scene = Scene.fromFile(filePath);
-  tester(scene.textures);
-  scene.dispose();
 }
