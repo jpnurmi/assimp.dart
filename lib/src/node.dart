@@ -50,6 +50,12 @@ import 'meta_data.dart';
 import 'extensions.dart';
 import 'type.dart';
 
+/// A node in the imported hierarchy.
+///
+/// Each node has name, a parent node (except for the root node),
+/// a transformation relative to its parent and possibly several child nodes.
+/// Simple file formats don't support hierarchical structures - for these formats
+/// the imported scene does consist of only a single root node without children.
 class Node extends AssimpType<aiNode> {
   aiNode get _node => ptr.ref;
 
@@ -59,14 +65,38 @@ class Node extends AssimpType<aiNode> {
     return Node._(ptr);
   }
 
+  /// The name of the node.
+  ///
+  /// The name might be empty (length of zero) but all nodes which
+  /// need to be referenced by either bones or animations are named.
+  /// Multiple nodes may have the same name, except for nodes which are referenced
+  /// by bones (see #aiBone and #aiMesh::mBones). Their names *must* be unique.
+  ///
+  /// Cameras and lights reference a specific node by name - if there
+  /// are multiple nodes with this name, they are assigned to each of them.
+  /// <br>
+  /// There are no limitations with regard to the characters contained in
+  /// the name string as it is usually taken directly from the source file.
+  ///
+  /// Implementations should be able to handle tokens such as whitespace, tabs,
+  /// line feeds, quotation marks, ampersands etc.
+  ///
+  /// Sometimes assimp introduces new nodes not present in the source file
+  /// into the hierarchy (usually out of necessity because sometimes the
+  /// source hierarchy format is simply not compatible). Their names are
+  /// surrounded by @verbatim <> @endverbatim e.g.
+  /// @verbatim<DummyRootNode> @endverbatim.
   String get name => AssimpString.fromNative(_node.mName);
 
+  /// The transformation relative to the node's parent.
   Matrix4 get transformation => AssimpMatrix4.fromNative(_node.mTransformation);
 
+  /// Parent node. NULL if this node is the root node.
   Node get parent => AssimpPointer.isNotNull(_node.mParent)
       ? Node.fromNative(_node.mParent)
       : null;
 
+  /// The child nodes of this node.
   Iterable<Node> get children {
     return Iterable.generate(
       _node.mNumChildren,
@@ -74,8 +104,14 @@ class Node extends AssimpType<aiNode> {
     );
   }
 
+  /// The meshes of this node. Each entry is an index into the
+  /// mesh list of the [Scene].
   Iterable<int> get meshes => _node.mMeshes.asTypedList(_node.mNumMeshes);
 
+  /// Metadata associated with this node or NULL if there is no metadata.
+  /// Whether any metadata is generated depends on the source file format. See the
+  /// @link importer_notes @endlink page for more information on every source file
+  /// format. Importers that don't document any metadata don't write any.
   MetaData get metaData => AssimpPointer.isNotNull(_node.mMetaData)
       ? MetaData.fromNative(_node.mMetaData)
       : null;

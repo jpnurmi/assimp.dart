@@ -47,6 +47,9 @@ import 'bindings.dart';
 import 'extensions.dart';
 import 'type.dart';
 
+/// Container for holding metadata.
+///
+/// Metadata is a key-value store using string keys and values.
 class MetaData extends AssimpType<aiMetadata> {
   aiMetadata get _metaData => ptr.ref;
 
@@ -56,8 +59,10 @@ class MetaData extends AssimpType<aiMetadata> {
     return MetaData._(ptr);
   }
 
+  /// Map of properties.
   Map<String, dynamic> get properties => Map.fromIterables(keys, values);
 
+  /// Arrays of keys, may not be NULL. Entries in this array may not be NULL as well.
   Iterable<String> get keys {
     return Iterable.generate(
       _metaData.mNumProperties,
@@ -65,6 +70,8 @@ class MetaData extends AssimpType<aiMetadata> {
     );
   }
 
+  /// Array of values, may not be NULL. Entries in this array may be NULL if the
+  /// corresponding property key has no assigned value.
   Iterable<dynamic> get values {
     return Iterable.generate(
       _metaData.mNumProperties,
