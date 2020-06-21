@@ -140,7 +140,7 @@ class Scene extends AssimpType<aiScene> {
     final cpath = Utf8.toUtf8(path);
     final ptr = aiImportFile(cpath, flags);
     free(cpath);
-    return AssimpPointer.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
+    return Scene.fromNative(ptr);
   }
 
   factory Scene._fromBuffer(
@@ -149,7 +149,7 @@ class Scene extends AssimpType<aiScene> {
     final ptr = aiImportFileFromMemory(cstr, length, flags, chint);
     free(cstr);
     free(chint);
-    return AssimpPointer.isNotNull(ptr) ? Scene.fromNative(ptr) : null;
+    return Scene.fromNative(ptr);
   }
 
   /// Reads the given file from a given string.

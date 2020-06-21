@@ -92,9 +92,7 @@ class Node extends AssimpType<aiNode> {
   Matrix4 get transformation => AssimpMatrix4.fromNative(_node.mTransformation);
 
   /// Parent node. NULL if this node is the root node.
-  Node get parent => AssimpPointer.isNotNull(_node.mParent)
-      ? Node.fromNative(_node.mParent)
-      : null;
+  Node get parent => Node.fromNative(_node.mParent);
 
   /// The child nodes of this node.
   Iterable<Node> get children {
@@ -112,7 +110,5 @@ class Node extends AssimpType<aiNode> {
   /// Whether any metadata is generated depends on the source file format. See the
   /// @link importer_notes @endlink page for more information on every source file
   /// format. Importers that don't document any metadata don't write any.
-  MetaData get metaData => AssimpPointer.isNotNull(_node.mMetaData)
-      ? MetaData.fromNative(_node.mMetaData)
-      : null;
+  MetaData get metaData => MetaData.fromNative(_node.mMetaData);
 }
