@@ -150,7 +150,7 @@ static void generateTest(const QString &typeName, const QString &fileName, std::
 {
     QFile file(testFilePath(fileName));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-        qFatal(qPrintable(file.errorString()));
+        qFatal("%s", qPrintable(file.errorString()));
 
     QTextStream out(&file);
     writeHeader(out, fileName);
