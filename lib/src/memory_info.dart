@@ -47,6 +47,11 @@ import 'bindings.dart';
 import 'extensions.dart';
 import 'type.dart';
 
+/// Stores the memory requirements for different components (e.g. meshes, materials,
+/// animations) of an import. All sizes are in bytes.
+///
+/// See also:
+/// - Importer::GetMemoryRequirements()
 class MemoryInfo extends AssimpType<aiMemoryInfo> {
   aiMemoryInfo get _memoryInfo => ptr.ref;
 
@@ -56,12 +61,27 @@ class MemoryInfo extends AssimpType<aiMemoryInfo> {
     return MemoryInfo._(ptr);
   }
 
+  /// Storage allocated for texture data
   int get textures => _memoryInfo.textures;
+
+  /// Storage allocated for material data
   int get materials => _memoryInfo.materials;
+
+  /// Storage allocated for mesh data
   int get meshes => _memoryInfo.meshes;
+
+  /// Storage allocated for node data
   int get nodes => _memoryInfo.nodes;
+
+  /// Storage allocated for animation data
   int get animations => _memoryInfo.animations;
+
+  /// Storage allocated for camera data
   int get cameras => _memoryInfo.cameras;
+
+  /// Storage allocated for light data
   int get lights => _memoryInfo.lights;
+
+  /// Total storage allocated for the full import.
   int get total => _memoryInfo.total;
 }
