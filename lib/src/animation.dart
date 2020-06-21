@@ -43,16 +43,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'extensions.dart';
 
 enum AnimBehavior { defaults, constant, linear, repeat }
 
 class VectorKey {
-  Pointer<b.aiVectorKey> _ptr;
+  Pointer<aiVectorKey> _ptr;
 
   VectorKey._(this._ptr);
-  factory VectorKey.fromNative(Pointer<b.aiVectorKey> ptr) {
+  factory VectorKey.fromNative(Pointer<aiVectorKey> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return VectorKey._(ptr);
   }
@@ -62,10 +62,10 @@ class VectorKey {
 }
 
 class QuaternionKey {
-  Pointer<b.aiQuatKey> _ptr;
+  Pointer<aiQuatKey> _ptr;
 
   QuaternionKey._(this._ptr);
-  factory QuaternionKey.fromNative(Pointer<b.aiQuatKey> ptr) {
+  factory QuaternionKey.fromNative(Pointer<aiQuatKey> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return QuaternionKey._(ptr);
   }
@@ -75,10 +75,10 @@ class QuaternionKey {
 }
 
 class MeshKey {
-  Pointer<b.aiMeshKey> _ptr;
+  Pointer<aiMeshKey> _ptr;
 
   MeshKey._(this._ptr);
-  factory MeshKey.fromNative(Pointer<b.aiMeshKey> ptr) {
+  factory MeshKey.fromNative(Pointer<aiMeshKey> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MeshKey._(ptr);
   }
@@ -88,10 +88,10 @@ class MeshKey {
 }
 
 class MeshMorphKey {
-  Pointer<b.aiMeshMorphKey> _ptr;
+  Pointer<aiMeshMorphKey> _ptr;
 
   MeshMorphKey._(this._ptr);
-  factory MeshMorphKey.fromNative(Pointer<b.aiMeshMorphKey> ptr) {
+  factory MeshMorphKey.fromNative(Pointer<aiMeshMorphKey> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MeshMorphKey._(ptr);
   }
@@ -104,10 +104,10 @@ class MeshMorphKey {
 }
 
 class NodeAnim {
-  Pointer<b.aiNodeAnim> _ptr;
+  Pointer<aiNodeAnim> _ptr;
 
   NodeAnim._(this._ptr);
-  factory NodeAnim.fromNative(Pointer<b.aiNodeAnim> ptr) {
+  factory NodeAnim.fromNative(Pointer<aiNodeAnim> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return NodeAnim._(ptr);
   }
@@ -140,10 +140,10 @@ class NodeAnim {
 }
 
 class MeshAnim {
-  Pointer<b.aiMeshAnim> _ptr;
+  Pointer<aiMeshAnim> _ptr;
 
   MeshAnim._(this._ptr);
-  factory MeshAnim.fromNative(Pointer<b.aiMeshAnim> ptr) {
+  factory MeshAnim.fromNative(Pointer<aiMeshAnim> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MeshAnim._(ptr);
   }
@@ -159,10 +159,10 @@ class MeshAnim {
 }
 
 class MeshMorphAnim {
-  Pointer<b.aiMeshMorphAnim> _ptr;
+  Pointer<aiMeshMorphAnim> _ptr;
 
   MeshMorphAnim._(this._ptr);
-  factory MeshMorphAnim.fromNative(Pointer<b.aiMeshMorphAnim> ptr) {
+  factory MeshMorphAnim.fromNative(Pointer<aiMeshMorphAnim> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MeshMorphAnim._(ptr);
   }
@@ -178,10 +178,10 @@ class MeshMorphAnim {
 }
 
 class Animation {
-  Pointer<b.aiAnimation> _ptr;
+  Pointer<aiAnimation> _ptr;
 
   Animation._(this._ptr);
-  factory Animation.fromNative(Pointer<b.aiAnimation> ptr) {
+  factory Animation.fromNative(Pointer<aiAnimation> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Animation._(ptr);
   }

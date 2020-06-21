@@ -45,15 +45,15 @@ import 'dart:ffi';
 
 import 'package:vector_math/vector_math.dart';
 
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'meta_data.dart';
 import 'extensions.dart';
 
 class Node {
-  Pointer<b.aiNode> _ptr;
+  Pointer<aiNode> _ptr;
 
   Node._(this._ptr);
-  factory Node.fromNative(Pointer<b.aiNode> ptr) {
+  factory Node.fromNative(Pointer<aiNode> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Node._(ptr);
   }

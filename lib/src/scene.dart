@@ -47,8 +47,9 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 
 import 'animation.dart';
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'camera.dart';
+import 'extensions.dart';
 import 'libassimp.dart';
 import 'light.dart';
 import 'material.dart';
@@ -56,13 +57,12 @@ import 'mesh.dart';
 import 'meta_data.dart';
 import 'node.dart';
 import 'texture.dart';
-import 'extensions.dart';
 
 class Scene {
-  Pointer<b.aiScene> _ptr;
+  Pointer<aiScene> _ptr;
 
   Scene._(this._ptr);
-  factory Scene.fromNative(Pointer<b.aiScene> ptr) {
+  factory Scene.fromNative(Pointer<aiScene> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Scene._(ptr);
   }

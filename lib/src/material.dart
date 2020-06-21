@@ -43,14 +43,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'extensions.dart';
 
 class MaterialProperty {
-  Pointer<b.aiMaterialProperty> _ptr;
+  Pointer<aiMaterialProperty> _ptr;
 
   MaterialProperty._(this._ptr);
-  factory MaterialProperty.fromNative(Pointer<b.aiMaterialProperty> ptr) {
+  factory MaterialProperty.fromNative(Pointer<aiMaterialProperty> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MaterialProperty._(ptr);
   }
@@ -59,15 +59,15 @@ class MaterialProperty {
 
   dynamic get value {
     switch (_ptr.ref.mType) {
-      case b.aiPropertyTypeInfo.float:
+      case aiPropertyTypeInfo.float:
         return _ptr.ref.mData.cast<Float>().value;
-      case b.aiPropertyTypeInfo.double:
+      case aiPropertyTypeInfo.double:
         return _ptr.ref.mData.cast<Double>().value;
-      case b.aiPropertyTypeInfo.string:
-        return AssimpString.fromNative(_ptr.ref.mData.cast<b.aiString>());
-      case b.aiPropertyTypeInfo.integer:
+      case aiPropertyTypeInfo.string:
+        return AssimpString.fromNative(_ptr.ref.mData.cast<aiString>());
+      case aiPropertyTypeInfo.integer:
         return _ptr.ref.mData.cast<Uint32>().value;
-      case b.aiPropertyTypeInfo.buffer:
+      case aiPropertyTypeInfo.buffer:
         return _ptr.ref.mData.cast<Uint8>().asTypedList(_ptr.ref.mDataLength);
       default:
         return null;
@@ -79,10 +79,10 @@ class MaterialProperty {
 }
 
 class Material {
-  Pointer<b.aiMaterial> _ptr;
+  Pointer<aiMaterial> _ptr;
 
   Material._(this._ptr);
-  factory Material.fromNative(Pointer<b.aiMaterial> ptr) {
+  factory Material.fromNative(Pointer<aiMaterial> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Material._(ptr);
   }

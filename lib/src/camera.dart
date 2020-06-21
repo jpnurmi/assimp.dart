@@ -43,14 +43,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'extensions.dart';
 
 class Camera {
-  Pointer<b.aiCamera> _ptr;
+  Pointer<aiCamera> _ptr;
 
   Camera._(this._ptr);
-  factory Camera.fromNative(Pointer<b.aiCamera> ptr) {
+  factory Camera.fromNative(Pointer<aiCamera> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Camera._(ptr);
   }

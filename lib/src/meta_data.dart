@@ -43,14 +43,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'extensions.dart';
 
 class MetaData {
-  Pointer<b.aiMetadata> _ptr;
+  Pointer<aiMetadata> _ptr;
 
   MetaData._(this._ptr);
-  factory MetaData.fromNative(Pointer<b.aiMetadata> ptr) {
+  factory MetaData.fromNative(Pointer<aiMetadata> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MetaData._(ptr);
   }
@@ -71,22 +71,22 @@ class MetaData {
     );
   }
 
-  static dynamic _toValue(Pointer<b.aiMetadataEntry> ptr) {
+  static dynamic _toValue(Pointer<aiMetadataEntry> ptr) {
     switch (ptr.ref.mType) {
-      case b.aiMetadataType.AI_BOOL:
+      case aiMetadataType.AI_BOOL:
         return ptr.ref.mData.cast<Int8>().value;
-      case b.aiMetadataType.AI_INT32:
+      case aiMetadataType.AI_INT32:
         return ptr.ref.mData.cast<Int32>().value;
-      case b.aiMetadataType.AI_UINT64:
+      case aiMetadataType.AI_UINT64:
         return ptr.ref.mData.cast<Uint64>().value;
-      case b.aiMetadataType.AI_FLOAT:
+      case aiMetadataType.AI_FLOAT:
         return ptr.ref.mData.cast<Float>().value;
-      case b.aiMetadataType.AI_DOUBLE:
+      case aiMetadataType.AI_DOUBLE:
         return ptr.ref.mData.cast<Double>().value;
-      case b.aiMetadataType.AI_AISTRING:
-        return AssimpString.fromNative(ptr.ref.mData.cast<b.aiString>());
-      case b.aiMetadataType.AI_AIVECTOR3D:
-        return AssimpVector3.fromNative(ptr.ref.mData.cast<b.aiVector3D>());
+      case aiMetadataType.AI_AISTRING:
+        return AssimpString.fromNative(ptr.ref.mData.cast<aiString>());
+      case aiMetadataType.AI_AIVECTOR3D:
+        return AssimpVector3.fromNative(ptr.ref.mData.cast<aiVector3D>());
       default:
         throw UnimplementedError(ptr.ref.mType.toString());
     }

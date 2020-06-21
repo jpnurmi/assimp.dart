@@ -43,16 +43,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'extensions.dart';
 
 enum LightSourceType { undefined, directional, point, spot, ambient, area }
 
 class Light {
-  Pointer<b.aiLight> _ptr;
+  Pointer<aiLight> _ptr;
 
   Light._(this._ptr);
-  factory Light.fromNative(Pointer<b.aiLight> ptr) {
+  factory Light.fromNative(Pointer<aiLight> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Light._(ptr);
   }

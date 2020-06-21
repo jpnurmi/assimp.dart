@@ -43,14 +43,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'extensions.dart';
 
 class Face {
-  Pointer<b.aiFace> _ptr;
+  Pointer<aiFace> _ptr;
 
   Face._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
-  factory Face.fromNative(Pointer<b.aiFace> ptr) {
+  factory Face.fromNative(Pointer<aiFace> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Face._(ptr);
   }
@@ -64,10 +64,10 @@ class Face {
 }
 
 class VertexWeight {
-  Pointer<b.aiVertexWeight> _ptr;
+  Pointer<aiVertexWeight> _ptr;
 
   VertexWeight._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
-  factory VertexWeight.fromNative(Pointer<b.aiVertexWeight> ptr) {
+  factory VertexWeight.fromNative(Pointer<aiVertexWeight> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return VertexWeight._(ptr);
   }
@@ -78,10 +78,10 @@ class VertexWeight {
 }
 
 class Bone {
-  Pointer<b.aiBone> _ptr;
+  Pointer<aiBone> _ptr;
 
   Bone._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
-  factory Bone.fromNative(Pointer<b.aiBone> ptr) {
+  factory Bone.fromNative(Pointer<aiBone> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Bone._(ptr);
   }
@@ -99,10 +99,10 @@ class Bone {
 }
 
 class AnimMesh {
-  Pointer<b.aiAnimMesh> _ptr;
+  Pointer<aiAnimMesh> _ptr;
 
   AnimMesh._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
-  factory AnimMesh.fromNative(Pointer<b.aiAnimMesh> ptr) {
+  factory AnimMesh.fromNative(Pointer<aiAnimMesh> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return AnimMesh._(ptr);
   }
@@ -139,7 +139,7 @@ class AnimMesh {
 
   Iterable<Iterable<Color>> get colors {
     var n = 0;
-    while (n < b.AI_MAX_NUMBER_OF_COLOR_SETS &&
+    while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
         AssimpPointer.isNotNull(_ptr.ref.mColors?.elementAt(n))) ++n;
     return Iterable.generate(
       n,
@@ -152,7 +152,7 @@ class AnimMesh {
 
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
-    while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
+    while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
         AssimpPointer.isNotNull(_ptr.ref.mTextureCoords?.elementAt(n))) ++n;
     return Iterable.generate(
       n,
@@ -181,10 +181,10 @@ class PrimitiveType {
 }
 
 class Mesh {
-  Pointer<b.aiMesh> _ptr;
+  Pointer<aiMesh> _ptr;
 
   Mesh._(this._ptr) : assert(AssimpPointer.isNotNull(_ptr));
-  factory Mesh.fromNative(Pointer<b.aiMesh> ptr) {
+  factory Mesh.fromNative(Pointer<aiMesh> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Mesh._(ptr);
   }
@@ -221,7 +221,7 @@ class Mesh {
 
   Iterable<Iterable<Color>> get colors {
     var n = 0;
-    while (n < b.AI_MAX_NUMBER_OF_COLOR_SETS &&
+    while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
         _ptr.ref.mColors != null &&
         AssimpPointer.isNotNull(_ptr.ref.mColors[n])) ++n;
     return Iterable.generate(
@@ -235,7 +235,7 @@ class Mesh {
 
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
-    while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
+    while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
         _ptr.ref.mTextureCoords != null &&
         AssimpPointer.isNotNull(_ptr.ref.mTextureCoords[n])) ++n;
     return Iterable.generate(
@@ -250,7 +250,7 @@ class Mesh {
 
   Iterable<int> get uvComponents {
     var n = 0;
-    while (n < b.AI_MAX_NUMBER_OF_TEXTURECOORDS &&
+    while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
         _ptr.ref.mNumUVComponents != null &&
         _ptr.ref.mNumUVComponents.elementAt(n).value > 0) ++n;
     return n > 0 ? _ptr.ref.mNumUVComponents.asTypedList(n) : [];

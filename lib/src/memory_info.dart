@@ -43,14 +43,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings.dart' as b;
+import 'bindings.dart';
 import 'extensions.dart';
 
 class MemoryInfo {
-  Pointer<b.aiMemoryInfo> _ptr;
+  Pointer<aiMemoryInfo> _ptr;
 
   MemoryInfo._(this._ptr);
-  factory MemoryInfo.fromNative(Pointer<b.aiMemoryInfo> ptr) {
+  factory MemoryInfo.fromNative(Pointer<aiMemoryInfo> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MemoryInfo._(ptr);
   }
