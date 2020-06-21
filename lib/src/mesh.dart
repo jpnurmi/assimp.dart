@@ -283,5 +283,5 @@ class Mesh extends AssimpType<aiMesh> {
 
   int get morphingMethod => _mesh.mMethod;
 
-  Aabb3 get aabb => AssimpAabb3.fromNative(null); // ### TODO: _mesh.mAABB);
+  Aabb3 get aabb => AssimpAabb3.fromNative(_mesh.mAABB);
 }

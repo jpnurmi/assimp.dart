@@ -16,16 +16,23 @@ static QString isTrueOrFalse(bool val) { return val ? "isTrue" : "isFalse"; }
 static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 
+static QString color3ToString(const aiColor3D &c) { return QString("Color.fromARGB(255, %1, %2, %3)").arg(std::round(c.r * 255)).arg(std::round(c.g * 255)).arg(std::round(c.b * 255)); }
+static QString matrix4ToString(const aiMatrix4x4 &m) { return QString("Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16)").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
+static QString quaternionToString(const aiQuaternion &q) { return QString("Quaternion(%1, %2, %3, %4)").arg(q.x).arg(q.y).arg(q.z).arg(q.z); }
+static QString vector3ToString(const aiVector3D &v) { return QString("Vector3(%1, %2, %3)").arg(v.x).arg(v.y).arg(v.z); }
+static QString aabbToString(const aiAABB &a) { return QString("Aabb3.minMax(%1, %2)").arg(vector3ToString(a.mMin)).arg(vector3ToString(a.mMax)); }
+
 static QString equalsTo(const QString &value) { return QString("equals(%1)").arg(value); }
 static QString equalsToInt(int value) { return value ? equalsTo(QString::number(value)) : "isZero"; }
 static QString equalsToFloat(float value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
 static QString equalsToDouble(double value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
 static QString equalsToString(const char *str, uint len) { return len ? equalsTo(QString("'%1'").arg(QString::fromUtf8(str, len).replace("\\", "\\\\").replace("$", "\\$"))) : "isEmpty"; }
 static QString equalsToString(const aiString &str) { return equalsToString(str.data, str.length); }
-static QString equalsToColor3(const aiColor3D &c) { return QString("isSameColorAs(Color.fromARGB(255, %1, %2, %3))").arg(std::round(c.r * 255)).arg(std::round(c.g * 255)).arg(std::round(c.b * 255)); }
-static QString equalsToQuaternion(const aiQuaternion &q) { return QString("quaternionMoreOrLessEquals(Quaternion(%1, %2, %3, %4))").arg(q.x).arg(q.y).arg(q.z).arg(q.z); }
-static QString equalsToVector3(const aiVector3D &v) { return QString("vector3MoreOrLessEquals(Vector3(%1, %2, %3))").arg(v.x).arg(v.y).arg(v.z); }
-static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("matrix4MoreOrLessEquals(Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16))").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
+static QString equalsToAabb(const aiAABB &a) { return QString("aabb3MoreOrLessEquals(%1)").arg(aabbToString(a)); }
+static QString equalsToColor3(const aiColor3D &c) { return QString("isSameColorAs(%1)").arg(color3ToString(c)); }
+static QString equalsToQuaternion(const aiQuaternion &q) { return QString("quaternionMoreOrLessEquals(%1)").arg(quaternionToString(q)); }
+static QString equalsToVector3(const aiVector3D &v) { return QString("vector3MoreOrLessEquals(%1)").arg(vector3ToString(v)); }
+static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("matrix4MoreOrLessEquals(%1)").arg(matrix4ToString(m)); }
 static QString equalsToByteArray(const char *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return equalsTo("[%1]").arg(v.join(", ")); }
 static QString equalsToIntArray(const uint *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return equalsTo("[%1]").arg(v.join(", ")); }
 static QString equalsToDoubleArray(const double *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return equalsTo("[%1]").arg(v.join(", ")); }
@@ -386,7 +393,7 @@ static void writeMeshTester(QTextStream &out, const QString &fileName = QString(
             << "      expect(meshes.elementAt(" << i << ").name, " << equalsToString(mesh->mName) << ");\n"
             << "      expect(meshes.elementAt(" << i << ").animMeshes.length, " << equalsToInt(mesh->mNumAnimMeshes) << ");\n"
             << "      expect(meshes.elementAt(" << i << ").morphingMethod, " << equalsToInt(mesh->mMethod) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").aabb, isNull);\n" // ### TODO
+            << "      expect(meshes.elementAt(" << i << ").aabb, " << equalsToAabb(mesh->mAABB) << ");\n"
             << (i < scene->mNumMeshes - 1 ? "\n" : "");
     }
     out << "    });\n";

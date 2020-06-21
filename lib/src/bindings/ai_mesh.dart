@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'ai_aabb.dart';
 import 'ai_anim_mesh.dart';
 import 'ai_bone.dart';
 import 'ai_color.dart';
@@ -417,18 +418,21 @@ class aiMesh extends Struct {
   int mMethod;
 
   // struct aiAABB              mAABB;                /*  1284    24 */
+  Pointer<aiAABB> get mAABB =>
+      Pointer<aiAABB>.fromAddress(addressOf.address + 1284);
+
   @Float()
-  double mMinX;
+  double _mMinX;
   @Float()
-  double mMinY;
+  double _mMinY;
   @Float()
-  double mMinZ;
+  double _mMinZ;
   @Float()
-  double mMaxX;
+  double _mMaxX;
   @Float()
-  double mMaxY;
+  double _mMaxY;
   @Float()
-  double mMaxZ;
+  double _mMaxZ;
 
   /* size: 1312, members: 19 */
   /* sum members: 1296, holes: 3, sum holes: 12 */

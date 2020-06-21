@@ -24,6 +24,17 @@ import 'package:vector_math/vector_math.dart';
 /// disregard.
 const double precisionErrorTolerance = 1e-5;
 
+double relativeAabb3Error(Aabb3 calculated, Aabb3 correct) {
+  return math.max(absoluteError(calculated.min, correct.min),
+      absoluteError(calculated.max, correct.max));
+}
+
+Matcher aabb3MoreOrLessEquals(Aabb3 value,
+    {double epsilon = precisionErrorTolerance}) {
+  return _IsWithinDistance<Aabb3>(
+      relativeAabb3Error, value, precisionErrorTolerance);
+}
+
 Matcher matrix3MoreOrLessEquals(Matrix3 value,
     {double epsilon = precisionErrorTolerance}) {
   return _IsWithinDistance<Matrix3>(

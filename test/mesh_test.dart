@@ -55,7 +55,7 @@ void main() {
       expect(meshes.elementAt(0).name, isEmpty);
       expect(meshes.elementAt(0).animMeshes.length, isZero);
       expect(meshes.elementAt(0).morphingMethod, isZero);
-      expect(meshes.elementAt(0).aabb, isNull);
+      expect(meshes.elementAt(0).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
     });
     testMeshes('3mf/spider.3mf', (meshes) {
       expect(meshes.length, equals(19));
@@ -73,7 +73,7 @@ void main() {
       expect(meshes.elementAt(0).name, equals('HLeib01'));
       expect(meshes.elementAt(0).animMeshes.length, isZero);
       expect(meshes.elementAt(0).morphingMethod, isZero);
-      expect(meshes.elementAt(0).aabb, isNull);
+      expect(meshes.elementAt(0).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(1).primitiveTypes, equals(4));
       expect(meshes.elementAt(1).vertices.length, equals(93));
@@ -89,7 +89,7 @@ void main() {
       expect(meshes.elementAt(1).name, equals('OK'));
       expect(meshes.elementAt(1).animMeshes.length, isZero);
       expect(meshes.elementAt(1).morphingMethod, isZero);
-      expect(meshes.elementAt(1).aabb, isNull);
+      expect(meshes.elementAt(1).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(2).primitiveTypes, equals(4));
       expect(meshes.elementAt(2).vertices.length, equals(111));
@@ -105,7 +105,7 @@ void main() {
       expect(meshes.elementAt(2).name, equals('Bein1Li'));
       expect(meshes.elementAt(2).animMeshes.length, isZero);
       expect(meshes.elementAt(2).morphingMethod, isZero);
-      expect(meshes.elementAt(2).aabb, isNull);
+      expect(meshes.elementAt(2).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(3).primitiveTypes, equals(4));
       expect(meshes.elementAt(3).vertices.length, equals(117));
@@ -121,7 +121,7 @@ void main() {
       expect(meshes.elementAt(3).name, equals('Bein1Re'));
       expect(meshes.elementAt(3).animMeshes.length, isZero);
       expect(meshes.elementAt(3).morphingMethod, isZero);
-      expect(meshes.elementAt(3).aabb, isNull);
+      expect(meshes.elementAt(3).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(4).primitiveTypes, equals(4));
       expect(meshes.elementAt(4).vertices.length, equals(113));
@@ -137,7 +137,7 @@ void main() {
       expect(meshes.elementAt(4).name, equals('Bein2Li'));
       expect(meshes.elementAt(4).animMeshes.length, isZero);
       expect(meshes.elementAt(4).morphingMethod, isZero);
-      expect(meshes.elementAt(4).aabb, isNull);
+      expect(meshes.elementAt(4).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(5).primitiveTypes, equals(4));
       expect(meshes.elementAt(5).vertices.length, equals(115));
@@ -153,7 +153,7 @@ void main() {
       expect(meshes.elementAt(5).name, equals('Bein2Re'));
       expect(meshes.elementAt(5).animMeshes.length, isZero);
       expect(meshes.elementAt(5).morphingMethod, isZero);
-      expect(meshes.elementAt(5).aabb, isNull);
+      expect(meshes.elementAt(5).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(6).primitiveTypes, equals(4));
       expect(meshes.elementAt(6).vertices.length, equals(107));
@@ -169,7 +169,7 @@ void main() {
       expect(meshes.elementAt(6).name, equals('Bein3Re'));
       expect(meshes.elementAt(6).animMeshes.length, isZero);
       expect(meshes.elementAt(6).morphingMethod, isZero);
-      expect(meshes.elementAt(6).aabb, isNull);
+      expect(meshes.elementAt(6).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(7).primitiveTypes, equals(4));
       expect(meshes.elementAt(7).vertices.length, equals(107));
@@ -185,7 +185,7 @@ void main() {
       expect(meshes.elementAt(7).name, equals('Bein3Li'));
       expect(meshes.elementAt(7).animMeshes.length, isZero);
       expect(meshes.elementAt(7).morphingMethod, isZero);
-      expect(meshes.elementAt(7).aabb, isNull);
+      expect(meshes.elementAt(7).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(8).primitiveTypes, equals(4));
       expect(meshes.elementAt(8).vertices.length, equals(113));
@@ -201,7 +201,7 @@ void main() {
       expect(meshes.elementAt(8).name, equals('Bein4Re'));
       expect(meshes.elementAt(8).animMeshes.length, isZero);
       expect(meshes.elementAt(8).morphingMethod, isZero);
-      expect(meshes.elementAt(8).aabb, isNull);
+      expect(meshes.elementAt(8).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(9).primitiveTypes, equals(4));
       expect(meshes.elementAt(9).vertices.length, equals(113));
@@ -217,7 +217,7 @@ void main() {
       expect(meshes.elementAt(9).name, equals('Bein4Li'));
       expect(meshes.elementAt(9).animMeshes.length, isZero);
       expect(meshes.elementAt(9).morphingMethod, isZero);
-      expect(meshes.elementAt(9).aabb, isNull);
+      expect(meshes.elementAt(9).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(10).primitiveTypes, equals(4));
       expect(meshes.elementAt(10).vertices.length, equals(42));
@@ -233,7 +233,7 @@ void main() {
       expect(meshes.elementAt(10).name, equals('Zahn'));
       expect(meshes.elementAt(10).animMeshes.length, isZero);
       expect(meshes.elementAt(10).morphingMethod, isZero);
-      expect(meshes.elementAt(10).aabb, isNull);
+      expect(meshes.elementAt(10).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(11).primitiveTypes, equals(4));
       expect(meshes.elementAt(11).vertices.length, equals(44));
@@ -249,7 +249,7 @@ void main() {
       expect(meshes.elementAt(11).name, equals('klZahn'));
       expect(meshes.elementAt(11).animMeshes.length, isZero);
       expect(meshes.elementAt(11).morphingMethod, isZero);
-      expect(meshes.elementAt(11).aabb, isNull);
+      expect(meshes.elementAt(11).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(12).primitiveTypes, equals(4));
       expect(meshes.elementAt(12).vertices.length, equals(79));
@@ -265,7 +265,7 @@ void main() {
       expect(meshes.elementAt(12).name, equals('Kopf'));
       expect(meshes.elementAt(12).animMeshes.length, isZero);
       expect(meshes.elementAt(12).morphingMethod, isZero);
-      expect(meshes.elementAt(12).aabb, isNull);
+      expect(meshes.elementAt(12).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(13).primitiveTypes, equals(4));
       expect(meshes.elementAt(13).vertices.length, equals(17));
@@ -281,7 +281,7 @@ void main() {
       expect(meshes.elementAt(13).name, equals('Brust'));
       expect(meshes.elementAt(13).animMeshes.length, isZero);
       expect(meshes.elementAt(13).morphingMethod, isZero);
-      expect(meshes.elementAt(13).aabb, isNull);
+      expect(meshes.elementAt(13).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(14).primitiveTypes, equals(4));
       expect(meshes.elementAt(14).vertices.length, equals(79));
@@ -297,7 +297,7 @@ void main() {
       expect(meshes.elementAt(14).name, equals('Kopf2'));
       expect(meshes.elementAt(14).animMeshes.length, isZero);
       expect(meshes.elementAt(14).morphingMethod, isZero);
-      expect(meshes.elementAt(14).aabb, isNull);
+      expect(meshes.elementAt(14).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(15).primitiveTypes, equals(4));
       expect(meshes.elementAt(15).vertices.length, equals(42));
@@ -313,7 +313,7 @@ void main() {
       expect(meshes.elementAt(15).name, equals('Zahn2'));
       expect(meshes.elementAt(15).animMeshes.length, isZero);
       expect(meshes.elementAt(15).morphingMethod, isZero);
-      expect(meshes.elementAt(15).aabb, isNull);
+      expect(meshes.elementAt(15).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(16).primitiveTypes, equals(4));
       expect(meshes.elementAt(16).vertices.length, equals(44));
@@ -329,7 +329,7 @@ void main() {
       expect(meshes.elementAt(16).name, equals('klZahn2'));
       expect(meshes.elementAt(16).animMeshes.length, isZero);
       expect(meshes.elementAt(16).morphingMethod, isZero);
-      expect(meshes.elementAt(16).aabb, isNull);
+      expect(meshes.elementAt(16).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(17).primitiveTypes, equals(4));
       expect(meshes.elementAt(17).vertices.length, equals(36));
@@ -345,7 +345,7 @@ void main() {
       expect(meshes.elementAt(17).name, equals('Auge'));
       expect(meshes.elementAt(17).animMeshes.length, isZero);
       expect(meshes.elementAt(17).morphingMethod, isZero);
-      expect(meshes.elementAt(17).aabb, isNull);
+      expect(meshes.elementAt(17).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(18).primitiveTypes, equals(4));
       expect(meshes.elementAt(18).vertices.length, equals(36));
@@ -361,7 +361,7 @@ void main() {
       expect(meshes.elementAt(18).name, equals('Duplicate05'));
       expect(meshes.elementAt(18).animMeshes.length, isZero);
       expect(meshes.elementAt(18).morphingMethod, isZero);
-      expect(meshes.elementAt(18).aabb, isNull);
+      expect(meshes.elementAt(18).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
     });
   });
 
@@ -382,7 +382,7 @@ void main() {
       expect(meshes.elementAt(0).name, equals('Cylinder'));
       expect(meshes.elementAt(0).animMeshes.length, isZero);
       expect(meshes.elementAt(0).morphingMethod, isZero);
-      expect(meshes.elementAt(0).aabb, isNull);
+      expect(meshes.elementAt(0).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
     });
   });
 
@@ -403,7 +403,7 @@ void main() {
       expect(meshes.elementAt(0).name, equals('HLeib01'));
       expect(meshes.elementAt(0).animMeshes.length, isZero);
       expect(meshes.elementAt(0).morphingMethod, isZero);
-      expect(meshes.elementAt(0).aabb, isNull);
+      expect(meshes.elementAt(0).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(1).primitiveTypes, equals(4));
       expect(meshes.elementAt(1).vertices.length, equals(180));
@@ -419,7 +419,7 @@ void main() {
       expect(meshes.elementAt(1).name, equals('OK'));
       expect(meshes.elementAt(1).animMeshes.length, isZero);
       expect(meshes.elementAt(1).morphingMethod, isZero);
-      expect(meshes.elementAt(1).aabb, isNull);
+      expect(meshes.elementAt(1).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(2).primitiveTypes, equals(4));
       expect(meshes.elementAt(2).vertices.length, equals(294));
@@ -435,7 +435,7 @@ void main() {
       expect(meshes.elementAt(2).name, equals('Bein1Li'));
       expect(meshes.elementAt(2).animMeshes.length, isZero);
       expect(meshes.elementAt(2).morphingMethod, isZero);
-      expect(meshes.elementAt(2).aabb, isNull);
+      expect(meshes.elementAt(2).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(3).primitiveTypes, equals(4));
       expect(meshes.elementAt(3).vertices.length, equals(294));
@@ -451,7 +451,7 @@ void main() {
       expect(meshes.elementAt(3).name, equals('Bein1Re'));
       expect(meshes.elementAt(3).animMeshes.length, isZero);
       expect(meshes.elementAt(3).morphingMethod, isZero);
-      expect(meshes.elementAt(3).aabb, isNull);
+      expect(meshes.elementAt(3).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(4).primitiveTypes, equals(4));
       expect(meshes.elementAt(4).vertices.length, equals(294));
@@ -467,7 +467,7 @@ void main() {
       expect(meshes.elementAt(4).name, equals('Bein2Li'));
       expect(meshes.elementAt(4).animMeshes.length, isZero);
       expect(meshes.elementAt(4).morphingMethod, isZero);
-      expect(meshes.elementAt(4).aabb, isNull);
+      expect(meshes.elementAt(4).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(5).primitiveTypes, equals(4));
       expect(meshes.elementAt(5).vertices.length, equals(294));
@@ -483,7 +483,7 @@ void main() {
       expect(meshes.elementAt(5).name, equals('Bein2Re'));
       expect(meshes.elementAt(5).animMeshes.length, isZero);
       expect(meshes.elementAt(5).morphingMethod, isZero);
-      expect(meshes.elementAt(5).aabb, isNull);
+      expect(meshes.elementAt(5).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(6).primitiveTypes, equals(4));
       expect(meshes.elementAt(6).vertices.length, equals(294));
@@ -499,7 +499,7 @@ void main() {
       expect(meshes.elementAt(6).name, equals('Bein3Re'));
       expect(meshes.elementAt(6).animMeshes.length, isZero);
       expect(meshes.elementAt(6).morphingMethod, isZero);
-      expect(meshes.elementAt(6).aabb, isNull);
+      expect(meshes.elementAt(6).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(7).primitiveTypes, equals(4));
       expect(meshes.elementAt(7).vertices.length, equals(294));
@@ -515,7 +515,7 @@ void main() {
       expect(meshes.elementAt(7).name, equals('Bein3Li'));
       expect(meshes.elementAt(7).animMeshes.length, isZero);
       expect(meshes.elementAt(7).morphingMethod, isZero);
-      expect(meshes.elementAt(7).aabb, isNull);
+      expect(meshes.elementAt(7).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(8).primitiveTypes, equals(4));
       expect(meshes.elementAt(8).vertices.length, equals(294));
@@ -531,7 +531,7 @@ void main() {
       expect(meshes.elementAt(8).name, equals('Bein4Re'));
       expect(meshes.elementAt(8).animMeshes.length, isZero);
       expect(meshes.elementAt(8).morphingMethod, isZero);
-      expect(meshes.elementAt(8).aabb, isNull);
+      expect(meshes.elementAt(8).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(9).primitiveTypes, equals(4));
       expect(meshes.elementAt(9).vertices.length, equals(294));
@@ -547,7 +547,7 @@ void main() {
       expect(meshes.elementAt(9).name, equals('Bein4Li'));
       expect(meshes.elementAt(9).animMeshes.length, isZero);
       expect(meshes.elementAt(9).morphingMethod, isZero);
-      expect(meshes.elementAt(9).aabb, isNull);
+      expect(meshes.elementAt(9).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(10).primitiveTypes, equals(4));
       expect(meshes.elementAt(10).vertices.length, equals(126));
@@ -563,7 +563,7 @@ void main() {
       expect(meshes.elementAt(10).name, equals('Zahn'));
       expect(meshes.elementAt(10).animMeshes.length, isZero);
       expect(meshes.elementAt(10).morphingMethod, isZero);
-      expect(meshes.elementAt(10).aabb, isNull);
+      expect(meshes.elementAt(10).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(11).primitiveTypes, equals(4));
       expect(meshes.elementAt(11).vertices.length, equals(126));
@@ -579,7 +579,7 @@ void main() {
       expect(meshes.elementAt(11).name, equals('klZahn'));
       expect(meshes.elementAt(11).animMeshes.length, isZero);
       expect(meshes.elementAt(11).morphingMethod, isZero);
-      expect(meshes.elementAt(11).aabb, isNull);
+      expect(meshes.elementAt(11).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(12).primitiveTypes, equals(4));
       expect(meshes.elementAt(12).vertices.length, equals(270));
@@ -595,7 +595,7 @@ void main() {
       expect(meshes.elementAt(12).name, equals('Kopf'));
       expect(meshes.elementAt(12).animMeshes.length, isZero);
       expect(meshes.elementAt(12).morphingMethod, isZero);
-      expect(meshes.elementAt(12).aabb, isNull);
+      expect(meshes.elementAt(12).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(13).primitiveTypes, equals(4));
       expect(meshes.elementAt(13).vertices.length, equals(60));
@@ -611,7 +611,7 @@ void main() {
       expect(meshes.elementAt(13).name, equals('Brust'));
       expect(meshes.elementAt(13).animMeshes.length, isZero);
       expect(meshes.elementAt(13).morphingMethod, isZero);
-      expect(meshes.elementAt(13).aabb, isNull);
+      expect(meshes.elementAt(13).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(14).primitiveTypes, equals(4));
       expect(meshes.elementAt(14).vertices.length, equals(270));
@@ -627,7 +627,7 @@ void main() {
       expect(meshes.elementAt(14).name, equals('Kopf2'));
       expect(meshes.elementAt(14).animMeshes.length, isZero);
       expect(meshes.elementAt(14).morphingMethod, isZero);
-      expect(meshes.elementAt(14).aabb, isNull);
+      expect(meshes.elementAt(14).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(15).primitiveTypes, equals(4));
       expect(meshes.elementAt(15).vertices.length, equals(126));
@@ -643,7 +643,7 @@ void main() {
       expect(meshes.elementAt(15).name, equals('Zahn2'));
       expect(meshes.elementAt(15).animMeshes.length, isZero);
       expect(meshes.elementAt(15).morphingMethod, isZero);
-      expect(meshes.elementAt(15).aabb, isNull);
+      expect(meshes.elementAt(15).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(16).primitiveTypes, equals(4));
       expect(meshes.elementAt(16).vertices.length, equals(126));
@@ -659,7 +659,7 @@ void main() {
       expect(meshes.elementAt(16).name, equals('klZahn2'));
       expect(meshes.elementAt(16).animMeshes.length, isZero);
       expect(meshes.elementAt(16).morphingMethod, isZero);
-      expect(meshes.elementAt(16).aabb, isNull);
+      expect(meshes.elementAt(16).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(17).primitiveTypes, equals(4));
       expect(meshes.elementAt(17).vertices.length, equals(114));
@@ -675,7 +675,7 @@ void main() {
       expect(meshes.elementAt(17).name, equals('Auge'));
       expect(meshes.elementAt(17).animMeshes.length, isZero);
       expect(meshes.elementAt(17).morphingMethod, isZero);
-      expect(meshes.elementAt(17).aabb, isNull);
+      expect(meshes.elementAt(17).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
 
       expect(meshes.elementAt(18).primitiveTypes, equals(4));
       expect(meshes.elementAt(18).vertices.length, equals(114));
@@ -691,7 +691,7 @@ void main() {
       expect(meshes.elementAt(18).name, equals('Duplicate05'));
       expect(meshes.elementAt(18).animMeshes.length, isZero);
       expect(meshes.elementAt(18).morphingMethod, isZero);
-      expect(meshes.elementAt(18).aabb, isNull);
+      expect(meshes.elementAt(18).aabb, aabb3MoreOrLessEquals(Aabb3.minMax(Vector3(0, 0, 0), Vector3(0, 0, 0))));
     });
   });
 
