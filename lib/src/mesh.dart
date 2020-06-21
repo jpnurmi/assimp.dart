@@ -56,12 +56,7 @@ class Face extends AssimpType<aiFace> {
     return Face._(ptr);
   }
 
-  Iterable<int> get indices {
-    return Iterable.generate(
-      _face.mNumIndices,
-      (i) => _face.mIndices[i],
-    );
-  }
+  Iterable<int> get indices => _face.mIndices.asTypedList(_face.mNumIndices);
 }
 
 class VertexWeight extends AssimpType<aiVertexWeight> {
@@ -201,21 +196,21 @@ class Mesh extends AssimpType<aiMesh> {
 
   Iterable<Vector3> get normals {
     return Iterable.generate(
-      _mesh.mNumVertices,
+      AssimpPointer.isNotNull(_mesh.mNormals) ? _mesh.mNumVertices : 0,
       (i) => AssimpVector3.fromNative(_mesh.mNormals.elementAt(i)),
     );
   }
 
   Iterable<Vector3> get tangents {
     return Iterable.generate(
-      _mesh.mNumVertices,
+      AssimpPointer.isNotNull(_mesh.mTangents) ? _mesh.mNumVertices : 0,
       (i) => AssimpVector3.fromNative(_mesh.mTangents.elementAt(i)),
     );
   }
 
   Iterable<Vector3> get bitangents {
     return Iterable.generate(
-      _mesh.mNumVertices,
+      AssimpPointer.isNotNull(_mesh.mBitangents) ? _mesh.mNumVertices : 0,
       (i) => AssimpVector3.fromNative(_mesh.mBitangents.elementAt(i)),
     );
   }

@@ -55,7 +55,7 @@ void main() {
     testScene('fbx/huesitos.fbx', (scene) {
       final animations = scene.animations;
       expect(animations, isNotEmpty);
-      expect(animations.length, isNonZero);
+      expect(animations.length, equals(1));
       final animation_0 = animations.elementAt(0);
       expect(animation_0.name, equals('Armature|Action'));
       expect(animation_0.duration, moreOrLessEquals(39));

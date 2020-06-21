@@ -74,12 +74,7 @@ class Node extends AssimpType<aiNode> {
     );
   }
 
-  Iterable<int> get meshes {
-    return Iterable.generate(
-      _node.mNumMeshes,
-      (i) => _node.mMeshes[i],
-    );
-  }
+  Iterable<int> get meshes => _node.mMeshes.asTypedList(_node.mNumMeshes);
 
   MetaData get metaData => AssimpPointer.isNotNull(_node.mMetaData)
       ? MetaData.fromNative(_node.mMetaData)

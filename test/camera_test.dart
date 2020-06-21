@@ -55,7 +55,7 @@ void main() {
     testScene('fbx/huesitos.fbx', (scene) {
       final cameras = scene.cameras;
       expect(cameras, isNotEmpty);
-      expect(cameras.length, isNonZero);
+      expect(cameras.length, equals(1));
       final camera_0 = cameras.elementAt(0);
       expect(camera_0.name, equals('Camera'));
       expect(camera_0.position, vector3MoreOrLessEquals(Vector3(0, 0, 0)));

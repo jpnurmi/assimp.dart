@@ -42,7 +42,7 @@ void main() {
     testScene('3mf/box.3mf', (scene) {
       final materials = scene.materials;
       expect(materials, isNotEmpty);
-      expect(materials.length, isNonZero);
+      expect(materials.length, equals(1));
       final material_0 = materials.elementAt(0);
       expect(material_0.properties.length, equals(2));
       final property_0_0 = material_0.properties.elementAt(0);
@@ -61,7 +61,7 @@ void main() {
     testScene('3mf/spider.3mf', (scene) {
       final materials = scene.materials;
       expect(materials, isNotEmpty);
-      expect(materials.length, isNonZero);
+      expect(materials.length, equals(4));
       final material_0 = materials.elementAt(0);
       expect(material_0.properties.length, equals(1));
       final property_0_0 = material_0.properties.elementAt(0);
@@ -104,7 +104,7 @@ void main() {
     testScene('fbx/huesitos.fbx', (scene) {
       final materials = scene.materials;
       expect(materials, isNotEmpty);
-      expect(materials.length, isNonZero);
+      expect(materials.length, equals(1));
       final material_0 = materials.elementAt(0);
       expect(material_0.properties.length, equals(16));
       final property_0_0 = material_0.properties.elementAt(0);
@@ -210,7 +210,7 @@ void main() {
     testScene('Obj/Spider/spider.obj', (scene) {
       final materials = scene.materials;
       expect(materials, isNotEmpty);
-      expect(materials.length, isNonZero);
+      expect(materials.length, equals(6));
       final material_0 = materials.elementAt(0);
       expect(material_0.properties.length, equals(10));
       final property_0_0 = material_0.properties.elementAt(0);

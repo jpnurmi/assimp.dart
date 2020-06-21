@@ -55,7 +55,7 @@ void main() {
     testScene('fbx/huesitos.fbx', (scene) {
       final lights = scene.lights;
       expect(lights, isNotEmpty);
-      expect(lights.length, isNonZero);
+      expect(lights.length, equals(1));
       final light_0 = lights.elementAt(0);
       expect(light_0.name, equals('Lamp'));
       expect(light_0.type, equals(LightSourceType.point));
@@ -67,7 +67,7 @@ void main() {
       expect(light_0.attenuationQuadratic, isZero);
       expect(light_0.colorDiffuse, isSameColorAs(Color.fromARGB(255, 255, 255, 255)));
       expect(light_0.colorSpecular, isSameColorAs(Color.fromARGB(255, 255, 255, 255)));
-      expect(light_0.colorAmbient, isSameColorAs(Color.fromARGB(255, 0, 0, 0)));
+      expect(light_0.colorAmbient, isSameColorAs(Color.fromARGB(0, 255, 0, 0)));
       expect(light_0.angleInnerCone, moreOrLessEquals(6.28319));
       expect(light_0.angleOuterCone, moreOrLessEquals(6.28319));
       expect(light_0.size.width, isZero);
