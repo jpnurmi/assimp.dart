@@ -45,24 +45,25 @@ import 'dart:ffi';
 
 import 'bindings.dart';
 import 'extensions.dart';
+import 'type.dart';
 
-class Camera {
-  Pointer<aiCamera> _ptr;
+class Camera extends AssimpType<aiCamera> {
+  aiCamera get _camera => ptr.ref;
 
-  Camera._(this._ptr);
+  Camera._(Pointer<aiCamera> ptr) : super(ptr);
   factory Camera.fromNative(Pointer<aiCamera> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Camera._(ptr);
   }
 
-  String get name => AssimpString.fromNative(_ptr.ref.mName);
+  String get name => AssimpString.fromNative(_camera.mName);
 
-  Vector3 get position => AssimpVector3.fromNative(_ptr.ref.mPosition);
-  Vector3 get up => AssimpVector3.fromNative(_ptr.ref.mUp);
-  Vector3 get lookAt => AssimpVector3.fromNative(_ptr.ref.mLookAt);
+  Vector3 get position => AssimpVector3.fromNative(_camera.mPosition);
+  Vector3 get up => AssimpVector3.fromNative(_camera.mUp);
+  Vector3 get lookAt => AssimpVector3.fromNative(_camera.mLookAt);
 
-  double get horizontalFov => _ptr.ref.mHorizontalFOV;
-  double get clipPlaneNear => _ptr.ref.mClipPlaneNear;
-  double get clipPlaneFar => _ptr.ref.mClipPlaneFar;
-  double get aspect => _ptr.ref.mAspect;
+  double get horizontalFov => _camera.mHorizontalFOV;
+  double get clipPlaneNear => _camera.mClipPlaneNear;
+  double get clipPlaneFar => _camera.mClipPlaneFar;
+  double get aspect => _camera.mAspect;
 }

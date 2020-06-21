@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:test/test.dart';
-import 'package:assimp/assimp.dart';
+import '../lib/assimp.dart';
 import '../lib/src/bindings.dart';
 import 'test_utils.dart';
 
@@ -17,6 +17,25 @@ void main() {
 
   test('size', () {
     expect(sizeOf<aiScene>(), equals(128));
+  });
+
+  test('size', () {
+    Scene a = Scene.fromNative(allocate<aiScene>());
+    Scene b = Scene.fromNative(allocate<aiScene>());
+    Scene aa = Scene.fromNative(a.ptr);
+    Scene bb = Scene.fromNative(b.ptr);
+    expect(a, equals(a));
+    expect(a, equals(aa));
+    expect(b, equals(b));
+    expect(b, equals(bb));
+    expect(a, isNot(equals(b)));
+    expect(a, isNot(equals(bb)));
+    expect(b, isNot(equals(a)));
+    expect(b, isNot(equals(aa)));
+  });
+
+  test('toString', () {
+    expect(Scene.fromNative(allocate<aiScene>()).toString(), matches(r'Scene\(Pointer<aiScene>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:test/test.dart';
-import 'package:assimp/assimp.dart';
+import '../lib/assimp.dart';
 import '../lib/src/bindings.dart';
 import 'test_utils.dart';
 
@@ -17,6 +17,25 @@ void main() {
 
   test('size', () {
     expect(sizeOf<aiAnimation>(), equals(1096));
+  });
+
+  test('size', () {
+    Animation a = Animation.fromNative(allocate<aiAnimation>());
+    Animation b = Animation.fromNative(allocate<aiAnimation>());
+    Animation aa = Animation.fromNative(a.ptr);
+    Animation bb = Animation.fromNative(b.ptr);
+    expect(a, equals(a));
+    expect(a, equals(aa));
+    expect(b, equals(b));
+    expect(b, equals(bb));
+    expect(a, isNot(equals(b)));
+    expect(a, isNot(equals(bb)));
+    expect(b, isNot(equals(a)));
+    expect(b, isNot(equals(aa)));
+  });
+
+  test('toString', () {
+    expect(Animation.fromNative(allocate<aiAnimation>()).toString(), matches(r'Animation\(Pointer<aiAnimation>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

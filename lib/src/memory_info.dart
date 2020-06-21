@@ -45,22 +45,23 @@ import 'dart:ffi';
 
 import 'bindings.dart';
 import 'extensions.dart';
+import 'type.dart';
 
-class MemoryInfo {
-  Pointer<aiMemoryInfo> _ptr;
+class MemoryInfo extends AssimpType<aiMemoryInfo> {
+  aiMemoryInfo get _memoryInfo => ptr.ref;
 
-  MemoryInfo._(this._ptr);
+  MemoryInfo._(Pointer<aiMemoryInfo> ptr) : super(ptr);
   factory MemoryInfo.fromNative(Pointer<aiMemoryInfo> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MemoryInfo._(ptr);
   }
 
-  int get textures => _ptr.ref.textures;
-  int get materials => _ptr.ref.materials;
-  int get meshes => _ptr.ref.meshes;
-  int get nodes => _ptr.ref.nodes;
-  int get animations => _ptr.ref.animations;
-  int get cameras => _ptr.ref.cameras;
-  int get lights => _ptr.ref.lights;
-  int get total => _ptr.ref.total;
+  int get textures => _memoryInfo.textures;
+  int get materials => _memoryInfo.materials;
+  int get meshes => _memoryInfo.meshes;
+  int get nodes => _memoryInfo.nodes;
+  int get animations => _memoryInfo.animations;
+  int get cameras => _memoryInfo.cameras;
+  int get lights => _memoryInfo.lights;
+  int get total => _memoryInfo.total;
 }

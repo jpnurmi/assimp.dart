@@ -43,38 +43,27 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'bindings.dart';
+import 'package:meta/meta.dart';
+
 import 'extensions.dart';
-import 'type.dart';
 
-enum LightSourceType { undefined, directional, point, spot, ambient, area }
+abstract class AssimpType<T extends NativeType> {
+  @protected
+  @visibleForTesting
+  final Pointer<T> ptr;
 
-class Light extends AssimpType<aiLight> {
-  aiLight get _light => ptr.ref;
+  AssimpType(this.ptr) : assert(AssimpPointer.isNotNull(ptr));
 
-  Light._(Pointer<aiLight> ptr) : super(ptr);
-  factory Light.fromNative(Pointer<aiLight> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Light._(ptr);
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != this.runtimeType) return false;
+    AssimpType type = other;
+    return ptr == type.ptr;
   }
 
-  String get name => AssimpString.fromNative(_light.mName);
-  LightSourceType get type => LightSourceType.values[_light.mType];
+  @override
+  int get hashCode => ptr.hashCode;
 
-  Vector3 get position => AssimpVector3.fromNative(_light.mPosition);
-  Vector3 get direction => AssimpVector3.fromNative(_light.mDirection);
-  Vector3 get up => AssimpVector3.fromNative(_light.mUp);
-
-  double get attenuationConstant => _light.mAttenuationConstant;
-  double get attenuationLinear => _light.mAttenuationLinear;
-  double get attenuationQuadratic => _light.mAttenuationQuadratic;
-
-  Color get colorDiffuse => AssimpColor3.fromNative(_light.mColorDiffuse);
-  Color get colorSpecular => AssimpColor3.fromNative(_light.mColorSpecular);
-  Color get colorAmbient => AssimpColor3.fromNative(_light.mColorAmbient);
-
-  double get angleInnerCone => _light.mAngleInnerCone;
-  double get angleOuterCone => _light.mAngleOuterCone;
-
-  Size get size => AssimpSize.fromNative(_light.mSize);
+  @override
+  String toString() => '$runtimeType($ptr)';
 }

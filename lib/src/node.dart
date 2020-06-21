@@ -48,40 +48,40 @@ import 'package:vector_math/vector_math.dart';
 import 'bindings.dart';
 import 'meta_data.dart';
 import 'extensions.dart';
+import 'type.dart';
 
-class Node {
-  Pointer<aiNode> _ptr;
+class Node extends AssimpType<aiNode> {
+  aiNode get _node => ptr.ref;
 
-  Node._(this._ptr);
+  Node._(Pointer<aiNode> ptr) : super(ptr);
   factory Node.fromNative(Pointer<aiNode> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Node._(ptr);
   }
 
-  String get name => AssimpString.fromNative(_ptr.ref.mName);
+  String get name => AssimpString.fromNative(_node.mName);
 
-  Matrix4 get transformation =>
-      AssimpMatrix4.fromNative(_ptr.ref.mTransformation);
+  Matrix4 get transformation => AssimpMatrix4.fromNative(_node.mTransformation);
 
-  Node get parent => AssimpPointer.isNotNull(_ptr.ref.mParent)
-      ? Node.fromNative(_ptr.ref.mParent)
+  Node get parent => AssimpPointer.isNotNull(_node.mParent)
+      ? Node.fromNative(_node.mParent)
       : null;
 
   Iterable<Node> get children {
     return Iterable.generate(
-      _ptr.ref.mNumChildren,
-      (i) => Node.fromNative(_ptr.ref.mChildren[i]),
+      _node.mNumChildren,
+      (i) => Node.fromNative(_node.mChildren[i]),
     );
   }
 
   Iterable<int> get meshes {
     return Iterable.generate(
-      _ptr.ref.mNumMeshes,
-      (i) => _ptr.ref.mMeshes[i],
+      _node.mNumMeshes,
+      (i) => _node.mMeshes[i],
     );
   }
 
-  MetaData get metaData => AssimpPointer.isNotNull(_ptr.ref.mMetaData)
-      ? MetaData.fromNative(_ptr.ref.mMetaData)
+  MetaData get metaData => AssimpPointer.isNotNull(_node.mMetaData)
+      ? MetaData.fromNative(_node.mMetaData)
       : null;
 }

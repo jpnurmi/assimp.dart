@@ -57,11 +57,12 @@ import 'mesh.dart';
 import 'meta_data.dart';
 import 'node.dart';
 import 'texture.dart';
+import 'type.dart';
 
-class Scene {
-  Pointer<aiScene> _ptr;
+class Scene extends AssimpType<aiScene> {
+  aiScene get _scene => ptr.ref;
 
-  Scene._(this._ptr);
+  Scene._(Pointer<aiScene> ptr) : super(ptr);
   factory Scene.fromNative(Pointer<aiScene> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Scene._(ptr);
@@ -97,60 +98,55 @@ class Scene {
     return Scene._fromBuffer(cbuffer.cast(), bytes.length, flags, hint);
   }
 
-  int get flags => _ptr.ref.mFlags;
+  int get flags => _scene.mFlags;
 
-  Node get rootNode => Node.fromNative(_ptr.ref.mRootNode);
+  Node get rootNode => Node.fromNative(_scene.mRootNode);
 
   Iterable<Mesh> get meshes {
     return Iterable.generate(
-      _ptr.ref.mNumMeshes,
-      (i) => Mesh.fromNative(_ptr.ref.mMeshes[i]),
+      _scene.mNumMeshes,
+      (i) => Mesh.fromNative(_scene.mMeshes[i]),
     );
   }
 
   Iterable<Material> get materials {
     return Iterable.generate(
-      _ptr.ref.mNumMaterials,
-      (i) => Material.fromNative(_ptr.ref.mMaterials[i]),
+      _scene.mNumMaterials,
+      (i) => Material.fromNative(_scene.mMaterials[i]),
     );
   }
 
   Iterable<Animation> get animations {
     return Iterable.generate(
-      _ptr.ref.mNumAnimations,
-      (i) => Animation.fromNative(_ptr.ref.mAnimations[i]),
+      _scene.mNumAnimations,
+      (i) => Animation.fromNative(_scene.mAnimations[i]),
     );
   }
 
   Iterable<Texture> get textures {
     return Iterable.generate(
-      _ptr.ref.mNumTextures,
-      (i) => Texture.fromNative(_ptr.ref.mTextures[i]),
+      _scene.mNumTextures,
+      (i) => Texture.fromNative(_scene.mTextures[i]),
     );
   }
 
   Iterable<Light> get lights {
     return Iterable.generate(
-      _ptr.ref.mNumLights,
-      (i) => Light.fromNative(_ptr.ref.mLights[i]),
+      _scene.mNumLights,
+      (i) => Light.fromNative(_scene.mLights[i]),
     );
   }
 
   Iterable<Camera> get cameras {
     return Iterable.generate(
-      _ptr.ref.mNumCameras,
-      (i) => Camera.fromNative(_ptr.ref.mCameras[i]),
+      _scene.mNumCameras,
+      (i) => Camera.fromNative(_scene.mCameras[i]),
     );
   }
 
-  MetaData get metaData => MetaData.fromNative(_ptr.ref.mMetaData);
+  MetaData get metaData => MetaData.fromNative(_scene.mMetaData);
 
-  void applyPostProcessing(int flags) {
-    aiApplyPostProcessing(_ptr, flags);
-  }
+  void applyPostProcessing(int flags) => aiApplyPostProcessing(ptr, flags);
 
-  void dispose() {
-    aiReleaseImport(_ptr);
-    _ptr = null;
-  }
+  void dispose() => aiReleaseImport(ptr);
 }

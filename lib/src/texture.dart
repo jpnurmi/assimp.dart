@@ -47,41 +47,42 @@ import 'package:ffi/ffi.dart';
 
 import 'bindings.dart';
 import 'extensions.dart';
+import 'type.dart';
 
-class Texel {
-  Pointer<aiTexel> _ptr;
+class Texel extends AssimpType<aiTexel> {
+  aiTexel get _texel => ptr.ref;
 
-  Texel._(this._ptr);
+  Texel._(Pointer<aiTexel> ptr) : super(ptr);
   factory Texel.fromNative(Pointer<aiTexel> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Texel._(ptr);
   }
 
-  int get b => _ptr.ref.b;
-  int get g => _ptr.ref.g;
-  int get r => _ptr.ref.r;
-  int get a => _ptr.ref.a;
+  int get b => _texel.b;
+  int get g => _texel.g;
+  int get r => _texel.r;
+  int get a => _texel.a;
 }
 
-class Texture {
-  Pointer<aiTexture> _ptr;
+class Texture extends AssimpType<aiTexture> {
+  aiTexture get _texture => ptr.ref;
 
-  Texture._(this._ptr);
+  Texture._(Pointer<aiTexture> ptr) : super(ptr);
   factory Texture.fromNative(Pointer<aiTexture> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Texture._(ptr);
   }
 
-  int get width => _ptr.ref.mWidth;
-  int get height => _ptr.ref.mHeight;
+  int get width => _texture.mWidth;
+  int get height => _texture.mHeight;
 
   Iterable<Texel> get data {
     return Iterable.generate(
-      _ptr.ref.mWidth * _ptr.ref.mHeight,
-      (i) => Texel.fromNative(_ptr.ref.pcData.elementAt(i)),
+      _texture.mWidth * _texture.mHeight,
+      (i) => Texel.fromNative(_texture.pcData.elementAt(i)),
     );
   }
 
-  String get formatHint => Utf8.fromUtf8(_ptr.ref.achFormatHint);
-  String get fileName => AssimpString.fromNative(_ptr.ref.mFilename);
+  String get formatHint => Utf8.fromUtf8(_texture.achFormatHint);
+  String get fileName => AssimpString.fromNative(_texture.mFilename);
 }

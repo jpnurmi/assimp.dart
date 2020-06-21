@@ -45,43 +45,44 @@ import 'dart:ffi';
 
 import 'bindings.dart';
 import 'extensions.dart';
+import 'type.dart';
 
-class MaterialProperty {
-  Pointer<aiMaterialProperty> _ptr;
+class MaterialProperty extends AssimpType<aiMaterialProperty> {
+  aiMaterialProperty get _property => ptr.ref;
 
-  MaterialProperty._(this._ptr);
+  MaterialProperty._(Pointer<aiMaterialProperty> ptr) : super(ptr);
   factory MaterialProperty.fromNative(Pointer<aiMaterialProperty> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MaterialProperty._(ptr);
   }
 
-  String get key => AssimpString.fromNative(_ptr.ref.mKey);
+  String get key => AssimpString.fromNative(_property.mKey);
 
   dynamic get value {
-    switch (_ptr.ref.mType) {
+    switch (_property.mType) {
       case aiPropertyTypeInfo.float:
-        return _ptr.ref.mData.cast<Float>().value;
+        return _property.mData.cast<Float>().value;
       case aiPropertyTypeInfo.double:
-        return _ptr.ref.mData.cast<Double>().value;
+        return _property.mData.cast<Double>().value;
       case aiPropertyTypeInfo.string:
-        return AssimpString.fromNative(_ptr.ref.mData.cast<aiString>());
+        return AssimpString.fromNative(_property.mData.cast<aiString>());
       case aiPropertyTypeInfo.integer:
-        return _ptr.ref.mData.cast<Uint32>().value;
+        return _property.mData.cast<Uint32>().value;
       case aiPropertyTypeInfo.buffer:
-        return _ptr.ref.mData.cast<Uint8>().asTypedList(_ptr.ref.mDataLength);
+        return _property.mData.cast<Uint8>().asTypedList(_property.mDataLength);
       default:
         return null;
     }
   }
 
-  int get index => _ptr.ref.mIndex;
-  int get semantic => _ptr.ref.mSemantic;
+  int get index => _property.mIndex;
+  int get semantic => _property.mSemantic;
 }
 
-class Material {
-  Pointer<aiMaterial> _ptr;
+class Material extends AssimpType<aiMaterial> {
+  aiMaterial get _material => ptr.ref;
 
-  Material._(this._ptr);
+  Material._(Pointer<aiMaterial> ptr) : super(ptr);
   factory Material.fromNative(Pointer<aiMaterial> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Material._(ptr);
@@ -89,8 +90,8 @@ class Material {
 
   Iterable<MaterialProperty> get properties {
     return Iterable.generate(
-      _ptr.ref.mNumProperties,
-      (i) => MaterialProperty.fromNative(_ptr.ref.mProperties[i]),
+      _material.mNumProperties,
+      (i) => MaterialProperty.fromNative(_material.mProperties[i]),
     );
   }
 }

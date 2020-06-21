@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:test/test.dart';
-import 'package:assimp/assimp.dart';
+import '../lib/assimp.dart';
 import '../lib/src/bindings.dart';
 import 'test_utils.dart';
 
@@ -17,6 +17,25 @@ void main() {
 
   test('size', () {
     expect(sizeOf<aiLight>(), equals(1132));
+  });
+
+  test('size', () {
+    Light a = Light.fromNative(allocate<aiLight>());
+    Light b = Light.fromNative(allocate<aiLight>());
+    Light aa = Light.fromNative(a.ptr);
+    Light bb = Light.fromNative(b.ptr);
+    expect(a, equals(a));
+    expect(a, equals(aa));
+    expect(b, equals(b));
+    expect(b, equals(bb));
+    expect(a, isNot(equals(b)));
+    expect(a, isNot(equals(bb)));
+    expect(b, isNot(equals(a)));
+    expect(b, isNot(equals(aa)));
+  });
+
+  test('toString', () {
+    expect(Light.fromNative(allocate<aiLight>()).toString(), matches(r'Light\(Pointer<aiLight>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

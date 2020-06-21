@@ -45,11 +45,12 @@ import 'dart:ffi';
 
 import 'bindings.dart';
 import 'extensions.dart';
+import 'type.dart';
 
-class MetaData {
-  Pointer<aiMetadata> _ptr;
+class MetaData extends AssimpType<aiMetadata> {
+  aiMetadata get _metaData => ptr.ref;
 
-  MetaData._(this._ptr);
+  MetaData._(Pointer<aiMetadata> ptr) : super(ptr);
   factory MetaData.fromNative(Pointer<aiMetadata> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MetaData._(ptr);
@@ -59,15 +60,15 @@ class MetaData {
 
   Iterable<String> get keys {
     return Iterable.generate(
-      _ptr.ref.mNumProperties,
-      (i) => AssimpString.fromNative(_ptr.ref.mKeys.elementAt(i)),
+      _metaData.mNumProperties,
+      (i) => AssimpString.fromNative(_metaData.mKeys.elementAt(i)),
     );
   }
 
   Iterable<dynamic> get values {
     return Iterable.generate(
-      _ptr.ref.mNumProperties,
-      (i) => _toValue(_ptr.ref.mValues.elementAt(i)),
+      _metaData.mNumProperties,
+      (i) => _toValue(_metaData.mValues.elementAt(i)),
     );
   }
 
