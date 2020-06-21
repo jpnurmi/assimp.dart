@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiNode>(), equals(1144));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = Node.fromNative(allocate<aiNode>());
     final b = Node.fromNative(allocate<aiNode>());
-    final aa = Node.fromNative(a.ptr);
-    final bb = Node.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {

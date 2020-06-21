@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiCamera>(), equals(1080));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = Camera.fromNative(allocate<aiCamera>());
     final b = Camera.fromNative(allocate<aiCamera>());
-    final aa = Camera.fromNative(a.ptr);
-    final bb = Camera.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {

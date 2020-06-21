@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiMesh>(), equals(1312));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = Mesh.fromNative(allocate<aiMesh>());
     final b = Mesh.fromNative(allocate<aiMesh>());
-    final aa = Mesh.fromNative(a.ptr);
-    final bb = Mesh.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {

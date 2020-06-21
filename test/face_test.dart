@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiFace>(), equals(16));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = Face.fromNative(allocate<aiFace>());
     final b = Face.fromNative(allocate<aiFace>());
-    final aa = Face.fromNative(a.ptr);
-    final bb = Face.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {

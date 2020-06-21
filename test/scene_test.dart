@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiScene>(), equals(128));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = Scene.fromNative(allocate<aiScene>());
     final b = Scene.fromNative(allocate<aiScene>());
-    final aa = Scene.fromNative(a.ptr);
-    final bb = Scene.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {

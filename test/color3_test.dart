@@ -12,11 +12,11 @@ void main() {
   prepareTest();
 
   test('null', () {
-    expect(VertexWeight.fromNative(null), isNull);
+    expect(AssimpColor3.fromNative(null), isNull);
   });
 
   test('size', () {
-    expect(sizeOf<aiVertexWeight>(), equals(8));
+    expect(sizeOf<aiColor3D>(), equals(12));
   });
 
 }

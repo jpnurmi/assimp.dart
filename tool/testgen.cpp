@@ -14,7 +14,6 @@ static QString indexed(const QString id, int i, int j) { return QString("%1_%2_%
 static QString indexed(const QString id, int i, int j, int k) { return QString("%1_%2_%3_%4").arg(id).arg(i).arg(j).arg(k); }
 
 static QString import(const QString &package) { return QString("import '%1';").arg(package); }
-static QString dartName(const QString &typeName) { return typeName == "aiMetadata" ? "MetaData" : typeName.mid(2); }
 
 static QString isTrueOrFalse(bool val) { return val ? "isTrue" : "isFalse"; }
 static QString isEmptyOrNot(int num) { return num ? "isNotEmpty" : "isEmpty"; }
@@ -106,42 +105,36 @@ static void writeGroup(QTextStream &out, const QString &name, std::function<void
     out << "  });\n\n";
 }
 
-static void writeNullTest(QTextStream &out, const QString &typeName)
+static void writeNullTest(QTextStream &out, const QString &dartName)
 {
     writeGroup(out, "null", [&]() {
-        out << QString("    expect(%1.fromNative(null), isNull);\n").arg(typeName);
+        out << QString("    expect(%1.fromNative(null), isNull);\n").arg(dartName);
     });
 }
 
-static void writeSizeTest(QTextStream &out, const QString &typeName, size_t size)
+static void writeSizeTest(QTextStream &out, const QString &nativeName, size_t size)
 {
     writeGroup(out, "size", [&]() {
-        out << QString("    expect(sizeOf<%1>(), equals(%2));\n").arg(typeName).arg(size);
+        out << QString("    expect(sizeOf<%1>(), equals(%2));\n").arg(nativeName).arg(size);
     });
 }
 
-static void writeEqualityTest(QTextStream &out, const QString &typeName)
+static void writeEqualityTest(QTextStream &out, const QString &nativeName, const QString &dartName)
 {
-    writeGroup(out, "size", [&]() {
-        out << QString("    final a = %1.fromNative(allocate<%2>());\n").arg(dartName(typeName)).arg(typeName)
-            << QString("    final b = %1.fromNative(allocate<%2>());\n").arg(dartName(typeName)).arg(typeName)
-            << QString("    final aa = %1.fromNative(a.ptr);\n").arg(dartName(typeName))
-            << QString("    final bb = %1.fromNative(b.ptr);\n").arg(dartName(typeName))
+    writeGroup(out, "equals", [&]() {
+        out << QString("    final a = %1.fromNative(allocate<%2>());\n").arg(dartName).arg(nativeName)
+            << QString("    final b = %1.fromNative(allocate<%2>());\n").arg(dartName).arg(nativeName)
             << QString("    expect(a, equals(a));\n")
-            << QString("    expect(a, equals(aa));\n")
             << QString("    expect(b, equals(b));\n")
-            << QString("    expect(b, equals(bb));\n")
             << QString("    expect(a, isNot(equals(b)));\n")
-            << QString("    expect(a, isNot(equals(bb)));\n")
-            << QString("    expect(b, isNot(equals(a)));\n")
-            << QString("    expect(b, isNot(equals(aa)));\n");
+            << QString("    expect(b, isNot(equals(a)));\n");
     });
 }
 
-static void writeToStringTest(QTextStream &out, const QString &typeName)
+static void writeToStringTest(QTextStream &out, const QString &nativeName, const QString &dartName)
 {
     writeGroup(out, "toString", [&]() {
-        out << QString("    expect(%1.fromNative(allocate<%2>()).toString(), matches(r'%1\\(Pointer<%2>: address=0x[0-f]+\\)'));\n").arg(dartName(typeName)).arg(typeName);
+        out << QString("    expect(%1.fromNative(allocate<%2>()).toString(), matches(r'%1\\(Pointer<%2>: address=0x[0-f]+\\)'));\n").arg(dartName).arg(nativeName);
     });
 }
 
@@ -553,7 +546,7 @@ static void writeSceneTest(QTextStream &out, const QString &fileName, TestWriter
 }
 
 template <typename T>
-static void generateTest(const QString &typeName, const QString &fileName, TestWriter writer)
+static void generateTest(const QString &nativeName, const QString &dartName, const QString &fileName, TestWriter writer = nullptr)
 {
     QFile file(testFilePath(fileName));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
@@ -561,11 +554,11 @@ static void generateTest(const QString &typeName, const QString &fileName, TestW
 
     QTextStream out(&file);
     writeHeader(out, fileName);
-    writeNullTest(out, dartName(typeName));
-    writeSizeTest(out, typeName, sizeof(T));
-    writeEqualityTest(out, typeName);
-    writeToStringTest(out, typeName);
+    writeNullTest(out, dartName);
+    writeSizeTest(out, nativeName, sizeof(T));
     if (writer) {
+        writeEqualityTest(out, nativeName, dartName);
+        writeToStringTest(out, nativeName, dartName);
         writeGroup(out, "3mf", [&]() {
             writeSceneTest(out, "3mf/box.3mf", writer);
             writeSceneTest(out, "3mf/spider.3mf", writer);
@@ -584,16 +577,24 @@ int main(int argc, char *argv[])
 {
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
-    generateTest<aiAnimation>("aiAnimation", "animation_test.dart", writeAnimationTester);
-    generateTest<aiBone>("aiBone", "bone_test.dart", writeBoneTester);
-    generateTest<aiCamera>("aiCamera", "camera_test.dart", writeCameraTester);
-    generateTest<aiFace>("aiFace", "face_test.dart", writeFaceTester);
-    generateTest<aiLight>("aiLight", "light_test.dart", writeLightTester);
-    generateTest<aiMaterial>("aiMaterial", "material_test.dart", writeMaterialTester);
-    generateTest<aiMesh>("aiMesh", "mesh_test.dart", writeMeshTester);
-    generateTest<aiMetadata>("aiMetadata", "meta_data_test.dart", writeMetaDataTester);
-    generateTest<aiNode>("aiNode", "node_test.dart", writeNodeTester);
-    generateTest<aiScene>("aiScene", "scene_test.dart", writeSceneTester);
-    generateTest<aiTexture>("aiTexture", "texture_test.dart", writeTextureTester);
-    generateTest<aiVertexWeight>("aiVertexWeight", "vertex_weight_test.dart", nullptr);
+    generateTest<aiAnimation>("aiAnimation", "Animation", "animation_test.dart", writeAnimationTester);
+    generateTest<aiBone>("aiBone", "Bone", "bone_test.dart", writeBoneTester);
+    generateTest<aiCamera>("aiCamera", "Camera", "camera_test.dart", writeCameraTester);
+    generateTest<aiColor3D>("aiColor3D", "AssimpColor3", "color3_test.dart");
+    generateTest<aiColor4D>("aiColor4D", "AssimpColor4", "color4_test.dart");
+    generateTest<aiFace>("aiFace", "Face", "face_test.dart", writeFaceTester);
+    generateTest<aiLight>("aiLight", "Light", "light_test.dart", writeLightTester);
+    generateTest<aiMaterial>("aiMaterial", "Material", "material_test.dart", writeMaterialTester);
+    generateTest<aiMatrix3x3>("aiMatrix3x3", "AssimpMatrix3", "matrix3_test.dart");
+    generateTest<aiMatrix4x4>("aiMatrix4x4", "AssimpMatrix4", "matrix4_test.dart");
+    generateTest<aiMesh>("aiMesh", "Mesh", "mesh_test.dart", writeMeshTester);
+    generateTest<aiMetadata>("aiMetadata", "MetaData", "meta_data_test.dart", writeMetaDataTester);
+    generateTest<aiNode>("aiNode", "Node", "node_test.dart", writeNodeTester);
+    generateTest<aiPlane>("aiPlane", "AssimpPlane", "plane_test.dart");
+    generateTest<aiRay>("aiRay", "AssimpRay", "ray_test.dart");
+    generateTest<aiScene>("aiScene", "Scene", "scene_test.dart", writeSceneTester);
+    generateTest<aiTexture>("aiTexture", "Texture", "texture_test.dart", writeTextureTester);
+    generateTest<aiVector2D>("aiVector2D", "AssimpVector2", "vector2_test.dart");
+    generateTest<aiVector3D>("aiVector3D", "AssimpVector3", "vector3_test.dart");
+    generateTest<aiVertexWeight>("aiVertexWeight", "VertexWeight", "vertex_weight_test.dart");
 }

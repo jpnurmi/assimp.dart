@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiLight>(), equals(1132));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = Light.fromNative(allocate<aiLight>());
     final b = Light.fromNative(allocate<aiLight>());
-    final aa = Light.fromNative(a.ptr);
-    final bb = Light.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {

@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiMetadata>(), equals(24));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = MetaData.fromNative(allocate<aiMetadata>());
     final b = MetaData.fromNative(allocate<aiMetadata>());
-    final aa = MetaData.fromNative(a.ptr);
-    final bb = MetaData.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {

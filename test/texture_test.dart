@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiTexture>(), equals(1064));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = Texture.fromNative(allocate<aiTexture>());
     final b = Texture.fromNative(allocate<aiTexture>());
-    final aa = Texture.fromNative(a.ptr);
-    final bb = Texture.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {

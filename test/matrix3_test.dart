@@ -12,11 +12,11 @@ void main() {
   prepareTest();
 
   test('null', () {
-    expect(VertexWeight.fromNative(null), isNull);
+    expect(AssimpMatrix3.fromNative(null), isNull);
   });
 
   test('size', () {
-    expect(sizeOf<aiVertexWeight>(), equals(8));
+    expect(sizeOf<aiMatrix3x3>(), equals(36));
   });
 
 }

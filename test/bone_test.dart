@@ -19,19 +19,13 @@ void main() {
     expect(sizeOf<aiBone>(), equals(1104));
   });
 
-  test('size', () {
+  test('equals', () {
     final a = Bone.fromNative(allocate<aiBone>());
     final b = Bone.fromNative(allocate<aiBone>());
-    final aa = Bone.fromNative(a.ptr);
-    final bb = Bone.fromNative(b.ptr);
     expect(a, equals(a));
-    expect(a, equals(aa));
     expect(b, equals(b));
-    expect(b, equals(bb));
     expect(a, isNot(equals(b)));
-    expect(a, isNot(equals(bb)));
     expect(b, isNot(equals(a)));
-    expect(b, isNot(equals(aa)));
   });
 
   test('toString', () {
