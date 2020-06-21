@@ -145,9 +145,8 @@ static void writeToStringTest(QTextStream &out, const QString &typeName)
     });
 }
 
-static void writeAnimationTester(QTextStream &out, const QString &fileName = QString())
+static void writeAnimationTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      final animations = scene.animations;\n"
         << "      expect(animations, " << isEmptyOrNot(scene->mAnimations != nullptr) << ");\n"
@@ -214,12 +213,10 @@ static void writeAnimationTester(QTextStream &out, const QString &fileName = QSt
         out << (i < scene->mNumAnimations - 1 ? "\n" : "");
     }
     out << "    });\n";
-    aiReleaseImport(scene);
 }
 
-static void writeCameraTester(QTextStream &out, const QString &fileName = QString())
+static void writeCameraTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      final cameras = scene.cameras;\n"
         << "      expect(cameras, " << isEmptyOrNot(scene->mCameras != nullptr) << ");\n"
@@ -238,12 +235,10 @@ static void writeCameraTester(QTextStream &out, const QString &fileName = QStrin
             << (i < scene->mNumCameras - 1 ? "\n" : "");
     }
     out << "    });\n";
-    aiReleaseImport(scene);
 }
 
-static void writeFaceTester(QTextStream &out, const QString &fileName = QString())
+static void writeFaceTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n";
     for (uint i = 0; i < scene->mNumMeshes; ++i) {
         const aiMesh *mesh = scene->mMeshes[i];
@@ -256,12 +251,10 @@ static void writeFaceTester(QTextStream &out, const QString &fileName = QString(
         }
     }
     out << "    });\n";
-    aiReleaseImport(scene);
 }
 
-static void writeLightTester(QTextStream &out, const QString &fileName = QString())
+static void writeLightTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      final lights = scene.lights;\n"
         << "      expect(lights, " << isEmptyOrNot(scene->mLights != nullptr) << ");\n"
@@ -287,12 +280,10 @@ static void writeLightTester(QTextStream &out, const QString &fileName = QString
             << (i < scene->mNumLights - 1 ? "\n" : "");
     }
     out << "    });\n";
-    aiReleaseImport(scene);
 }
 
-static void writeMaterialTester(QTextStream &out, const QString &fileName = QString())
+static void writeMaterialTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      final materials = scene.materials;\n"
         << "      expect(materials, " << isEmptyOrNot(scene->mMaterials != nullptr) << ");\n"
@@ -335,12 +326,10 @@ static void writeMaterialTester(QTextStream &out, const QString &fileName = QStr
         out << (i < scene->mNumMaterials - 1 ? "\n" : "");
     }
     out << "    });\n";
-    aiReleaseImport(scene);
 }
 
-static void writeMeshTester(QTextStream &out, const QString &fileName = QString())
+static void writeMeshTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      final meshes = scene.meshes;\n"
         << "      expect(meshes, " << isEmptyOrNot(scene->mMeshes != nullptr) << ");\n"
@@ -412,12 +401,10 @@ static void writeMeshTester(QTextStream &out, const QString &fileName = QString(
             << (i < scene->mNumMeshes - 1 ? "\n" : "");
     }
     out << "    });\n";
-    aiReleaseImport(scene);
 }
 
-static void writeMetaDataTester(QTextStream &out, const QString &fileName = QString())
+static void writeMetaDataTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      final metaData = scene.metaData;\n"
         << "      expect(metaData, " << isNullOrNot(scene->mMetaData) << ");\n";
@@ -465,12 +452,10 @@ static void writeMetaDataTester(QTextStream &out, const QString &fileName = QStr
         }
     }
     out << "    });\n";
-    aiReleaseImport(scene);
 }
 
-static void writeNodeTester(QTextStream &out, const QString &fileName = QString())
+static void writeNodeTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      final rootNode = scene.rootNode;\n"
         << "      expect(rootNode, " << isNullOrNot(scene->mRootNode) << ");\n"
@@ -491,12 +476,10 @@ static void writeNodeTester(QTextStream &out, const QString &fileName = QString(
     out << "      expect(rootNode.meshes, " << equalsToUintArray(scene->mRootNode->mMeshes, scene->mRootNode->mNumMeshes) << ");\n"
         << "      expect(rootNode.metaData, " << isNullOrNot(scene->mRootNode->mMetaData) << ");\n"
         << "    });\n\n";
-    aiReleaseImport(scene);
 }
 
-static void writeSceneTester(QTextStream &out, const QString &fileName = QString())
+static void writeSceneTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      expect(scene, " << isNullOrNot(scene) << ");\n"
         << "      expect(scene.flags, " << isZeroOrNot(scene->mFlags) << ");\n"
@@ -509,12 +492,10 @@ static void writeSceneTester(QTextStream &out, const QString &fileName = QString
         << "      expect(scene.cameras.length, " << equalsToInt(scene->mNumCameras) << ");\n"
         << "      expect(scene.metaData, " << isNullOrNot(scene->mMetaData) << ");\n"
         << "    });\n";
-    aiReleaseImport(scene);
 }
 
-static void writeTextureTester(QTextStream &out, const QString &fileName = QString())
+static void writeTextureTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
-    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
     out << "    testScene('" << fileName << "', (scene) {\n"
         << "      final textures = scene.textures;\n"
         << "      expect(textures, " << isEmptyOrNot(scene->mTextures != nullptr) << ");\n"
@@ -537,11 +518,19 @@ static void writeTextureTester(QTextStream &out, const QString &fileName = QStri
         }
     }
     out << "    });\n";
+}
+
+typedef std::function<void(QTextStream &out, const aiScene *scene, const QString &fileName)> TestWriter;
+
+static void writeSceneTest(QTextStream &out, const QString &fileName, TestWriter writer)
+{
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    writer(out, scene, fileName);
     aiReleaseImport(scene);
 }
 
 template <typename T>
-static void generateTest(const QString &typeName, const QString &fileName, std::function<void(QTextStream &out, const QString &filePath)> writer)
+static void generateTest(const QString &typeName, const QString &fileName, TestWriter writer)
 {
     QFile file(testFilePath(fileName));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
@@ -554,14 +543,14 @@ static void generateTest(const QString &typeName, const QString &fileName, std::
     writeEqualityTest(out, typeName);
     writeToStringTest(out, typeName);
     writeGroup(out, "3mf", [&]() {
-        writer(out, "3mf/box.3mf");
-        writer(out, "3mf/spider.3mf");
+        writeSceneTest(out, "3mf/box.3mf", writer);
+        writeSceneTest(out, "3mf/spider.3mf", writer);
     });
     writeGroup(out, "fbx", [&]() {
-        writer(out, "fbx/huesitos.fbx");
+        writeSceneTest(out, "fbx/huesitos.fbx", writer);
     });
     writeGroup(out, "obj", [&]() {
-        writer(out, "Obj/Spider/spider.obj");
+        writeSceneTest(out, "Obj/Spider/spider.obj", writer);
     });
     writeFooter(out, fileName);
 }
