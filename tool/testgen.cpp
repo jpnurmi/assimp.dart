@@ -241,6 +241,24 @@ static void writeCameraTester(QTextStream &out, const QString &fileName = QStrin
     aiReleaseImport(scene);
 }
 
+static void writeFaceTester(QTextStream &out, const QString &fileName = QString())
+{
+    const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
+    out << "    testScene('" << fileName << "', (scene) {\n";
+    for (uint i = 0; i < scene->mNumMeshes; ++i) {
+        const aiMesh *mesh = scene->mMeshes[i];
+        if (mesh->mNumFaces > 0) {
+            out << "      final "  << indexed("mesh", i) << " = scene.meshes.elementAt(" << i << ");\n";
+            for (uint j = 0; j < mesh->mNumFaces; ++j) {
+                out << "      final "  << indexed("face", i, j) << " = "  << indexed("mesh", i) << ".faces.elementAt(" << j << ");\n"
+                    << "      expect(" << indexed("face", i, j) << ".indices, " << equalsToUintArray(mesh->mFaces[j].mIndices, mesh->mFaces[j].mNumIndices) << ");\n";
+            }
+        }
+    }
+    out << "    });\n";
+    aiReleaseImport(scene);
+}
+
 static void writeLightTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
@@ -554,6 +572,7 @@ int main(int argc, char *argv[])
 
     generateTest<aiAnimation>("aiAnimation", "animation_test.dart", writeAnimationTester);
     generateTest<aiCamera>("aiCamera", "camera_test.dart", writeCameraTester);
+    generateTest<aiFace>("aiFace", "face_test.dart", writeFaceTester);
     generateTest<aiLight>("aiLight", "light_test.dart", writeLightTester);
     generateTest<aiMaterial>("aiMaterial", "material_test.dart", writeMaterialTester);
     generateTest<aiMesh>("aiMesh", "mesh_test.dart", writeMeshTester);
