@@ -20,10 +20,10 @@ void main() {
   });
 
   test('size', () {
-    Light a = Light.fromNative(allocate<aiLight>());
-    Light b = Light.fromNative(allocate<aiLight>());
-    Light aa = Light.fromNative(a.ptr);
-    Light bb = Light.fromNative(b.ptr);
+    final a = Light.fromNative(allocate<aiLight>());
+    final b = Light.fromNative(allocate<aiLight>());
+    final aa = Light.fromNative(a.ptr);
+    final bb = Light.fromNative(b.ptr);
     expect(a, equals(a));
     expect(a, equals(aa));
     expect(b, equals(b));
@@ -56,21 +56,22 @@ void main() {
       final lights = scene.lights;
       expect(lights, isNotEmpty);
       expect(lights.length, isNonZero);
-      expect(lights.elementAt(0).name, equals('Lamp'));
-      expect(lights.elementAt(0).type, equals(LightSourceType.point));
-      expect(lights.elementAt(0).position, vector3MoreOrLessEquals(Vector3(0, 0, 0)));
-      expect(lights.elementAt(0).direction, vector3MoreOrLessEquals(Vector3(0, -1, 0)));
-      expect(lights.elementAt(0).up, vector3MoreOrLessEquals(Vector3(0, 0, -1)));
-      expect(lights.elementAt(0).attenuationConstant, isZero);
-      expect(lights.elementAt(0).attenuationLinear, moreOrLessEquals(0.000666667));
-      expect(lights.elementAt(0).attenuationQuadratic, isZero);
-      expect(lights.elementAt(0).colorDiffuse, isSameColorAs(Color.fromARGB(255, 255, 255, 255)));
-      expect(lights.elementAt(0).colorSpecular, isSameColorAs(Color.fromARGB(255, 255, 255, 255)));
-      expect(lights.elementAt(0).colorAmbient, isSameColorAs(Color.fromARGB(255, 0, 0, 0)));
-      expect(lights.elementAt(0).angleInnerCone, moreOrLessEquals(6.28319));
-      expect(lights.elementAt(0).angleOuterCone, moreOrLessEquals(6.28319));
-      expect(lights.elementAt(0).size.width, isZero);
-      expect(lights.elementAt(0).size.height, isZero);
+      final light_0 = lights.elementAt(0);
+      expect(light_0.name, equals('Lamp'));
+      expect(light_0.type, equals(LightSourceType.point));
+      expect(light_0.position, vector3MoreOrLessEquals(Vector3(0, 0, 0)));
+      expect(light_0.direction, vector3MoreOrLessEquals(Vector3(0, -1, 0)));
+      expect(light_0.up, vector3MoreOrLessEquals(Vector3(0, 0, -1)));
+      expect(light_0.attenuationConstant, isZero);
+      expect(light_0.attenuationLinear, moreOrLessEquals(0.000666667));
+      expect(light_0.attenuationQuadratic, isZero);
+      expect(light_0.colorDiffuse, isSameColorAs(Color.fromARGB(255, 255, 255, 255)));
+      expect(light_0.colorSpecular, isSameColorAs(Color.fromARGB(255, 255, 255, 255)));
+      expect(light_0.colorAmbient, isSameColorAs(Color.fromARGB(255, 0, 0, 0)));
+      expect(light_0.angleInnerCone, moreOrLessEquals(6.28319));
+      expect(light_0.angleOuterCone, moreOrLessEquals(6.28319));
+      expect(light_0.size.width, isZero);
+      expect(light_0.size.height, isZero);
     });
   });
 

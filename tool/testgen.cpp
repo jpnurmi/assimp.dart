@@ -9,6 +9,10 @@ static QString testFilePath(const QString &fileName) { return testFileDir().file
 static QDir testModelDir() { return QDir(QDir::currentPath() + "/models/model-db/"); }
 static QString testModelPath(const QString &fileName) { return testModelDir().filePath(fileName); }
 
+static QString indexed(const QString id, int i) { return QString("%1_%2").arg(id).arg(i); }
+static QString indexed(const QString id, int i, int j) { return QString("%1_%2_%3").arg(id).arg(i).arg(j); }
+static QString indexed(const QString id, int i, int j, int k) { return QString("%1_%2_%3_%4").arg(id).arg(i).arg(j).arg(k); }
+
 static QString import(const QString &package) { return QString("import '%1';").arg(package); }
 static QString dartName(const QString &typeName) { return typeName == "aiMetadata" ? "MetaData" : typeName.mid(2); }
 
@@ -116,10 +120,10 @@ static void writeSizeTest(QTextStream &out, const QString &typeName, size_t size
 static void writeEqualityTest(QTextStream &out, const QString &typeName)
 {
     writeGroup(out, "size", [&]() {
-        out << QString("    %1 a = %1.fromNative(allocate<%2>());\n").arg(dartName(typeName)).arg(typeName)
-            << QString("    %1 b = %1.fromNative(allocate<%2>());\n").arg(dartName(typeName)).arg(typeName)
-            << QString("    %1 aa = %1.fromNative(a.ptr);\n").arg(dartName(typeName))
-            << QString("    %1 bb = %1.fromNative(b.ptr);\n").arg(dartName(typeName))
+        out << QString("    final a = %1.fromNative(allocate<%2>());\n").arg(dartName(typeName)).arg(typeName)
+            << QString("    final b = %1.fromNative(allocate<%2>());\n").arg(dartName(typeName)).arg(typeName)
+            << QString("    final aa = %1.fromNative(a.ptr);\n").arg(dartName(typeName))
+            << QString("    final bb = %1.fromNative(b.ptr);\n").arg(dartName(typeName))
             << QString("    expect(a, equals(a));\n")
             << QString("    expect(a, equals(aa));\n")
             << QString("    expect(b, equals(b));\n")
@@ -164,52 +168,61 @@ static void writeAnimationTester(QTextStream &out, const QString &fileName = QSt
         << "      expect(animations.length, " << isZeroOrNot(scene->mNumAnimations) << ");\n";
     for (uint i = 0; i < scene->mNumAnimations; ++i) {
         const aiAnimation *animation = scene->mAnimations[i];
-        out << "      expect(animations.elementAt(" << i << ").name, " << equalsToString(animation->mName) << ");\n";
-        out << "      expect(animations.elementAt(" << i << ").duration, " << equalsToDouble(animation->mDuration) << ");\n";
-        out << "      expect(animations.elementAt(" << i << ").ticksPerSecond, " << equalsToDouble(animation->mTicksPerSecond) << ");\n";
-        out << "      expect(animations.elementAt(" << i << ").channels.length, " << equalsToInt(animation->mNumChannels) << ");\n";
+        out << "      final "  << indexed("animation", i) << " = animations.elementAt(" << i << ");\n"
+            << "      expect(" << indexed("animation", i) << ".name, " << equalsToString(animation->mName) << ");\n"
+            << "      expect(" << indexed("animation", i) << ".duration, " << equalsToDouble(animation->mDuration) << ");\n"
+            << "      expect(" << indexed("animation", i) << ".ticksPerSecond, " << equalsToDouble(animation->mTicksPerSecond) << ");\n"
+            << "      expect(" << indexed("animation", i) << ".channels.length, " << equalsToInt(animation->mNumChannels) << ");\n";
         for (uint j = 0; j < animation->mNumChannels; ++j) {
             const aiNodeAnim *channel = animation->mChannels[j];
-            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").positionKeys.length, " << equalsToInt(channel->mNumPositionKeys) << ");\n";
+            out << "      final  " << indexed("channel", i, j) << " = " << indexed("animation", i) << ".channels.elementAt(" << j << ");\n"
+                << "      expect(" << indexed("channel", i, j) << ".positionKeys.length, " << equalsToInt(channel->mNumPositionKeys) << ");\n";
             for (uint k = 0; k < channel->mNumPositionKeys; ++k) {
-                const aiVectorKey *key = channel->mPositionKeys + k;
-                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").positionKeys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
-                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").positionKeys.elementAt(" << k << ").value, " << equalsToVector3(key->mValue) << ");\n";
+                const aiVectorKey *positionKey = channel->mPositionKeys + k;
+                out << "      final "  << indexed("positionKey", i, j, k) << " = " << indexed("channel", i, j) << ".positionKeys.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("positionKey", i, j, k) << ".time, " << equalsToDouble(positionKey->mTime) << ");\n"
+                    << "      expect(" << indexed("positionKey", i, j, k) << ".value, " << equalsToVector3(positionKey->mValue) << ");\n";
             }
-            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").rotationKeys.length, " << equalsToInt(channel->mNumRotationKeys) << ");\n";
+            out << "      expect(" << indexed("channel", i, j) << ".rotationKeys.length, " << equalsToInt(channel->mNumRotationKeys) << ");\n";
             for (uint k = 0; k < channel->mNumRotationKeys; ++k) {
-                const aiQuatKey *key = channel->mRotationKeys + k;
-                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").rotationKeys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
-                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").rotationKeys.elementAt(" << k << ").value, " << equalsToQuaternion(key->mValue) << ");\n";
+                const aiQuatKey *rotationKey = channel->mRotationKeys + k;
+                out << "      final "  << indexed("rotationKey", i, j, k) << " = " << indexed("channel", i, j) << ".rotationKeys.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("rotationKey", i, j, k) << ".time, " << equalsToDouble(rotationKey->mTime) << ");\n"
+                    << "      expect(" << indexed("rotationKey", i, j, k) << ".value, " << equalsToQuaternion(rotationKey->mValue) << ");\n";
             }
-            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").scalingKeys.length, " << equalsToInt(channel->mNumScalingKeys) << ");\n";
+            out << "      expect(" << indexed("channel", i, j) << ".scalingKeys.length, " << equalsToInt(channel->mNumScalingKeys) << ");\n";
             for (uint k = 0; k < channel->mNumScalingKeys; ++k) {
-                const aiVectorKey *key = channel->mScalingKeys + k;
-                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").scalingKeys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
-                out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").scalingKeys.elementAt(" << k << ").value, " << equalsToVector3(key->mValue) << ");\n";
+                const aiVectorKey *scalingKey = channel->mScalingKeys + k;
+                out << "      final "  << indexed("scalingKey", i, j, k) << " = " << indexed("channel", i, j) << ".scalingKeys.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("scalingKey", i, j, k) << ".time, " << equalsToDouble(scalingKey->mTime) << ");\n"
+                    << "      expect(" << indexed("scalingKey", i, j, k) << ".value, " << equalsToVector3(scalingKey->mValue) << ");\n";
             }
-            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").preState, " << equalsToAnimBehavior(channel->mPreState) << ");\n";
-            out << "      expect(animations.elementAt(" << i << ").channels.elementAt(" << j << ").postState, " << equalsToAnimBehavior(channel->mPostState) << ");\n";
+            out << "      expect(" << indexed("channel", i, j) << ".preState, " << equalsToAnimBehavior(channel->mPreState) << ");\n"
+                << "      expect(" << indexed("channel", i, j) << ".postState, " << equalsToAnimBehavior(channel->mPostState) << ");\n";
         }
-        out << "      expect(animations.elementAt(" << i << ").meshChannels.length, " << equalsToInt(animation->mNumMeshChannels) << ");\n";
+        out << "      expect(" << indexed("animation", i) << ".meshChannels.length, " << equalsToInt(animation->mNumMeshChannels) << ");\n";
         for (uint j = 0; j < animation->mNumMeshChannels; ++j) {
-            const aiMeshAnim *channel = animation->mMeshChannels[j];
-            out << "      expect(animations.elementAt(" << i << ").meshChannels.elementAt(" << j << ").keys.length, " << equalsToInt(channel->mNumKeys) << ");\n";
-            for (uint k = 0; k < channel->mNumKeys; ++k) {
-                const aiMeshKey *key = channel->mKeys + k;
-                out << "      expect(animations.elementAt(" << i << ").meshChannels.elementAt(" << j << ").keys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
-                out << "      expect(animations.elementAt(" << i << ").meshChannels.elementAt(" << j << ").keys.elementAt(" << k << ").value, " << equalsToInt(key->mValue) << ");\n";
+            const aiMeshAnim *meshChannel = animation->mMeshChannels[j];
+            out << "      final "  << indexed("meshChannel", i, j) << " = " << indexed("animation", i) << ".meshChannels.elementAt(" << j << ");\n"
+                << "      expect(" << indexed("meshChannel", i, j) << ".keys.length, " << equalsToInt(meshChannel->mNumKeys) << ");\n";
+            for (uint k = 0; k < meshChannel->mNumKeys; ++k) {
+                const aiMeshKey *meshKey = meshChannel->mKeys + k;
+                out << "      final "  << indexed("meshKey", i, j, k) << " = " << indexed("meshChannel", i, j) << ".keys.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("meshKey", i, j, k) << ".time, " << equalsToDouble(meshKey->mTime) << ");\n"
+                    << "      expect(" << indexed("meshKey", i, j, k) << ".value, " << equalsToInt(meshKey->mValue) << ");\n";
             }
         }
-        out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.length, " << equalsToInt(animation->mNumMorphMeshChannels) << ");\n";
+        out << "      expect(" << indexed("animation", i) << ".meshMorphChannels.length, " << equalsToInt(animation->mNumMorphMeshChannels) << ");\n";
         for (uint j = 0; j < animation->mNumMorphMeshChannels; ++j) {
             const aiMeshMorphAnim *channel = animation->mMorphMeshChannels[j];
-            out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.elementAt(" << j << ").keys.length, " << equalsToInt(channel->mNumKeys) << ");\n";
+            out << "      final "  << indexed("meshMorphChannel", i, j) << " = " << indexed("animation", i) << ".meshMorphChannels.elementAt(" << j << ");\n"
+                << "      expect(" << indexed("meshMorphChannel", i, j) << ".keys.length, " << equalsToInt(channel->mNumKeys) << ");\n";
             for (uint k = 0; k < channel->mNumKeys; ++k) {
                 const aiMeshMorphKey *key = channel->mKeys + k;
-                out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.elementAt(" << j << ").keys.elementAt(" << k << ").time, " << equalsToDouble(key->mTime) << ");\n";
-                out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.elementAt(" << j << ").keys.elementAt(" << k << ").values, " << equalsToIntArray(key->mValues, key->mNumValuesAndWeights) << ");\n";
-                out << "      expect(animations.elementAt(" << i << ").meshMorphChannels.elementAt(" << j << ").keys.elementAt(" << k << ").weights, " << equalsToDoubleArray(key->mWeights, key->mNumValuesAndWeights) << ");\n";
+                out << "      final "  << indexed("meshMorphKey", i, j, k) << " = " << indexed("meshMorphChannel", i, j) << ".keys.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("meshMorphKey", i, j, k) << ".time, " << equalsToDouble(key->mTime) << ");\n"
+                    << "      expect(" << indexed("meshMorphKey", i, j, k) << ".values, " << equalsToIntArray(key->mValues, key->mNumValuesAndWeights) << ");\n"
+                    << "      expect(" << indexed("meshMorphKey", i, j, k) << ".weights, " << equalsToDoubleArray(key->mWeights, key->mNumValuesAndWeights) << ");\n";
             }
         }
         out << (i < scene->mNumAnimations - 1 ? "\n" : "");
@@ -243,14 +256,15 @@ static void writeCameraTester(QTextStream &out, const QString &fileName = QStrin
         << "      expect(cameras.length, " << isZeroOrNot(scene->mNumCameras) << ");\n";
     for (uint i = 0; i < scene->mNumCameras; ++i) {
         const aiCamera *camera = scene->mCameras[i];
-        out << "      expect(cameras.elementAt(" << i << ").name, " << equalsToString(camera->mName) << ");\n"
-            << "      expect(cameras.elementAt(" << i << ").position, " << equalsToVector3(camera->mPosition) << ");\n"
-            << "      expect(cameras.elementAt(" << i << ").up, " << equalsToVector3(camera->mUp) << ");\n"
-            << "      expect(cameras.elementAt(" << i << ").lookAt, " << equalsToVector3(camera->mLookAt) << ");\n"
-            << "      expect(cameras.elementAt(" << i << ").horizontalFov, " << equalsToFloat(camera->mHorizontalFOV) << ");\n"
-            << "      expect(cameras.elementAt(" << i << ").clipPlaneNear, " << equalsToFloat(camera->mClipPlaneNear) << ");\n"
-            << "      expect(cameras.elementAt(" << i << ").clipPlaneFar, " << equalsToFloat(camera->mClipPlaneFar) << ");\n"
-            << "      expect(cameras.elementAt(" << i << ").aspect, " << equalsToFloat(camera->mAspect) << ");\n"
+        out << "      final "  << indexed("camera", i) << " = cameras.elementAt(" << i << ");\n"
+            << "      expect(" << indexed("camera", i) << ".name, " << equalsToString(camera->mName) << ");\n"
+            << "      expect(" << indexed("camera", i) << ".position, " << equalsToVector3(camera->mPosition) << ");\n"
+            << "      expect(" << indexed("camera", i) << ".up, " << equalsToVector3(camera->mUp) << ");\n"
+            << "      expect(" << indexed("camera", i) << ".lookAt, " << equalsToVector3(camera->mLookAt) << ");\n"
+            << "      expect(" << indexed("camera", i) << ".horizontalFov, " << equalsToFloat(camera->mHorizontalFOV) << ");\n"
+            << "      expect(" << indexed("camera", i) << ".clipPlaneNear, " << equalsToFloat(camera->mClipPlaneNear) << ");\n"
+            << "      expect(" << indexed("camera", i) << ".clipPlaneFar, " << equalsToFloat(camera->mClipPlaneFar) << ");\n"
+            << "      expect(" << indexed("camera", i) << ".aspect, " << equalsToFloat(camera->mAspect) << ");\n"
             << (i < scene->mNumCameras - 1 ? "\n" : "");
     }
     out << "    });\n";
@@ -282,21 +296,22 @@ static void writeLightTester(QTextStream &out, const QString &fileName = QString
         << "      expect(lights.length, " << isZeroOrNot(scene->mNumLights) << ");\n";
     for (uint i = 0; i < scene->mNumLights; ++i) {
         const aiLight *light = scene->mLights[i];
-        out << "      expect(lights.elementAt(" << i << ").name, " << equalsToString(light->mName) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").type, " << equalsToLightSourceType(light->mType) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").position, " << equalsToVector3(light->mPosition) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").direction, " << equalsToVector3(light->mDirection) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").up, " << equalsToVector3(light->mUp) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").attenuationConstant, " << equalsToFloat(light->mAttenuationConstant) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").attenuationLinear, " << equalsToFloat(light->mAttenuationLinear) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").attenuationQuadratic, " << equalsToFloat(light->mAttenuationQuadratic) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").colorDiffuse, " << equalsToColor3(light->mColorDiffuse) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").colorSpecular, " << equalsToColor3(light->mColorSpecular) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").colorAmbient, " << equalsToColor3(light->mColorAmbient) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").angleInnerCone, " << equalsToFloat(light->mAngleInnerCone) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").angleOuterCone, " << equalsToFloat(light->mAngleOuterCone) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").size.width, " << equalsToFloat(light->mSize.x) << ");\n"
-            << "      expect(lights.elementAt(" << i << ").size.height, " << equalsToFloat(light->mSize.y) << ");\n"
+        out << "      final "  << indexed("light", i) << " = lights.elementAt(" << i << ");\n"
+            << "      expect(" << indexed("light", i) << ".name, " << equalsToString(light->mName) << ");\n"
+            << "      expect(" << indexed("light", i) << ".type, " << equalsToLightSourceType(light->mType) << ");\n"
+            << "      expect(" << indexed("light", i) << ".position, " << equalsToVector3(light->mPosition) << ");\n"
+            << "      expect(" << indexed("light", i) << ".direction, " << equalsToVector3(light->mDirection) << ");\n"
+            << "      expect(" << indexed("light", i) << ".up, " << equalsToVector3(light->mUp) << ");\n"
+            << "      expect(" << indexed("light", i) << ".attenuationConstant, " << equalsToFloat(light->mAttenuationConstant) << ");\n"
+            << "      expect(" << indexed("light", i) << ".attenuationLinear, " << equalsToFloat(light->mAttenuationLinear) << ");\n"
+            << "      expect(" << indexed("light", i) << ".attenuationQuadratic, " << equalsToFloat(light->mAttenuationQuadratic) << ");\n"
+            << "      expect(" << indexed("light", i) << ".colorDiffuse, " << equalsToColor3(light->mColorDiffuse) << ");\n"
+            << "      expect(" << indexed("light", i) << ".colorSpecular, " << equalsToColor3(light->mColorSpecular) << ");\n"
+            << "      expect(" << indexed("light", i) << ".colorAmbient, " << equalsToColor3(light->mColorAmbient) << ");\n"
+            << "      expect(" << indexed("light", i) << ".angleInnerCone, " << equalsToFloat(light->mAngleInnerCone) << ");\n"
+            << "      expect(" << indexed("light", i) << ".angleOuterCone, " << equalsToFloat(light->mAngleOuterCone) << ");\n"
+            << "      expect(" << indexed("light", i) << ".size.width, " << equalsToFloat(light->mSize.x) << ");\n"
+            << "      expect(" << indexed("light", i) << ".size.height, " << equalsToFloat(light->mSize.y) << ");\n"
             << (i < scene->mNumLights - 1 ? "\n" : "");
     }
     out << "    });\n";
@@ -328,36 +343,38 @@ static void writeMaterialTester(QTextStream &out, const QString &fileName = QStr
         << "      expect(materials.length, " << isZeroOrNot(scene->mNumMaterials) << ");\n";
     for (uint i = 0; i < scene->mNumMaterials; ++i) {
         const aiMaterial *material = scene->mMaterials[i];
-        out << "      expect(materials.elementAt(" << i << ").properties.length, " << equalsToInt(material->mNumProperties) << ");\n";
+        out << "      final "  << indexed("material", i) << " = materials.elementAt(" << i << ");\n"
+            << "      expect(" << indexed("material", i) << ".properties.length, " << equalsToInt(material->mNumProperties) << ");\n";
         for (uint j = 0; j < material->mNumProperties; ++j) {
             const aiMaterialProperty *property = material->mProperties[j];
-            out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").key, " << equalsToString(property->mKey) << ");\n";
+            out << "      final "  << indexed("property", i, j) << " = " << indexed("material", i) << ".properties.elementAt(" << j << ");\n"
+                << "      expect(" << indexed("property", i, j) << ".key, " << equalsToString(property->mKey) << ");\n";
             switch (property->mType) {
             case aiPropertyTypeInfo::aiPTI_Float:
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, double);\n";
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToFloat(*reinterpret_cast<float*>(property->mData)) << ");\n";
+                out << "      expect(" << indexed("property", i, j) << ".value.runtimeType, double);\n"
+                    << "      expect(" << indexed("property", i, j) << ".value, " << equalsToFloat(*reinterpret_cast<float*>(property->mData)) << ");\n";
                 break;
             case aiPropertyTypeInfo::aiPTI_Double:
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, double);\n";
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToDouble(*reinterpret_cast<double*>(property->mData)) << ");\n";
+                out << "      expect(" << indexed("property", i, j) << ".value.runtimeType, double);\n"
+                    << "      expect(" << indexed("property", i, j) << ".value, " << equalsToDouble(*reinterpret_cast<double*>(property->mData)) << ");\n";
                 break;
             case aiPropertyTypeInfo::aiPTI_String:
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, String);\n";
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToString(*reinterpret_cast<aiString*>(property->mData)) << ");\n";
+                out << "      expect(" << indexed("property", i, j) << ".value.runtimeType, String);\n"
+                    << "      expect(" << indexed("property", i, j) << ".value, " << equalsToString(*reinterpret_cast<aiString*>(property->mData)) << ");\n";
                 break;
             case aiPropertyTypeInfo::aiPTI_Integer:
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType, int);\n";
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToInt(*reinterpret_cast<int*>(property->mData)) << ");\n";
+                out << "      expect(" << indexed("property", i, j) << ".value.runtimeType, int);\n"
+                    << "      expect(" << indexed("property", i, j) << ".value, " << equalsToInt(*reinterpret_cast<int*>(property->mData)) << ");\n";
                 break;
             case aiPropertyTypeInfo::aiPTI_Buffer:
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value.runtimeType.toString(), 'Uint8List');\n";
-                out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").value, " << equalsToByteArray(property->mData, property->mDataLength) << ");\n";
+                out << "      expect(" << indexed("property", i, j) << ".value.runtimeType.toString(), 'Uint8List');\n"
+                    << "      expect(" << indexed("property", i, j) << ".value, " << equalsToByteArray(property->mData, property->mDataLength) << ");\n";
                 break;
             default:
                 break;
             }
-            out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").index, " << equalsToInt(property->mIndex) << ");\n";
-            out << "        expect(materials.elementAt(" << i << ").properties.elementAt(" << j << ").semantic, " << equalsToInt(property->mSemantic) << ");\n";
+            out << "      expect(" << indexed("property", i, j) << ".index, " << equalsToInt(property->mIndex) << ");\n"
+                << "      expect(" << indexed("property", i, j) << ".semantic, " << equalsToInt(property->mSemantic) << ");\n";
         }
         out << (i < scene->mNumMaterials - 1 ? "\n" : "");
     }
@@ -390,21 +407,22 @@ static void writeMeshTester(QTextStream &out, const QString &fileName = QString(
         << "      expect(meshes.length, " << isZeroOrNot(scene->mNumMeshes) << ");\n";
     for (uint i = 0; i < scene->mNumMeshes; ++i) {
         const aiMesh *mesh = scene->mMeshes[i];
-        out << "      expect(meshes.elementAt(" << i << ").primitiveTypes, " << equalsToInt(mesh->mPrimitiveTypes) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").vertices.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").normals.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").tangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").bitangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").colors.length, " << equalsToInt(arraySize(mesh->mColors)) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").textureCoords.length, " << equalsToInt(arraySize(mesh->mTextureCoords)) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").uvComponents.length, " << equalsToInt(arraySize(mesh->mNumUVComponents)) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").faces.length, " << equalsToInt(mesh->mNumFaces) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").bones.length, " << equalsToInt(mesh->mNumBones) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").materialIndex, " << equalsToInt(mesh->mMaterialIndex) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").name, " << equalsToString(mesh->mName) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").animMeshes.length, " << equalsToInt(mesh->mNumAnimMeshes) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").morphingMethod, " << equalsToInt(mesh->mMethod) << ");\n"
-            << "      expect(meshes.elementAt(" << i << ").aabb, " << equalsToAabb(mesh->mAABB) << ");\n"
+        out << "      final "  << indexed("mesh", i) << " = meshes.elementAt(" << i << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".primitiveTypes, " << equalsToInt(mesh->mPrimitiveTypes) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".vertices.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".normals.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".tangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".bitangents.length, " << equalsToInt(mesh->mNumVertices) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".colors.length, " << equalsToInt(arraySize(mesh->mColors)) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".textureCoords.length, " << equalsToInt(arraySize(mesh->mTextureCoords)) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".uvComponents.length, " << equalsToInt(arraySize(mesh->mNumUVComponents)) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".faces.length, " << equalsToInt(mesh->mNumFaces) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".bones.length, " << equalsToInt(mesh->mNumBones) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".materialIndex, " << equalsToInt(mesh->mMaterialIndex) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".name, " << equalsToString(mesh->mName) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".animMeshes.length, " << equalsToInt(mesh->mNumAnimMeshes) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".morphingMethod, " << equalsToInt(mesh->mMethod) << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".aabb, " << equalsToAabb(mesh->mAABB) << ");\n"
             << (i < scene->mNumMeshes - 1 ? "\n" : "");
     }
     out << "    });\n";
@@ -438,36 +456,38 @@ static void writeMetaDataTester(QTextStream &out, const QString &fileName = QStr
             << "      expect(metaData.values.length, " << equalsToInt(scene->mMetaData->mNumProperties) << ");\n"
             << "      expect(metaData.properties.length, " << equalsToInt(scene->mMetaData->mNumProperties) << ");\n";
         for (uint i = 0; i < scene->mMetaData->mNumProperties; ++i) {
-            out << "      expect(metaData.keys.elementAt(" << i << "), " << equalsToString(scene->mMetaData->mKeys[i]) << ");\n";
+            out << "      final "  << indexed("key", i) << " = metaData.keys.elementAt(" << i << ");\n"
+                << "      expect(" << indexed("key", i) << ", " << equalsToString(scene->mMetaData->mKeys[i]) << ");\n"
+                << "      final "  << indexed("value", i) << " = metaData.values.elementAt(" << i << ");\n";
             const aiMetadataEntry *entry = scene->mMetaData->mValues + i;
             switch (entry->mType) {
             case aiMetadataType::AI_BOOL:
-                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, bool);\n";
-                out << "      expect(metaData.values.elementAt(" << i << "), " << isTrueOrFalse(*reinterpret_cast<bool*>(entry->mData)) << ");\n";
+                out << "      expect(" << indexed("value", i) << ".runtimeType, bool);\n";
+                out << "      expect(" << indexed("value", i) << ", " << isTrueOrFalse(*reinterpret_cast<bool*>(entry->mData)) << ");\n";
                 break;
             case aiMetadataType::AI_INT32:
-                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, int);\n";
-                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToInt(*reinterpret_cast<int*>(entry->mData)) << ");\n";
+                out << "      expect(" << indexed("value", i) << ".runtimeType, int);\n";
+                out << "      expect(" << indexed("value", i) << ", " << equalsToInt(*reinterpret_cast<int*>(entry->mData)) << ");\n";
                 break;
             case aiMetadataType::AI_UINT64:
-                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, int);\n";
-                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToInt(*reinterpret_cast<qint64*>(entry->mData)) << ");\n";
+                out << "      expect(" << indexed("value", i) << ".runtimeType, int);\n";
+                out << "      expect(" << indexed("value", i) << ", " << equalsToInt(*reinterpret_cast<qint64*>(entry->mData)) << ");\n";
                 break;
             case aiMetadataType::AI_FLOAT:
-                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, double);\n";
-                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToFloat(*reinterpret_cast<float*>(entry->mData)) << ");\n";
+                out << "      expect(" << indexed("value", i) << ".runtimeType, double);\n";
+                out << "      expect(" << indexed("value", i) << ", " << equalsToFloat(*reinterpret_cast<float*>(entry->mData)) << ");\n";
                 break;
             case aiMetadataType::AI_DOUBLE:
-                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, double);\n";
-                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToDouble(*reinterpret_cast<double*>(entry->mData)) << ");\n";
+                out << "      expect(" << indexed("value", i) << ".runtimeType, double);\n";
+                out << "      expect(" << indexed("value", i) << ", " << equalsToDouble(*reinterpret_cast<double*>(entry->mData)) << ");\n";
                 break;
             case aiMetadataType::AI_AISTRING:
-                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, String);\n";
-                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToString(*reinterpret_cast<aiString*>(entry->mData)) << ");\n";
+                out << "      expect(" << indexed("value", i) << ".runtimeType, String);\n";
+                out << "      expect(" << indexed("value", i) << ", " << equalsToString(*reinterpret_cast<aiString*>(entry->mData)) << ");\n";
                 break;
             case aiMetadataType::AI_AIVECTOR3D:
-                out << "      expect(metaData.values.elementAt(" << i << ").runtimeType, Vector3);\n";
-                out << "      expect(metaData.values.elementAt(" << i << "), " << equalsToVector3(*reinterpret_cast<aiVector3D*>(entry->mData)) << ");\n";
+                out << "      expect(" << indexed("value", i) << ".runtimeType, Vector3);\n";
+                out << "      expect(" << indexed("value", i) << ", " << equalsToVector3(*reinterpret_cast<aiVector3D*>(entry->mData)) << ");\n";
                 break;
             default:
                 break;
@@ -506,12 +526,13 @@ static void writeNodeTester(QTextStream &out, const QString &fileName = QString(
         << "      expect(rootNode.children.length, " << equalsToInt(scene->mRootNode->mNumChildren) << ");\n";
     for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i) {
         const aiNode *node = scene->mRootNode->mChildren[i];
-        out << "      expect(rootNode.children.elementAt(" << i << ").name, " << equalsToString(node->mName) << ");\n"
-            << "      expect(rootNode.children.elementAt(" << i << ").transformation, " << equalsToMatrix4(node->mTransformation) << ");\n"
-            << "      expect(rootNode.children.elementAt(" << i << ").parent, " << isNullOrNot(node->mParent) << ");\n"
-            << "      expect(rootNode.children.elementAt(" << i << ").children.length, " << equalsToInt(node->mNumChildren) << ");\n"
-            << "      expect(rootNode.children.elementAt(" << i << ").meshes, " << equalsToIntArray(node->mMeshes, node->mNumMeshes) << ");\n"
-            << "      expect(rootNode.children.elementAt(" << i << ").metaData, " << isNullOrNot(node->mMetaData) << ");\n";
+        out << "      final "  << indexed("child", i) << " = rootNode.children.elementAt(" << i << ");\n"
+            << "      expect(" << indexed("child", i) << ".name, " << equalsToString(node->mName) << ");\n"
+            << "      expect(" << indexed("child", i) << ".transformation, " << equalsToMatrix4(node->mTransformation) << ");\n"
+            << "      expect(" << indexed("child", i) << ".parent, " << isNullOrNot(node->mParent) << ");\n"
+            << "      expect(" << indexed("child", i) << ".children.length, " << equalsToInt(node->mNumChildren) << ");\n"
+            << "      expect(" << indexed("child", i) << ".meshes, " << equalsToIntArray(node->mMeshes, node->mNumMeshes) << ");\n"
+            << "      expect(" << indexed("child", i) << ".metaData, " << isNullOrNot(node->mMetaData) << ");\n";
     }
     out << "      expect(rootNode.meshes, " << equalsToIntArray(scene->mRootNode->mMeshes, scene->mRootNode->mNumMeshes) << ");\n"
         << "      expect(rootNode.metaData, " << isNullOrNot(scene->mRootNode->mMetaData) << ");\n"

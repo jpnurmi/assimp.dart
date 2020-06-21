@@ -20,10 +20,10 @@ void main() {
   });
 
   test('size', () {
-    Camera a = Camera.fromNative(allocate<aiCamera>());
-    Camera b = Camera.fromNative(allocate<aiCamera>());
-    Camera aa = Camera.fromNative(a.ptr);
-    Camera bb = Camera.fromNative(b.ptr);
+    final a = Camera.fromNative(allocate<aiCamera>());
+    final b = Camera.fromNative(allocate<aiCamera>());
+    final aa = Camera.fromNative(a.ptr);
+    final bb = Camera.fromNative(b.ptr);
     expect(a, equals(a));
     expect(a, equals(aa));
     expect(b, equals(b));
@@ -56,14 +56,15 @@ void main() {
       final cameras = scene.cameras;
       expect(cameras, isNotEmpty);
       expect(cameras.length, isNonZero);
-      expect(cameras.elementAt(0).name, equals('Camera'));
-      expect(cameras.elementAt(0).position, vector3MoreOrLessEquals(Vector3(0, 0, 0)));
-      expect(cameras.elementAt(0).up, vector3MoreOrLessEquals(Vector3(0, 1, 0)));
-      expect(cameras.elementAt(0).lookAt, vector3MoreOrLessEquals(Vector3(1, 0, 0)));
-      expect(cameras.elementAt(0).horizontalFov, moreOrLessEquals(0.857556));
-      expect(cameras.elementAt(0).clipPlaneNear, moreOrLessEquals(10));
-      expect(cameras.elementAt(0).clipPlaneFar, moreOrLessEquals(10000));
-      expect(cameras.elementAt(0).aspect, moreOrLessEquals(1.33333));
+      final camera_0 = cameras.elementAt(0);
+      expect(camera_0.name, equals('Camera'));
+      expect(camera_0.position, vector3MoreOrLessEquals(Vector3(0, 0, 0)));
+      expect(camera_0.up, vector3MoreOrLessEquals(Vector3(0, 1, 0)));
+      expect(camera_0.lookAt, vector3MoreOrLessEquals(Vector3(1, 0, 0)));
+      expect(camera_0.horizontalFov, moreOrLessEquals(0.857556));
+      expect(camera_0.clipPlaneNear, moreOrLessEquals(10));
+      expect(camera_0.clipPlaneFar, moreOrLessEquals(10000));
+      expect(camera_0.aspect, moreOrLessEquals(1.33333));
     });
   });
 

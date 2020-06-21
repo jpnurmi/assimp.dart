@@ -20,10 +20,10 @@ void main() {
   });
 
   test('size', () {
-    Texture a = Texture.fromNative(allocate<aiTexture>());
-    Texture b = Texture.fromNative(allocate<aiTexture>());
-    Texture aa = Texture.fromNative(a.ptr);
-    Texture bb = Texture.fromNative(b.ptr);
+    final a = Texture.fromNative(allocate<aiTexture>());
+    final b = Texture.fromNative(allocate<aiTexture>());
+    final aa = Texture.fromNative(a.ptr);
+    final bb = Texture.fromNative(b.ptr);
     expect(a, equals(a));
     expect(a, equals(aa));
     expect(b, equals(b));

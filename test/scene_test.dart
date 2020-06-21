@@ -20,10 +20,10 @@ void main() {
   });
 
   test('size', () {
-    Scene a = Scene.fromNative(allocate<aiScene>());
-    Scene b = Scene.fromNative(allocate<aiScene>());
-    Scene aa = Scene.fromNative(a.ptr);
-    Scene bb = Scene.fromNative(b.ptr);
+    final a = Scene.fromNative(allocate<aiScene>());
+    final b = Scene.fromNative(allocate<aiScene>());
+    final aa = Scene.fromNative(a.ptr);
+    final bb = Scene.fromNative(b.ptr);
     expect(a, equals(a));
     expect(a, equals(aa));
     expect(b, equals(b));
