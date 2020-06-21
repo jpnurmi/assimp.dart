@@ -69,4 +69,18 @@ void main() {
     expect(Assimp.branchName, isEmpty);
     expect(Assimp.compileFlags, isNonZero);
   });
+
+  test('importFormats', () {
+    final formats = Assimp.importFormats;
+    expect(formats, isNotEmpty);
+    for (final format in Assimp.importFormats) {
+      expect(format.name, isNotEmpty);
+      expect(format.author, isNotNull);
+      expect(format.maintainer, isNotNull);
+      expect(format.comments, isNotNull);
+      expect(format.flags, isNotNull);
+      expect(format.extensions, isNotEmpty);
+      expect(format.extensions, allOf(isNotEmpty));
+    }
+  });
 }

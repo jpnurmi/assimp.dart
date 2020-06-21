@@ -41,9 +41,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
+import 'dart:ffi';
+
 import 'package:ffi/ffi.dart';
 
+import 'bindings.dart';
+import 'extensions.dart';
 import 'libassimp.dart';
+import 'type.dart';
 
 class Assimp {
   Assimp._();
@@ -60,4 +65,37 @@ class Assimp {
 
   static int get compileFlags => aiGetCompileFlags();
   static String get branchName => Utf8.fromUtf8(aiGetBranchName());
+
+  static Iterable<ImportFormat> get importFormats {
+    return Iterable.generate(
+      aiGetImportFormatCount(),
+      (i) => ImportFormat.fromNative(aiGetImportFormatDescription(i)),
+    );
+  }
+}
+
+class ImportFormatFlags {
+  static const int text = 0x1;
+  static const int binary = 0x2;
+  static const int compressed = 0x4;
+  static const int limited = 0x8;
+  static const int experimental = 0x10;
+}
+
+class ImportFormat extends AssimpType<aiImporterDesc> {
+  aiImporterDesc get _desc => ptr.ref;
+
+  ImportFormat._(Pointer<aiImporterDesc> ptr) : super(ptr);
+  factory ImportFormat.fromNative(Pointer<aiImporterDesc> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return ImportFormat._(ptr);
+  }
+
+  String get name => Utf8.fromUtf8(_desc.mName);
+  String get author => Utf8.fromUtf8(_desc.mAuthor);
+  String get maintainer => Utf8.fromUtf8(_desc.mMaintainer);
+  String get comments => Utf8.fromUtf8(_desc.mComments);
+  int get flags => _desc.mFlags;
+  List<String> get extensions =>
+      Utf8.fromUtf8(_desc.mFileExtensions).split(' ');
 }
