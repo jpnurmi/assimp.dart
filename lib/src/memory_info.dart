@@ -43,8 +43,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'package:ffi/ffi.dart';
+
 import 'bindings.dart';
 import 'extensions.dart';
+import 'libassimp.dart';
+import 'scene.dart';
 import 'type.dart';
 
 /// Stores the memory requirements for different components (e.g. meshes, materials,
@@ -59,6 +63,13 @@ class MemoryInfo extends AssimpType<aiMemoryInfo> {
   factory MemoryInfo.fromNative(Pointer<aiMemoryInfo> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MemoryInfo._(ptr);
+  }
+
+  /// Get approximated storage required by a scene
+  factory MemoryInfo.fromScene(Scene scene) {
+    final mem = allocate<aiMemoryInfo>();
+    aiGetMemoryRequirements(scene.ptr, mem);
+    return MemoryInfo.fromNative(mem);
   }
 
   /// Storage allocated for texture data
@@ -84,4 +95,9 @@ class MemoryInfo extends AssimpType<aiMemoryInfo> {
 
   /// Total storage allocated for the full import.
   int get total => _memoryInfo.total;
+
+  /// Releases all resources associated with the given memory requirements.
+  ///
+  /// Call this function after you're done with the memory info.
+  void dispose() => free(ptr);
 }

@@ -344,6 +344,25 @@ static void writeMaterialTester(QTextStream &out, const aiScene *scene, const QS
     out << "    });\n";
 }
 
+
+static void writeMemoryInfoTester(QTextStream &out, const aiScene *scene, const QString &fileName)
+{
+    aiMemoryInfo mem;
+    aiGetMemoryRequirements(scene, &mem);
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final mem = MemoryInfo.fromScene(scene);\n"
+        << "      expect(mem, isNotNull);\n"
+        << "      expect(mem.textures, " << equalsToInt(mem.textures) << ");\n"
+        << "      expect(mem.materials, " << equalsToInt(mem.materials) << ");\n"
+        << "      expect(mem.meshes, " << equalsToInt(mem.meshes) << ");\n"
+        << "      expect(mem.nodes, " << equalsToInt(mem.nodes) << ");\n"
+        << "      expect(mem.animations, " << equalsToInt(mem.animations) << ");\n"
+        << "      expect(mem.cameras, " << equalsToInt(mem.cameras) << ");\n"
+        << "      expect(mem.lights, " << equalsToInt(mem.lights) << ");\n"
+        << "      expect(mem.total, " << equalsToInt(mem.total) << ");\n";
+    out << "    });\n";
+}
+
 static void writeMeshTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
     out << "    testScene('" << fileName << "', (scene) {\n"
@@ -587,6 +606,7 @@ int main(int argc, char *argv[])
     generateTest<aiMaterial>("aiMaterial", "Material", "material_test.dart", writeMaterialTester);
     generateTest<aiMatrix3x3>("aiMatrix3x3", "AssimpMatrix3", "matrix3_test.dart");
     generateTest<aiMatrix4x4>("aiMatrix4x4", "AssimpMatrix4", "matrix4_test.dart");
+    generateTest<aiMemoryInfo>("aiMemoryInfo", "MemoryInfo", "memory_info_test.dart", writeMemoryInfoTester);
     generateTest<aiMesh>("aiMesh", "Mesh", "mesh_test.dart", writeMeshTester);
     generateTest<aiMetadata>("aiMetadata", "MetaData", "meta_data_test.dart", writeMetaDataTester);
     generateTest<aiNode>("aiNode", "Node", "node_test.dart", writeNodeTester);

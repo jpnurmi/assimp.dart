@@ -50,6 +50,7 @@ export 'src/camera.dart';
 export 'src/extensions.dart';
 export 'src/light.dart';
 export 'src/material.dart';
+export 'src/memory_info.dart';
 export 'src/mesh.dart';
 export 'src/meta_data.dart';
 export 'src/node.dart';
