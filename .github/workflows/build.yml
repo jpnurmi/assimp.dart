@@ -1,0 +1,48 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04, macos-latest, windows-latest]
+    continue-on-error: true
+    steps:
+    - name: Install Dart
+      uses: DanTup/gh-actions/setup-dart@master
+    - name: Install Assimp on Ubuntu
+      if: matrix.os == 'ubuntu-18.04' || matrix.os == 'ubuntu-20.04'
+      run: sudo apt update && sudo apt install -y libassimp-dev
+    - name: Install Assimp on macOS
+      if: matrix.os == 'macos-latest'
+      run: brew install assimp
+    - name: Install vcpkg
+      if: matrix.os == 'windows-latest'
+      uses: lukka/run-vcpkg@v3
+      with:
+        setupOnly: true
+    - name: Install Assimp on Windows
+      if: matrix.os == 'windows-latest'
+      run: vcpkg install assimp
+    - name: Git checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Get dependencies
+      run: pub get
+    - name: Run tests
+      run: pub run test
+    - name: Measure coverage
+      run: pub run test_coverage
+    - name: Upload coverage
+      if: matrix.os == 'ubuntu-20.04'
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: coverage/lcov.info
