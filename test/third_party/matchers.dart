@@ -7,9 +7,7 @@
 import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
-import 'package:path/path.dart';
-// ignore: deprecated_member_use
-import 'package:test_api/test_api.dart' hide TypeMatcher, isInstanceOf;
+import 'package:test/test.dart';
 
 import 'package:vector_math/vector_math.dart';
 
