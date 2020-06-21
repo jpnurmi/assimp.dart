@@ -145,23 +145,6 @@ static void writeToStringTest(QTextStream &out, const QString &typeName)
     });
 }
 
-template <typename T>
-static void generateTest(const QString &typeName, const QString &fileName, std::function<void(QTextStream &out)> writer)
-{
-    QFile file(testFilePath(fileName));
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-        qFatal("%s", qPrintable(file.errorString()));
-
-    QTextStream out(&file);
-    writeHeader(out, fileName);
-    writeNullTest(out, dartName(typeName));
-    writeSizeTest(out, typeName, sizeof(T));
-    writeEqualityTest(out, typeName);
-    writeToStringTest(out, typeName);
-    writer(out);
-    writeFooter(out, fileName);
-}
-
 static void writeAnimationTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
@@ -234,22 +217,6 @@ static void writeAnimationTester(QTextStream &out, const QString &fileName = QSt
     aiReleaseImport(scene);
 }
 
-static void generateAnimationTest(const QString &fileName)
-{
-    generateTest<aiAnimation>("aiAnimation", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeAnimationTester(out, "3mf/box.3mf");
-            writeAnimationTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeAnimationTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeAnimationTester(out, "Obj/Spider/spider.obj");
-        });
-    });
-}
-
 static void writeCameraTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
@@ -272,22 +239,6 @@ static void writeCameraTester(QTextStream &out, const QString &fileName = QStrin
     }
     out << "    });\n";
     aiReleaseImport(scene);
-}
-
-static void generateCameraTest(const QString &fileName)
-{
-    generateTest<aiCamera>("aiCamera", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeCameraTester(out, "3mf/box.3mf");
-            writeCameraTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeCameraTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeCameraTester(out, "Obj/Spider/spider.obj");
-        });
-    });
 }
 
 static void writeLightTester(QTextStream &out, const QString &fileName = QString())
@@ -319,22 +270,6 @@ static void writeLightTester(QTextStream &out, const QString &fileName = QString
     }
     out << "    });\n";
     aiReleaseImport(scene);
-}
-
-static void generateLightTest(const QString &fileName)
-{
-    generateTest<aiLight>("aiLight", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeLightTester(out, "3mf/box.3mf");
-            writeLightTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeLightTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeLightTester(out, "Obj/Spider/spider.obj");
-        });
-    });
 }
 
 static void writeMaterialTester(QTextStream &out, const QString &fileName = QString())
@@ -383,22 +318,6 @@ static void writeMaterialTester(QTextStream &out, const QString &fileName = QStr
     }
     out << "    });\n";
     aiReleaseImport(scene);
-}
-
-static void generateMaterialTest(const QString &fileName)
-{
-    generateTest<aiMaterial>("aiMaterial", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeMaterialTester(out, "3mf/box.3mf");
-            writeMaterialTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeMaterialTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeMaterialTester(out, "Obj/Spider/spider.obj");
-        });
-    });
 }
 
 static void writeMeshTester(QTextStream &out, const QString &fileName = QString())
@@ -478,22 +397,6 @@ static void writeMeshTester(QTextStream &out, const QString &fileName = QString(
     aiReleaseImport(scene);
 }
 
-static void generateMeshTest(const QString &fileName)
-{
-    generateTest<aiMesh>("aiMesh", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeMeshTester(out, "3mf/box.3mf");
-            writeMeshTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeMeshTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeMeshTester(out, "Obj/Spider/spider.obj");
-        });
-    });
-}
-
 static void writeMetaDataTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
@@ -547,22 +450,6 @@ static void writeMetaDataTester(QTextStream &out, const QString &fileName = QStr
     aiReleaseImport(scene);
 }
 
-static void generateMetaDataTest(const QString &fileName)
-{
-    generateTest<aiMetadata>("aiMetadata", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeMetaDataTester(out, "3mf/box.3mf");
-            writeMetaDataTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeMetaDataTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeMetaDataTester(out, "Obj/Spider/spider.obj");
-        });
-    });
-}
-
 static void writeNodeTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
@@ -589,22 +476,6 @@ static void writeNodeTester(QTextStream &out, const QString &fileName = QString(
     aiReleaseImport(scene);
 }
 
-static void generateNodeTest(const QString &fileName)
-{
-    generateTest<aiNode>("aiNode", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeNodeTester(out, "3mf/box.3mf");
-            writeNodeTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeNodeTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeNodeTester(out, "Obj/Spider/spider.obj");
-        });
-    });
-}
-
 static void writeSceneTester(QTextStream &out, const QString &fileName = QString())
 {
     const aiScene *scene = aiImportFile(testModelPath(fileName).toLocal8Bit(), 0);
@@ -621,22 +492,6 @@ static void writeSceneTester(QTextStream &out, const QString &fileName = QString
         << "      expect(scene.metaData, " << isNullOrNot(scene->mMetaData) << ");\n"
         << "    });\n";
     aiReleaseImport(scene);
-}
-
-static void generateSceneTest(const QString &fileName)
-{
-    generateTest<aiScene>("aiScene", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeSceneTester(out, "3mf/box.3mf");
-            writeSceneTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeSceneTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeSceneTester(out, "Obj/Spider/spider.obj");
-        });
-    });
 }
 
 static void writeTextureTester(QTextStream &out, const QString &fileName = QString())
@@ -667,33 +522,43 @@ static void writeTextureTester(QTextStream &out, const QString &fileName = QStri
     aiReleaseImport(scene);
 }
 
-static void generateTextureTest(const QString &fileName)
+template <typename T>
+static void generateTest(const QString &typeName, const QString &fileName, std::function<void(QTextStream &out, const QString &filePath)> writer)
 {
-    generateTest<aiTexture>("aiTexture", fileName, [&](QTextStream &out) {
-        writeGroup(out, "3mf", [&]() {
-            writeTextureTester(out, "3mf/box.3mf");
-            writeTextureTester(out, "3mf/spider.3mf");
-        });
-        writeGroup(out, "fbx", [&]() {
-            writeTextureTester(out, "fbx/huesitos.fbx");
-        });
-        writeGroup(out, "obj", [&]() {
-            writeTextureTester(out, "Obj/Spider/spider.obj");
-        });
+    QFile file(testFilePath(fileName));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        qFatal("%s", qPrintable(file.errorString()));
+
+    QTextStream out(&file);
+    writeHeader(out, fileName);
+    writeNullTest(out, dartName(typeName));
+    writeSizeTest(out, typeName, sizeof(T));
+    writeEqualityTest(out, typeName);
+    writeToStringTest(out, typeName);
+    writeGroup(out, "3mf", [&]() {
+        writer(out, "3mf/box.3mf");
+        writer(out, "3mf/spider.3mf");
     });
+    writeGroup(out, "fbx", [&]() {
+        writer(out, "fbx/huesitos.fbx");
+    });
+    writeGroup(out, "obj", [&]() {
+        writer(out, "Obj/Spider/spider.obj");
+    });
+    writeFooter(out, fileName);
 }
 
 int main(int argc, char *argv[])
 {
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
-    generateAnimationTest("animation_test.dart");
-    generateCameraTest("camera_test.dart");
-    generateLightTest("light_test.dart");
-    generateMaterialTest("material_test.dart");
-    generateMeshTest("mesh_test.dart");
-    generateMetaDataTest("meta_data_test.dart");
-    generateNodeTest("node_test.dart");
-    generateSceneTest("scene_test.dart");
-    generateTextureTest("texture_test.dart");
+    generateTest<aiAnimation>("aiAnimation", "animation_test.dart", writeAnimationTester);
+    generateTest<aiCamera>("aiCamera", "camera_test.dart", writeCameraTester);
+    generateTest<aiLight>("aiLight", "light_test.dart", writeLightTester);
+    generateTest<aiMaterial>("aiMaterial", "material_test.dart", writeMaterialTester);
+    generateTest<aiMesh>("aiMesh", "mesh_test.dart", writeMeshTester);
+    generateTest<aiMetadata>("aiMetadata", "meta_data_test.dart", writeMetaDataTester);
+    generateTest<aiNode>("aiNode", "node_test.dart", writeNodeTester);
+    generateTest<aiScene>("aiScene", "scene_test.dart", writeSceneTester);
+    generateTest<aiTexture>("aiTexture", "texture_test.dart", writeTextureTester);
 }
