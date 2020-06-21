@@ -1,4 +1,4 @@
-#include <QtCore>
+﻿#include <QtCore>
 
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
@@ -211,6 +211,29 @@ static void writeAnimationTester(QTextStream &out, const aiScene *scene, const Q
             }
         }
         out << (i < scene->mNumAnimations - 1 ? "\n" : "");
+    }
+    out << "    });\n";
+}
+
+static void writeBoneTester(QTextStream &out, const aiScene *scene, const QString &fileName)
+{
+    out << "    testScene('" << fileName << "', (scene) {\n";
+    for (uint i = 0; i < scene->mNumMeshes; ++i) {
+        const aiMesh *mesh = scene->mMeshes[i];
+        if (mesh->mNumBones > 0) {
+            out << "      final "  << indexed("mesh", i) << " = scene.meshes.elementAt(" << i << ");\n";
+            for (uint j = 0; j < mesh->mNumBones; ++j) {
+                const aiBone *bone = mesh->mBones[j];
+                out << "      final "  << indexed("bone", i, j) << " = "  << indexed("mesh", i) << ".bones.elementAt(" << j << ");\n"
+                    << "      expect(" << indexed("bone", i, j) << ".name, " << equalsToString(bone->mName) << ");\n"
+                    << "      expect(" << indexed("bone", i, j) << ".offset, " << equalsToMatrix4(bone->mOffsetMatrix) << ");\n";
+                for (uint k = 0; k < bone->mNumWeights; ++k) {
+                    out << "      final "  << indexed("weight", i, j, k) << " = "  << indexed("bone", i, j) << ".weights.elementAt(" << k << ");\n"
+                        << "      expect(" << indexed("weight", i, j, k) << ".vertexId, " << equalsToInt(bone->mWeights[k].mVertexId) << ");\n"
+                        << "      expect(" << indexed("weight", i, j, k) << ".weight, " << equalsToFloat(bone->mWeights[k].mWeight) << ");\n";
+                }
+            }
+        }
     }
     out << "    });\n";
 }
@@ -542,16 +565,18 @@ static void generateTest(const QString &typeName, const QString &fileName, TestW
     writeSizeTest(out, typeName, sizeof(T));
     writeEqualityTest(out, typeName);
     writeToStringTest(out, typeName);
-    writeGroup(out, "3mf", [&]() {
-        writeSceneTest(out, "3mf/box.3mf", writer);
-        writeSceneTest(out, "3mf/spider.3mf", writer);
-    });
-    writeGroup(out, "fbx", [&]() {
-        writeSceneTest(out, "fbx/huesitos.fbx", writer);
-    });
-    writeGroup(out, "obj", [&]() {
-        writeSceneTest(out, "Obj/Spider/spider.obj", writer);
-    });
+    if (writer) {
+        writeGroup(out, "3mf", [&]() {
+            writeSceneTest(out, "3mf/box.3mf", writer);
+            writeSceneTest(out, "3mf/spider.3mf", writer);
+        });
+        writeGroup(out, "fbx", [&]() {
+            writeSceneTest(out, "fbx/huesitos.fbx", writer);
+        });
+        writeGroup(out, "obj", [&]() {
+            writeSceneTest(out, "Obj/Spider/spider.obj", writer);
+        });
+    }
     writeFooter(out, fileName);
 }
 
@@ -560,6 +585,7 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
     generateTest<aiAnimation>("aiAnimation", "animation_test.dart", writeAnimationTester);
+    generateTest<aiBone>("aiBone", "bone_test.dart", writeBoneTester);
     generateTest<aiCamera>("aiCamera", "camera_test.dart", writeCameraTester);
     generateTest<aiFace>("aiFace", "face_test.dart", writeFaceTester);
     generateTest<aiLight>("aiLight", "light_test.dart", writeLightTester);
@@ -569,4 +595,5 @@ int main(int argc, char *argv[])
     generateTest<aiNode>("aiNode", "node_test.dart", writeNodeTester);
     generateTest<aiScene>("aiScene", "scene_test.dart", writeSceneTester);
     generateTest<aiTexture>("aiTexture", "texture_test.dart", writeTextureTester);
+    generateTest<aiVertexWeight>("aiVertexWeight", "vertex_weight_test.dart", nullptr);
 }

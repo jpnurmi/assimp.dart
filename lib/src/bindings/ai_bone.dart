@@ -315,18 +315,12 @@ class aiBone extends Struct {
   @Uint32()
   int mNumWeights;
 
-  // class aiNode *             mArmature;            /*  1032     8 */
-  Pointer<aiNode> mArmature;
-
-  // class aiNode *             mNode;                /*  1040     8 */
-  Pointer<aiNode> mNode;
-
-  // class aiVertexWeight *     mWeights;             /*  1048     8 */
+  // class aiVertexWeight *     mWeights;             /*  1032     8 */
   Pointer<aiVertexWeight> mWeights;
 
-  // aiMatrix4x4                mOffsetMatrix;        /*  1056    64 */
-  Pointer<aiMatrix4x4> get mOffset =>
-      Pointer<aiMatrix4x4>.fromAddress(addressOf.address + 1056);
+  // aiMatrix4x4                mOffsetMatrix;        /*  1040    64 */
+  Pointer<aiMatrix4x4> get mOffsetMatrix =>
+      Pointer<aiMatrix4x4>.fromAddress(addressOf.address + 1040);
 
   // 4x4 ai_real
   @Float()
@@ -347,5 +341,5 @@ class aiBone extends Struct {
       _mD3,
       _mD4;
 
-  /* size: 1120, members: 6 */
+  /* size: 1104, members: 4 */
 }

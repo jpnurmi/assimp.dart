@@ -91,7 +91,7 @@ class Bone extends AssimpType<aiBone> {
     );
   }
 
-  Matrix4 get offset => AssimpMatrix4.fromNative(_bone.mOffset);
+  Matrix4 get offset => AssimpMatrix4.fromNative(_bone.mOffsetMatrix);
 }
 
 class AnimMesh extends AssimpType<aiAnimMesh> {
