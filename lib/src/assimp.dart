@@ -50,22 +50,45 @@ import 'extensions.dart';
 import 'libassimp.dart';
 import 'type.dart';
 
+/// ### TODO
 class Assimp {
   Assimp._();
 
+  /// Enable verbose logging. Verbose logging includes debug-related stuff and
+  /// detailed import statistics. This can have severe impact on import performance
+  /// and memory consumption. However, it might be useful to find out why a file
+  /// didn't read correctly.
+  /// @param d AI_TRUE or AI_FALSE, your decision.
   static void enableVerboseLogging(bool enable) =>
       aiEnableVerboseLogging(enable ? 1 : 0);
 
+  /// Returns the error text of the last failed import process.
+  ///
+  /// @return A textual description of the error that occurred at the last
+  /// import process. NULL if there was no error. There can't be an error if you
+  /// got a non-NULL #aiScene from #aiImportFile/#aiImportFileEx/#aiApplyPostProcessing.
   static String get errorString => Utf8.fromUtf8(aiGetErrorString());
+
+  /// Returns a string with legal copyright and licensing information
+  /// about Assimp. The string may include multiple lines.
   static String get legalString => Utf8.fromUtf8(aiGetLegalString());
 
+  /// Returns the current major version number of Assimp.
   static int get versionMajor => aiGetVersionMajor();
+
+  /// eturns the current minor version number of Assimp.
   static int get versionMinor => aiGetVersionMinor();
+
+  /// Returns the repository revision of the Assimp runtime.
   static int get versionRevision => aiGetVersionRevision();
 
+  /// Returns assimp's compile flags
   static int get compileFlags => aiGetCompileFlags();
+
+  /// Returns the branchname of the Assimp runtime.
   static String get branchName => Utf8.fromUtf8(aiGetBranchName());
 
+  /// Import file format descriptions
   static Iterable<ImportFormat> get importFormats {
     return Iterable.generate(
       aiGetImportFormatCount(),
@@ -74,14 +97,59 @@ class Assimp {
   }
 }
 
+class CompileFlags {
+  /// Assimp was compiled as a shared object (Windows: DLL)
+  static const int shared = 0x1;
+
+  /// Assimp was compiled against STLport
+  static const int stlPort = 0x2;
+
+  /// Assimp was compiled as a debug build
+  static const int debug = 0x4;
+
+  /// Assimp was compiled with ASSIMP_BUILD_BOOST_WORKAROUND defined
+  static const int noBoost = 0x8;
+
+  /// Assimp was compiled with ASSIMP_BUILD_SINGLETHREADED defined
+  static const int singleThreaded = 0x10;
+}
+
+/// Mixed set of flags for #aiImporterDesc, indicating some features
+/// common to many importers
 class ImportFormatFlags {
+  /// Indicates that there is a textual encoding of the
+  /// file format; and that it is supported.
   static const int text = 0x1;
+
+  /// Indicates that there is a binary encoding of the
+  /// file format; and that it is supported.
   static const int binary = 0x2;
+
+  /// Indicates that there is a compressed encoding of the
+  /// file format; and that it is supported.
   static const int compressed = 0x4;
+
+  /// Indicates that the importer reads only a very particular
+  /// subset of the file format. This happens commonly for
+  /// declarative or procedural formats which cannot easily
+  /// be mapped to #aiScene
   static const int limited = 0x8;
+
+  /// Indicates that the importer is highly experimental and
+  /// should be used with care. This only happens for trunk
+  /// (i.e. Git) versions, experimental code is not included
+  /// in releases.
   static const int experimental = 0x10;
 }
 
+/// Meta information about a particular importer. Importers need to fill
+/// this structure, but they can freely decide how talkative they are.
+/// A common use case for loader meta info is a user interface
+/// in which the user can choose between various import/export file
+/// formats. Building such an UI by hand means a lot of maintenance
+/// as importers/exporters are added to Assimp, so it might be useful
+/// to have a common mechanism to query some rough importer
+/// characteristics.
 class ImportFormat extends AssimpType<aiImporterDesc> {
   aiImporterDesc get _desc => ptr.ref;
 
@@ -91,11 +159,33 @@ class ImportFormat extends AssimpType<aiImporterDesc> {
     return ImportFormat._(ptr);
   }
 
+  /// Full name of the importer (i.e. Blender3D importer)
   String get name => Utf8.fromUtf8(_desc.mName);
+
+  /// Original author (left blank if unknown or whole assimp team)
   String get author => Utf8.fromUtf8(_desc.mAuthor);
+
+  /// Current maintainer, left blank if the author maintains
   String get maintainer => Utf8.fromUtf8(_desc.mMaintainer);
+
+  /// Implementation comments, i.e. unimplemented features
   String get comments => Utf8.fromUtf8(_desc.mComments);
+
+  /// These flags indicate some characteristics common to many importers.
   int get flags => _desc.mFlags;
+
+  /// List of file extensions this importer can handle.
+  /// List entries are separated by space characters.
+  /// All entries are lower case without a leading dot (i.e.
+  /// "xml dae" would be a valid value. Note that multiple
+  /// importers may respond to the same file extension -
+  /// assimp calls all importers in the order in which they
+  /// are registered and each importer gets the opportunity
+  /// to load the file until one importer "claims" the file. Apart
+  /// from file extension checks, importers typically use
+  /// other methods to quickly reject files (i.e. magic
+  /// words) so this does not mean that common or generic
+  /// file extensions such as XML would be tediously slow.
   List<String> get extensions =>
       Utf8.fromUtf8(_desc.mFileExtensions).split(' ');
 }

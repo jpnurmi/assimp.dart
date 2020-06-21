@@ -47,6 +47,24 @@ import 'bindings.dart';
 import 'extensions.dart';
 import 'type.dart';
 
+/// Data structure for a single material property
+///
+/// As an user, you'll probably never need to deal with this data structure.
+/// Just use the provided aiGetMaterialXXX() or aiMaterial::Get() family
+/// of functions to query material properties easily. Processing them
+/// manually is faster, but it is not the recommended way. It isn't worth
+/// the effort. <br>
+/// Material property names follow a simple scheme:
+/// @code
+///   $<name>
+///   ?<name>
+///      A public property, there must be corresponding AI_MATKEY_XXX define
+///      2nd: Public, but ignored by the #aiProcess_RemoveRedundantMaterials
+///      post-processing step.
+///   ~<name>
+///      A temporary property for internal use.
+/// @endcode
+/// @see aiMaterial
 class MaterialProperty extends AssimpType<aiMaterialProperty> {
   aiMaterialProperty get _property => ptr.ref;
 
@@ -56,8 +74,11 @@ class MaterialProperty extends AssimpType<aiMaterialProperty> {
     return MaterialProperty._(ptr);
   }
 
+  /// Specifies the name of the property (key)
+  /// Keys are generally case insensitive.
   String get key => AssimpString.fromNative(_property.mKey);
 
+  /// The value of the property
   dynamic get value {
     switch (_property.mType) {
       case aiPropertyTypeInfo.float:
@@ -75,10 +96,23 @@ class MaterialProperty extends AssimpType<aiMaterialProperty> {
     }
   }
 
+  /// Textures: Specifies the index of the texture.
+  /// For non-texture properties, this member is always 0.
   int get index => _property.mIndex;
+
+  /// Textures: Specifies their exact usage semantic.
+  /// For non-texture properties, this member is always 0
+  /// (or, better-said, #aiTextureType_NONE).
   int get semantic => _property.mSemantic;
 }
 
+/// Data structure for a material
+///
+/// Material data is stored using a key-value structure. A single key-value
+/// pair is called a 'material property'. C++ users should use the provided
+/// member functions of aiMaterial to process material properties, C users
+/// have to stick with the aiMaterialGetXXX family of unbound functions.
+/// The library defines a set of standard keys (AI_MATKEY_XXX).
 class Material extends AssimpType<aiMaterial> {
   aiMaterial get _material => ptr.ref;
 
@@ -88,6 +122,7 @@ class Material extends AssimpType<aiMaterial> {
     return Material._(ptr);
   }
 
+  /// List of all material properties loaded.
   Iterable<MaterialProperty> get properties {
     return Iterable.generate(
       _material.mNumProperties,
