@@ -22,7 +22,7 @@ static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(const void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 
 static QString color4ToString(const aiColor4D &c) { return QString("Color.fromARGB(%1, %2, %3, %4)").arg(std::round(c.a * 255)).arg(std::round(c.r * 255)).arg(std::round(c.g * 255)).arg(std::round(c.b * 255)); }
-static QString color3ToString(const aiColor3D &c) { return color4ToString(aiColor4D(1.0, c.r, c.g, c.b)); }
+static QString color3ToString(const aiColor3D &c) { return color4ToString(aiColor4D(c.r, c.g, c.b, 1.0)); }
 static QString matrix4ToString(const aiMatrix4x4 &m) { return QString("Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16)").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
 static QString quaternionToString(const aiQuaternion &q) { return QString("Quaternion(%1, %2, %3, %4)").arg(q.x).arg(q.y).arg(q.z).arg(q.z); }
 static QString vector3ToString(const aiVector3D &v) { return QString("Vector3(%1, %2, %3)").arg(v.x).arg(v.y).arg(v.z); }
