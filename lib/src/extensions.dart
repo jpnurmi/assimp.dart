@@ -82,13 +82,13 @@ extension AssimpColor3 on Color {
     );
   }
 
-  static Pointer<aiColor3D> toNative(Color color) {
-    final Pointer<aiColor3D> ptr = allocate();
-    ptr.ref.r = color.red / 255.0;
-    ptr.ref.g = color.green / 255.0;
-    ptr.ref.b = color.blue / 255.0;
-    return ptr;
-  }
+//  static Pointer<aiColor3D> toNative(Color color) {
+//    final Pointer<aiColor3D> ptr = allocate();
+//    ptr.ref.r = color.red / 255.0;
+//    ptr.ref.g = color.green / 255.0;
+//    ptr.ref.b = color.blue / 255.0;
+//    return ptr;
+//  }
 }
 
 extension AssimpColor4 on Color {
@@ -102,14 +102,14 @@ extension AssimpColor4 on Color {
     );
   }
 
-  static Pointer<aiColor4D> toNative(Color color) {
-    final Pointer<aiColor4D> ptr = allocate();
-    ptr.ref.a = color.alpha / 255.0;
-    ptr.ref.r = color.red / 255.0;
-    ptr.ref.g = color.green / 255.0;
-    ptr.ref.b = color.blue / 255.0;
-    return ptr;
-  }
+//  static Pointer<aiColor4D> toNative(Color color) {
+//    final Pointer<aiColor4D> ptr = allocate();
+//    ptr.ref.a = color.alpha / 255.0;
+//    ptr.ref.r = color.red / 255.0;
+//    ptr.ref.g = color.green / 255.0;
+//    ptr.ref.b = color.blue / 255.0;
+//    return ptr;
+//  }
 }
 
 extension AssimpMatrix3 on Matrix3 {
@@ -128,19 +128,19 @@ extension AssimpMatrix3 on Matrix3 {
     );
   }
 
-  static Pointer<aiMatrix3x3> toNative(Matrix3 matrix) {
-    final Pointer<aiMatrix3x3> ptr = allocate();
-    ptr.ref.a1 = matrix.row0.x;
-    ptr.ref.a2 = matrix.row0.y;
-    ptr.ref.a3 = matrix.row0.z;
-    ptr.ref.b1 = matrix.row1.x;
-    ptr.ref.b2 = matrix.row1.y;
-    ptr.ref.b3 = matrix.row1.z;
-    ptr.ref.c1 = matrix.row2.x;
-    ptr.ref.c2 = matrix.row2.y;
-    ptr.ref.c3 = matrix.row2.z;
-    return ptr;
-  }
+//  static Pointer<aiMatrix3x3> toNative(Matrix3 matrix) {
+//    final Pointer<aiMatrix3x3> ptr = allocate();
+//    ptr.ref.a1 = matrix.row0.x;
+//    ptr.ref.a2 = matrix.row0.y;
+//    ptr.ref.a3 = matrix.row0.z;
+//    ptr.ref.b1 = matrix.row1.x;
+//    ptr.ref.b2 = matrix.row1.y;
+//    ptr.ref.b3 = matrix.row1.z;
+//    ptr.ref.c1 = matrix.row2.x;
+//    ptr.ref.c2 = matrix.row2.y;
+//    ptr.ref.c3 = matrix.row2.z;
+//    return ptr;
+//  }
 }
 
 extension AssimpMatrix4 on Matrix4 {
@@ -166,26 +166,26 @@ extension AssimpMatrix4 on Matrix4 {
     );
   }
 
-  static Pointer<aiMatrix4x4> toNative(Matrix4 matrix) {
-    final Pointer<aiMatrix4x4> ptr = allocate();
-    ptr.ref.a1 = matrix.row0.x;
-    ptr.ref.a2 = matrix.row0.y;
-    ptr.ref.a3 = matrix.row0.z;
-    ptr.ref.a4 = matrix.row0.w;
-    ptr.ref.b1 = matrix.row1.x;
-    ptr.ref.b2 = matrix.row1.y;
-    ptr.ref.b3 = matrix.row1.z;
-    ptr.ref.b4 = matrix.row1.w;
-    ptr.ref.c1 = matrix.row2.x;
-    ptr.ref.c2 = matrix.row2.y;
-    ptr.ref.c3 = matrix.row2.z;
-    ptr.ref.c4 = matrix.row2.w;
-    ptr.ref.d1 = matrix.row3.x;
-    ptr.ref.d2 = matrix.row3.y;
-    ptr.ref.d3 = matrix.row3.z;
-    ptr.ref.d4 = matrix.row3.w;
-    return ptr;
-  }
+//  static Pointer<aiMatrix4x4> toNative(Matrix4 matrix) {
+//    final Pointer<aiMatrix4x4> ptr = allocate();
+//    ptr.ref.a1 = matrix.row0.x;
+//    ptr.ref.a2 = matrix.row0.y;
+//    ptr.ref.a3 = matrix.row0.z;
+//    ptr.ref.a4 = matrix.row0.w;
+//    ptr.ref.b1 = matrix.row1.x;
+//    ptr.ref.b2 = matrix.row1.y;
+//    ptr.ref.b3 = matrix.row1.z;
+//    ptr.ref.b4 = matrix.row1.w;
+//    ptr.ref.c1 = matrix.row2.x;
+//    ptr.ref.c2 = matrix.row2.y;
+//    ptr.ref.c3 = matrix.row2.z;
+//    ptr.ref.c4 = matrix.row2.w;
+//    ptr.ref.d1 = matrix.row3.x;
+//    ptr.ref.d2 = matrix.row3.y;
+//    ptr.ref.d3 = matrix.row3.z;
+//    ptr.ref.d4 = matrix.row3.w;
+//    return ptr;
+//  }
 }
 
 extension AssimpPlane on Plane {
@@ -194,14 +194,14 @@ extension AssimpPlane on Plane {
     return Plane.components(ptr.ref.a, ptr.ref.b, ptr.ref.c, ptr.ref.d);
   }
 
-  static Pointer<aiPlane> toNative(Plane plane) {
-    final Pointer<aiPlane> ptr = allocate();
-    ptr.ref.a = plane.normal.x;
-    ptr.ref.b = plane.normal.y;
-    ptr.ref.c = plane.normal.z;
-    ptr.ref.d = plane.constant;
-    return ptr;
-  }
+//  static Pointer<aiPlane> toNative(Plane plane) {
+//    final Pointer<aiPlane> ptr = allocate();
+//    ptr.ref.a = plane.normal.x;
+//    ptr.ref.b = plane.normal.y;
+//    ptr.ref.c = plane.normal.z;
+//    ptr.ref.d = plane.constant;
+//    return ptr;
+//  }
 }
 
 extension AssimpPointer on Pointer {
@@ -215,14 +215,14 @@ extension AssimpQuaternion on Quaternion {
     return Quaternion(ptr.ref.x, ptr.ref.y, ptr.ref.z, ptr.ref.z);
   }
 
-  static Pointer<aiQuaternion> toNative(Quaternion quaternion) {
-    final Pointer<aiQuaternion> ptr = allocate();
-    ptr.ref.x = quaternion.x;
-    ptr.ref.y = quaternion.y;
-    ptr.ref.z = quaternion.z;
-    ptr.ref.w = quaternion.w;
-    return ptr;
-  }
+//  static Pointer<aiQuaternion> toNative(Quaternion quaternion) {
+//    final Pointer<aiQuaternion> ptr = allocate();
+//    ptr.ref.x = quaternion.x;
+//    ptr.ref.y = quaternion.y;
+//    ptr.ref.z = quaternion.z;
+//    ptr.ref.w = quaternion.w;
+//    return ptr;
+//  }
 }
 
 extension AssimpRay on Ray {
@@ -247,12 +247,12 @@ extension AssimpSize on Size {
     return Size(ptr.ref.x, ptr.ref.y);
   }
 
-  static Pointer<aiVector2D> toNative(Size size) {
-    final Pointer<aiVector2D> ptr = allocate();
-    ptr.ref.x = size.width;
-    ptr.ref.y = size.height;
-    return ptr;
-  }
+//  static Pointer<aiVector2D> toNative(Size size) {
+//    final Pointer<aiVector2D> ptr = allocate();
+//    ptr.ref.x = size.width;
+//    ptr.ref.y = size.height;
+//    return ptr;
+//  }
 }
 
 extension AssimpString on String {
@@ -280,12 +280,12 @@ extension AssimpVector2 on Vector2 {
     return Vector2(ptr.ref.x, ptr.ref.y);
   }
 
-  static Pointer<aiVector2D> toNative(Vector2 vec) {
-    final Pointer<aiVector2D> ptr = allocate();
-    ptr.ref.x = vec.x;
-    ptr.ref.y = vec.y;
-    return ptr;
-  }
+//  static Pointer<aiVector2D> toNative(Vector2 vec) {
+//    final Pointer<aiVector2D> ptr = allocate();
+//    ptr.ref.x = vec.x;
+//    ptr.ref.y = vec.y;
+//    return ptr;
+//  }
 }
 
 extension AssimpVector3 on Vector3 {
@@ -294,11 +294,11 @@ extension AssimpVector3 on Vector3 {
     return Vector3(ptr.ref.x, ptr.ref.y, ptr.ref.z);
   }
 
-  static Pointer<aiVector3D> toNative(Vector3 vec) {
-    final Pointer<aiVector3D> ptr = allocate();
-    ptr.ref.x = vec.x;
-    ptr.ref.y = vec.y;
-    ptr.ref.z = vec.z;
-    return ptr;
-  }
+//  static Pointer<aiVector3D> toNative(Vector3 vec) {
+//    final Pointer<aiVector3D> ptr = allocate();
+//    ptr.ref.x = vec.x;
+//    ptr.ref.y = vec.y;
+//    ptr.ref.z = vec.z;
+//    return ptr;
+//  }
 }
