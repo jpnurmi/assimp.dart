@@ -102,6 +102,16 @@ void main() {
     }
   });
 
+  test('exportFormats', () {
+    final formats = Assimp.exportFormats;
+    expect(formats, isNotEmpty);
+    for (final format in formats) {
+      expect(format.id, isNotEmpty);
+      expect(format.description, isNotNull);
+      expect(format.extension, isNotEmpty);
+    }
+  });
+
   test('copy', () {
     Scene original = Scene.fromFile(testModelPath('3mf/spider.3mf'));
     Scene copy = original.copy();

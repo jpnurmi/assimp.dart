@@ -121,6 +121,14 @@ class Assimp {
       (i) => ImportFormat.fromNative(aiGetImportFormatDescription(i)),
     );
   }
+
+  /// Export file format descriptions
+  static Iterable<ExportFormat> get exportFormats {
+    return Iterable.generate(
+      aiGetExportFormatCount(),
+      (i) => ExportFormat.fromNative(aiGetExportFormatDescription(i)),
+    );
+  }
 }
 
 class CompileFlags {
@@ -214,4 +222,34 @@ class ImportFormat extends AssimpType<aiImporterDesc> {
   /// file extensions such as XML would be tediously slow.
   List<String> get extensions =>
       Utf8.fromUtf8(_desc.mFileExtensions).split(' ');
+}
+
+/// Describes an file format which Assimp can export to. Use #aiGetExportFormatCount() to
+/// learn how many export formats the current Assimp build supports and #aiGetExportFormatDescription()
+/// to retrieve a description of an export format option.
+class ExportFormat extends AssimpType<aiExportFormatDesc> {
+  aiExportFormatDesc get _desc => ptr.ref;
+
+  ExportFormat._(Pointer<aiExportFormatDesc> ptr) : super(ptr);
+  factory ExportFormat.fromNative(Pointer<aiExportFormatDesc> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return ExportFormat._(ptr);
+  }
+
+  /// a short string ID to uniquely identify the export format. Use this ID string to
+  /// specify which file format you want to export to when calling #aiExportScene().
+  /// Example: "dae" or "obj"
+  String get id => Utf8.fromUtf8(_desc.id);
+
+  /// A short description of the file format to present to users. Useful if you want
+  /// to allow the user to select an export format.
+  String get description => Utf8.fromUtf8(_desc.description);
+
+  /// Recommended file extension for the exported file in lower case.
+  String get extension => Utf8.fromUtf8(_desc.fileExtension);
+
+  /// Release a description of the nth export file format. Must be returned by
+  /// aiGetExportFormatDescription
+  /// @param desc Pointer to the description
+  void dispose() => aiReleaseExportFormatDescription(ptr);
 }
