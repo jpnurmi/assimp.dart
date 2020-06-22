@@ -1,6 +1,6 @@
 # Dart bindings for Assimp
 
-[![pub](https://img.shields.io/pub/v/dart_assimp.svg)](https://pub.dev/packages/dart_assimp)
+[![pub](https://img.shields.io/pub/v/assimp.svg)](https://pub.dev/packages/assimp)
 [![license: BSD](https://img.shields.io/badge/license-BSD-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
 ![build](https://github.com/jpnurmi/dart_assimp/workflows/Build/badge.svg)
 [![codecov](https://codecov.io/gh/jpnurmi/dart_assimp/branch/master/graph/badge.svg)](https://codecov.io/gh/jpnurmi/dart_assimp)
