@@ -212,6 +212,74 @@ static void writeAnimationTester(QTextStream &out, const aiScene *scene, const Q
     out << "    });\n";
 }
 
+static void writeAnimMeshTester(QTextStream &out, const aiScene *scene, const QString &fileName)
+{
+    out << "    testScene('" << fileName << "', (scene) {\n"
+        << "      final meshes = scene.meshes;\n";
+    for (uint i = 0; i < scene->mNumMeshes; ++i) {
+        const aiMesh *meshhh = scene->mMeshes[i];
+        out << "      final "  << indexed("mesh", i) << " = meshes.elementAt(" << i << ");\n"
+            << "      expect(" << indexed("mesh", i) << ".animMeshes.length, " << equalsToInt(meshhh->mNumAnimMeshes) << ");\n";
+        for (uint j = 0; j < meshhh->mNumAnimMeshes; ++j) {
+            const aiAnimMesh *animMesh = meshhh->mAnimMeshes[j];
+            out << "      final "  << indexed("animMesh", i, j) << " = "  << indexed("mesh", i) << ".animMeshes.elementAt(" << j << ");\n"
+                << "      expect(" << indexed("animMesh", i, j) << ".name, " << equalsToString(animMesh->mName) << ");\n"
+                << "      expect(" << indexed("animMesh", i, j) << ".weight, " << equalsToFloat(animMesh->mWeight) << ");\n";
+
+            const uint numVertices = animMesh->mNumVertices;
+            out << "      expect(" << indexed("mesh", i) << ".vertices.length, " << equalsToInt(animMesh->mNumVertices) << ");\n";
+            for (uint j = 0; j < numVertices; ++j) {
+                out << "      final "  << indexed("vertex", i, j) << " = "  << indexed("mesh", i) << ".vertices.elementAt(" << j << ");\n"
+                    << "      expect(" << indexed("vertex", i, j) << ", " << equalsToVector3(animMesh->mVertices[j]) << ");\n";
+            }
+
+            const uint numNormals = animMesh->mNormals ? animMesh->mNumVertices : 0;
+            out << "      expect(" << indexed("mesh", i) << ".normals.length, " << equalsToInt(numNormals) << ");\n";
+            for (uint j = 0; j <  numNormals; ++j) {
+                out << "      final "  << indexed("normal", i, j) << " = "  << indexed("mesh", i) << ".normals.elementAt(" << j << ");\n"
+                    << "      expect(" << indexed("normal", i, j) << ", " << equalsToVector3(animMesh->mNormals[j]) << ");\n";
+            }
+
+            const uint numTangents = animMesh->mTangents ? animMesh->mNumVertices : 0;
+            out << "      expect(" << indexed("mesh", i) << ".tangents.length, " << equalsToInt(numTangents) << ");\n";
+            for (uint j = 0; j < numTangents; ++j) {
+                out << "      final "  << indexed("tangent", i, j) << " = "  << indexed("mesh", i) << ".tangents.elementAt(" << j << ");\n"
+                    << "      expect(" << indexed("tangent", i, j) << ", " << equalsToVector3(animMesh->mTangents[j]) << ");\n";
+            }
+
+            const uint numBitangents = animMesh->mBitangents ? animMesh->mNumVertices : 0;
+            out << "      expect(" << indexed("mesh", i) << ".bitangents.length, " << equalsToInt(numBitangents) << ");\n";
+            for (uint j = 0; j < numBitangents; ++j) {
+                out << "      final "  << indexed("bitangent", i, j) << " = "  << indexed("mesh", i) << ".bitangents.elementAt(" << j << ");\n"
+                    << "      expect(" << indexed("bitangent", i, j) << ", " << equalsToVector3(animMesh->mBitangents[j]) << ");\n";
+            }
+
+            const uint numColorChannels = arraySize(animMesh->mColors);
+            out << "      expect(" << indexed("mesh", i) << ".colors.length, " << equalsToInt(numColorChannels) << ");\n";
+            for (uint j = 0; j < numColorChannels; ++j) {
+                out << "      final "  << indexed("colors", i, j) << " = "  << indexed("mesh", i) << ".colors.elementAt(" << j << ");\n"
+                    << "      expect(" << indexed("colors", i, j) << ".length, " << equalsToInt(numVertices) << ");\n";
+                for (uint k = 0; k < numVertices; ++k) {
+                    out << "      final "  << indexed("color", i, j, k) << " = .colors.elementAt(" << k << ");\n"
+                        << "      expect(" << indexed("color", i, j, k) << ", " << equalsToColor4(animMesh->mColors[j][k]) << ");\n";
+                }
+            }
+
+            const uint numTextureCoords = arraySize(animMesh->mTextureCoords);
+            out << "      expect(" << indexed("mesh", i) << ".textureCoords.length, " << equalsToInt(numTextureCoords) << ");\n";
+            for (uint j = 0; j < numTextureCoords; ++j) {
+                out << "      final "  << indexed("textureCoords", i, j) << " = "  << indexed("mesh", i) << ".textureCoords.elementAt(" << j << ");\n"
+                    << "      expect(" << indexed("textureCoords", i, j) << ".length, " << equalsToInt(numVertices) << ");\n";
+                for (uint k = 0; k < numVertices; ++k) {
+                    out << "      final "  << indexed("textureCoord", i, j, k) << " = " << indexed("textureCoords", i, j) << ".elementAt(" << k << ");\n"
+                        << "      expect(" << indexed("textureCoord", i, j, k) << ", " << equalsToVector3(animMesh->mTextureCoords[j][k]) << ");\n";
+                }
+            }
+        }
+    }
+    out << "    });\n";
+}
+
 static void writeBoneTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
     out << "    testScene('" << fileName << "', (scene) {\n";
@@ -606,7 +674,7 @@ int main(int argc, char *argv[])
 
     generateTest<aiAABB>("aiAABB", "AssimpAabb3", "aabb_test.dart");
     generateTest<aiAnimation>("aiAnimation", "Animation", "animation_test.dart", writeAnimationTester);
-    generateTest<aiAnimMesh>("aiAnimMesh", "AnimMesh", "anim_mesh_test.dart");
+    generateTest<aiAnimMesh>("aiAnimMesh", "AnimMesh", "anim_mesh_test.dart", writeAnimMeshTester);
     generateTest<aiBone>("aiBone", "Bone", "bone_test.dart", writeBoneTester);
     generateTest<aiCamera>("aiCamera", "Camera", "camera_test.dart", writeCameraTester);
     generateTest<aiColor3D>("aiColor3D", "AssimpColor3", "color3_test.dart");
