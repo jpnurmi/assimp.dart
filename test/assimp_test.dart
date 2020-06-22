@@ -70,10 +70,26 @@ void main() {
     expect(Assimp.compileFlags, isNonZero);
   });
 
+  test('extensions', () {
+    expect(Assimp.isSupported(''), isFalse);
+    expect(Assimp.isSupported('.'), isFalse);
+    expect(Assimp.isSupported('.obj'), isTrue);
+    expect(Assimp.isSupported('.dart'), isFalse);
+
+    final extensions = Assimp.extensions;
+    expect(extensions, isNotEmpty);
+    for (final extension in extensions) {
+      expect(extension, isNotEmpty);
+      expect(extension, startsWith('*.'));
+      expect(extension.length, greaterThan(2));
+      expect(Assimp.isSupported(extension), isTrue);
+    }
+  });
+
   test('importFormats', () {
     final formats = Assimp.importFormats;
     expect(formats, isNotEmpty);
-    for (final format in Assimp.importFormats) {
+    for (final format in formats) {
       expect(format.name, isNotEmpty);
       expect(format.author, isNotNull);
       expect(format.maintainer, isNotNull);

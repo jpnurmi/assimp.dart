@@ -47,6 +47,8 @@ import 'package:ffi/ffi.dart';
 
 // pahole libassimpd.so -M -C aiString
 class aiString extends Struct {
+  static Pointer<aiString> alloc() => allocate<aiString>()..ref.length = 0;
+
   // ai_uint32                  length;               /*     0     4 */
   @Uint32() // ai_uint32
   int length;

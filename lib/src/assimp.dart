@@ -88,6 +88,32 @@ class Assimp {
   /// Returns the branchname of the Assimp runtime.
   static String get branchName => Utf8.fromUtf8(aiGetBranchName());
 
+  /// Returns whether a given file extension is supported by ASSIMP
+  ///
+  /// @param szExtension Extension for which the function queries support for.
+  /// Must include a leading dot '.'. Example: ".3ds", ".md3"
+  /// @return AI_TRUE if the file extension is supported.
+  static bool isSupported(String extension) {
+    Pointer<Utf8> ptr = Utf8.toUtf8(extension);
+    int res = aiIsExtensionSupported(ptr);
+    free(ptr);
+    return res != 0;
+  }
+
+  /// Get a list of all file extensions supported by ASSIMP.
+  ///
+  /// If a file extension is contained in the list this does, of course, not
+  /// mean that ASSIMP is able to load all files with this extension.
+  /// @param szOut String to receive the extension list.
+  /// Format of the list: "*.3ds;*.obj;*.dae". NULL is not a valid parameter.
+  static Iterable<String> get extensions {
+    Pointer<aiString> ptr = aiString.alloc();
+    aiGetExtensionList(ptr);
+    String ext = AssimpString.fromNative(ptr);
+    free(ptr);
+    return ext.split(';');
+  }
+
   /// Import file format descriptions
   static Iterable<ImportFormat> get importFormats {
     return Iterable.generate(
