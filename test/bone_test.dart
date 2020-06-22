@@ -33,14 +33,14 @@ void main() {
   });
 
   test('3mf', () {
-    testScene('3mf/box.3mf', (scene) {
+    testScene('box.3mf', (scene) {
     });
-    testScene('3mf/spider.3mf', (scene) {
+    testScene('spider.3mf', (scene) {
     });
   });
 
   test('fbx', () {
-    testScene('fbx/huesitos.fbx', (scene) {
+    testScene('huesitos.fbx', (scene) {
       final mesh_0 = scene.meshes.elementAt(0);
       final bone_0_0 = mesh_0.bones.elementAt(0);
       expect(bone_0_0.name, equals('Bone'));
@@ -2004,8 +2004,13 @@ void main() {
     });
   });
 
+  test('collada', () {
+    testScene('anims.DAE', (scene) {
+    });
+  });
+
   test('obj', () {
-    testScene('Obj/Spider/spider.obj', (scene) {
+    testScene('spider.obj', (scene) {
     });
   });
 

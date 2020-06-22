@@ -10,7 +10,7 @@ static const int Dec = 9;
 static QDir testFileDir() { return QDir::current(); }
 static QString testFilePath(const QString &fileName) { return testFileDir().filePath(fileName); }
 
-static QDir testModelDir() { return QDir(QDir::currentPath() + "/models/model-db/"); }
+static QDir testModelDir() { return QDir(QDir::currentPath() + "/models/"); }
 static QString testModelPath(const QString &fileName) { return testModelDir().filePath(fileName); }
 
 static QString indexed(const QString id, int i) { return QString("%1_%2").arg(id).arg(i); }
@@ -584,14 +584,17 @@ static void generateTest(const QString &nativeName, const QString &dartName, con
         writeEqualityTest(out, nativeName, dartName);
         writeToStringTest(out, nativeName, dartName);
         writeGroup(out, "3mf", [&]() {
-            writeSceneTest(out, "3mf/box.3mf", writer);
-            writeSceneTest(out, "3mf/spider.3mf", writer);
+            writeSceneTest(out, "box.3mf", writer);
+            writeSceneTest(out, "spider.3mf", writer);
         });
         writeGroup(out, "fbx", [&]() {
-            writeSceneTest(out, "fbx/huesitos.fbx", writer);
+            writeSceneTest(out, "huesitos.fbx", writer);
+        });
+        writeGroup(out, "collada", [&]() {
+            writeSceneTest(out, "anims.DAE", writer);
         });
         writeGroup(out, "obj", [&]() {
-            writeSceneTest(out, "Obj/Spider/spider.obj", writer);
+            writeSceneTest(out, "spider.obj", writer);
         });
     }
     writeFooter(out, fileName);

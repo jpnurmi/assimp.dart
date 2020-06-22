@@ -5,7 +5,7 @@ import 'package:path/path.dart' hide equals;
 import '../lib/assimp.dart';
 export 'third_party/matchers.dart';
 
-String testModelPath(String fileName) => 'test/models/model-db/' + fileName;
+String testModelPath(String fileName) => 'test/models/' + fileName;
 
 void prepareTest() {
   // https://github.com/flutter/flutter/issues/20907

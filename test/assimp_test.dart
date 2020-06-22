@@ -113,7 +113,7 @@ void main() {
   });
 
   test('copy', () {
-    Scene original = Scene.fromFile(testModelPath('3mf/spider.3mf'));
+    Scene original = Scene.fromFile(testModelPath('spider.3mf'));
     Scene copy = original.copy();
     expect(copy.ptr.address, isNot(equals(original.ptr.address)));
     expect(copy.meshes, isNotEmpty);

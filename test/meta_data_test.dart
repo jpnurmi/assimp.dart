@@ -33,18 +33,18 @@ void main() {
   });
 
   test('3mf', () {
-    testScene('3mf/box.3mf', (scene) {
+    testScene('box.3mf', (scene) {
       final metaData = scene.metaData;
       expect(metaData, isNull);
     });
-    testScene('3mf/spider.3mf', (scene) {
+    testScene('spider.3mf', (scene) {
       final metaData = scene.metaData;
       expect(metaData, isNull);
     });
   });
 
   test('fbx', () {
-    testScene('fbx/huesitos.fbx', (scene) {
+    testScene('huesitos.fbx', (scene) {
       final metaData = scene.metaData;
       expect(metaData, isNotNull);
       expect(metaData.keys.length, equals(15));
@@ -128,8 +128,33 @@ void main() {
     });
   });
 
+  test('collada', () {
+    testScene('anims.DAE', (scene) {
+      final metaData = scene.metaData;
+      expect(metaData, isNotNull);
+      expect(metaData.keys.length, equals(3));
+      expect(metaData.values.length, equals(3));
+      expect(metaData.properties.length, equals(3));
+      final key_0 = metaData.keys.elementAt(0);
+      expect(key_0, equals('AuthoringTool'));
+      final value_0 = metaData.values.elementAt(0);
+      expect(value_0.runtimeType, String);
+      expect(value_0, equals('FBX COLLADA exporter'));
+      final key_1 = metaData.keys.elementAt(1);
+      expect(key_1, equals('Created'));
+      final value_1 = metaData.values.elementAt(1);
+      expect(value_1.runtimeType, String);
+      expect(value_1, equals('2015-02-03T10:29:10Z'));
+      final key_2 = metaData.keys.elementAt(2);
+      expect(key_2, equals('Modified'));
+      final value_2 = metaData.values.elementAt(2);
+      expect(value_2.runtimeType, String);
+      expect(value_2, equals('2015-02-03T10:29:10Z'));
+    });
+  });
+
   test('obj', () {
-    testScene('Obj/Spider/spider.obj', (scene) {
+    testScene('spider.obj', (scene) {
       final metaData = scene.metaData;
       expect(metaData, isNull);
     });

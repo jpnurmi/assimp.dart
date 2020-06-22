@@ -33,19 +33,19 @@ void main() {
   });
 
   test('3mf', () {
-    testScene('3mf/box.3mf', (scene) {
+    testScene('box.3mf', (scene) {
       final mem = MemoryInfo.fromScene(scene);
       expect(mem, isNotNull);
       expect(mem.textures, isZero);
       expect(mem.materials, equals(88));
-      expect(mem.meshes, equals(1408));
+      expect(mem.meshes, equals(1744));
       expect(mem.nodes, equals(2300));
       expect(mem.animations, isZero);
       expect(mem.cameras, isZero);
       expect(mem.lights, isZero);
-      expect(mem.total, equals(3924));
+      expect(mem.total, equals(4260));
     });
-    testScene('3mf/spider.3mf', (scene) {
+    testScene('spider.3mf', (scene) {
       final mem = MemoryInfo.fromScene(scene);
       expect(mem, isNotNull);
       expect(mem.textures, isZero);
@@ -60,7 +60,7 @@ void main() {
   });
 
   test('fbx', () {
-    testScene('fbx/huesitos.fbx', (scene) {
+    testScene('huesitos.fbx', (scene) {
       final mem = MemoryInfo.fromScene(scene);
       expect(mem, isNotNull);
       expect(mem.textures, isZero);
@@ -74,8 +74,23 @@ void main() {
     });
   });
 
+  test('collada', () {
+    testScene('anims.DAE', (scene) {
+      final mem = MemoryInfo.fromScene(scene);
+      expect(mem, isNotNull);
+      expect(mem.textures, isZero);
+      expect(mem.materials, equals(88));
+      expect(mem.meshes, equals(150016));
+      expect(mem.nodes, equals(148856));
+      expect(mem.animations, equals(93256));
+      expect(mem.cameras, isZero);
+      expect(mem.lights, isZero);
+      expect(mem.total, equals(392344));
+    });
+  });
+
   test('obj', () {
-    testScene('Obj/Spider/spider.obj', (scene) {
+    testScene('spider.obj', (scene) {
       final mem = MemoryInfo.fromScene(scene);
       expect(mem, isNotNull);
       expect(mem.textures, isZero);

@@ -33,7 +33,7 @@ void main() {
   });
 
   test('3mf', () {
-    testScene('3mf/box.3mf', (scene) {
+    testScene('box.3mf', (scene) {
       final materials = scene.materials;
       expect(materials, isNotEmpty);
       expect(materials.length, equals(1));
@@ -52,7 +52,7 @@ void main() {
       expect(property_0_1.index, isZero);
       expect(property_0_1.semantic, isZero);
     });
-    testScene('3mf/spider.3mf', (scene) {
+    testScene('spider.3mf', (scene) {
       final materials = scene.materials;
       expect(materials, isNotEmpty);
       expect(materials.length, equals(4));
@@ -95,7 +95,7 @@ void main() {
   });
 
   test('fbx', () {
-    testScene('fbx/huesitos.fbx', (scene) {
+    testScene('huesitos.fbx', (scene) {
       final materials = scene.materials;
       expect(materials, isNotEmpty);
       expect(materials.length, equals(1));
@@ -200,8 +200,30 @@ void main() {
     });
   });
 
+  test('collada', () {
+    testScene('anims.DAE', (scene) {
+      final materials = scene.materials;
+      expect(materials, isNotEmpty);
+      expect(materials.length, equals(1));
+      final material_0 = materials.elementAt(0);
+      expect(material_0.properties.length, equals(2));
+      final property_0_0 = material_0.properties.elementAt(0);
+      expect(property_0_0.key, equals('\$clr.diffuse'));
+      expect(property_0_0.value.runtimeType, double);
+      expect(property_0_0.value, moreOrLessEquals(0.600000024));
+      expect(property_0_0.index, isZero);
+      expect(property_0_0.semantic, isZero);
+      final property_0_1 = material_0.properties.elementAt(1);
+      expect(property_0_1.key, equals('?mat.name'));
+      expect(property_0_1.value.runtimeType, String);
+      expect(property_0_1.value, equals('DefaultMaterial'));
+      expect(property_0_1.index, isZero);
+      expect(property_0_1.semantic, isZero);
+    });
+  });
+
   test('obj', () {
-    testScene('Obj/Spider/spider.obj', (scene) {
+    testScene('spider.obj', (scene) {
       final materials = scene.materials;
       expect(materials, isNotEmpty);
       expect(materials.length, equals(6));

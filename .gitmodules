@@ -1,3 +1,0 @@
-[submodule "test/models"]
-	path = test/models
-	url = https://github.com/assimp/assimp-mdb.git

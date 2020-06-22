@@ -33,7 +33,7 @@ void main() {
   });
 
   test('3mf', () {
-    testScene('3mf/box.3mf', (scene) {
+    testScene('box.3mf', (scene) {
       final rootNode = scene.rootNode;
       expect(rootNode, isNotNull);
       expect(rootNode.name, equals('3MF'));
@@ -41,7 +41,7 @@ void main() {
       expect(rootNode.parent, isNull);
       expect(rootNode.children.length, equals(1));
       final child_0 = rootNode.children.elementAt(0);
-      expect(child_0.name, isEmpty);
+      expect(child_0.name, equals('1'));
       expect(child_0.transformation, matrix4MoreOrLessEquals(Matrix4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
       expect(child_0.parent, isNotNull);
       expect(child_0.children.length, isZero);
@@ -51,7 +51,7 @@ void main() {
       expect(rootNode.metaData, isNull);
     });
 
-    testScene('3mf/spider.3mf', (scene) {
+    testScene('spider.3mf', (scene) {
       final rootNode = scene.rootNode;
       expect(rootNode, isNotNull);
       expect(rootNode.name, equals('3MF'));
@@ -198,7 +198,7 @@ void main() {
   });
 
   test('fbx', () {
-    testScene('fbx/huesitos.fbx', (scene) {
+    testScene('huesitos.fbx', (scene) {
       final rootNode = scene.rootNode;
       expect(rootNode, isNotNull);
       expect(rootNode.name, equals('RootNode'));
@@ -239,8 +239,29 @@ void main() {
 
   });
 
+  test('collada', () {
+    testScene('anims.DAE', (scene) {
+      final rootNode = scene.rootNode;
+      expect(rootNode, isNotNull);
+      expect(rootNode.name, equals('Array Test 001'));
+      expect(rootNode.transformation, matrix4MoreOrLessEquals(Matrix4(1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1)));
+      expect(rootNode.parent, isNull);
+      expect(rootNode.children.length, equals(1));
+      final child_0 = rootNode.children.elementAt(0);
+      expect(child_0.name, equals('Box001'));
+      expect(child_0.transformation, matrix4MoreOrLessEquals(Matrix4(1, -5.23598835e-08, 0, 0, 5.23598835e-08, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)));
+      expect(child_0.parent, isNotNull);
+      expect(child_0.children.length, equals(2));
+      expect(child_0.meshes, equals([]));
+      expect(child_0.metaData, isNull);
+      expect(rootNode.meshes, equals([]));
+      expect(rootNode.metaData, isNull);
+    });
+
+  });
+
   test('obj', () {
-    testScene('Obj/Spider/spider.obj', (scene) {
+    testScene('spider.obj', (scene) {
       final rootNode = scene.rootNode;
       expect(rootNode, isNotNull);
       expect(rootNode.name, equals('spider.obj'));

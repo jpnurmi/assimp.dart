@@ -33,12 +33,12 @@ void main() {
   });
 
   test('3mf', () {
-    testScene('3mf/box.3mf', (scene) {
+    testScene('box.3mf', (scene) {
       final cameras = scene.cameras;
       expect(cameras, isEmpty);
       expect(cameras.length, isZero);
     });
-    testScene('3mf/spider.3mf', (scene) {
+    testScene('spider.3mf', (scene) {
       final cameras = scene.cameras;
       expect(cameras, isEmpty);
       expect(cameras.length, isZero);
@@ -46,7 +46,7 @@ void main() {
   });
 
   test('fbx', () {
-    testScene('fbx/huesitos.fbx', (scene) {
+    testScene('huesitos.fbx', (scene) {
       final cameras = scene.cameras;
       expect(cameras, isNotEmpty);
       expect(cameras.length, equals(1));
@@ -62,8 +62,16 @@ void main() {
     });
   });
 
+  test('collada', () {
+    testScene('anims.DAE', (scene) {
+      final cameras = scene.cameras;
+      expect(cameras, isEmpty);
+      expect(cameras.length, isZero);
+    });
+  });
+
   test('obj', () {
-    testScene('Obj/Spider/spider.obj', (scene) {
+    testScene('spider.obj', (scene) {
       final cameras = scene.cameras;
       expect(cameras, isEmpty);
       expect(cameras.length, isZero);

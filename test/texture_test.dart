@@ -33,12 +33,12 @@ void main() {
   });
 
   test('3mf', () {
-    testScene('3mf/box.3mf', (scene) {
+    testScene('box.3mf', (scene) {
       final textures = scene.textures;
       expect(textures, isEmpty);
       expect(textures.length, isZero);
     });
-    testScene('3mf/spider.3mf', (scene) {
+    testScene('spider.3mf', (scene) {
       final textures = scene.textures;
       expect(textures, isEmpty);
       expect(textures.length, isZero);
@@ -46,7 +46,15 @@ void main() {
   });
 
   test('fbx', () {
-    testScene('fbx/huesitos.fbx', (scene) {
+    testScene('huesitos.fbx', (scene) {
+      final textures = scene.textures;
+      expect(textures, isEmpty);
+      expect(textures.length, isZero);
+    });
+  });
+
+  test('collada', () {
+    testScene('anims.DAE', (scene) {
       final textures = scene.textures;
       expect(textures, isEmpty);
       expect(textures.length, isZero);
@@ -54,7 +62,7 @@ void main() {
   });
 
   test('obj', () {
-    testScene('Obj/Spider/spider.obj', (scene) {
+    testScene('spider.obj', (scene) {
       final textures = scene.textures;
       expect(textures, isEmpty);
       expect(textures.length, isZero);
