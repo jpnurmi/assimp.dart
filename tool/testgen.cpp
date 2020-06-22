@@ -1,5 +1,7 @@
 ﻿#include <QtCore>
 
+#include <assimp/cexport.h>
+#include <assimp/cfileio.h>
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 
@@ -573,7 +575,8 @@ static void generateTest(const QString &nativeName, const QString &dartName, con
 
     QTextStream out(&file);
     writeHeader(out, fileName);
-    writeNullTest(out, dartName);
+    if (!dartName.isEmpty())
+        writeNullTest(out, dartName);
     writeSizeTest(out, nativeName, sizeof(T));
     if (writer) {
         writeEqualityTest(out, nativeName, dartName);
@@ -596,24 +599,43 @@ int main(int argc, char *argv[])
 {
     QDir::setCurrent(QString::fromLocal8Bit(argc > 1 ? argv[1] : OUT_PWD));
 
+    generateTest<aiAABB>("aiAABB", "AssimpAabb3", "aabb_test.dart");
     generateTest<aiAnimation>("aiAnimation", "Animation", "animation_test.dart", writeAnimationTester);
+    generateTest<aiAnimMesh>("aiAnimMesh", "AnimMesh", "anim_mesh_test.dart");
     generateTest<aiBone>("aiBone", "Bone", "bone_test.dart", writeBoneTester);
     generateTest<aiCamera>("aiCamera", "Camera", "camera_test.dart", writeCameraTester);
     generateTest<aiColor3D>("aiColor3D", "AssimpColor3", "color3_test.dart");
     generateTest<aiColor4D>("aiColor4D", "AssimpColor4", "color4_test.dart");
+    generateTest<aiExportDataBlob>("aiExportDataBlob", "", "export_data_test.dart"); // ### TODO: writeExportDataTester
+    generateTest<aiExportFormatDesc>("aiExportFormatDesc", "", "export_format_test.dart"); // ### TODO: writeExportFormatTester
     generateTest<aiFace>("aiFace", "Face", "face_test.dart", writeFaceTester);
+    generateTest<aiFile>("aiFile", "", "file_test.dart"); // ### TODO: writeFileTester
+    generateTest<aiFileIO>("aiFileIO", "", "file_io_test.dart"); // ### TODO: writeFileIOTester
     generateTest<aiLight>("aiLight", "Light", "light_test.dart", writeLightTester);
+    generateTest<aiImporterDesc>("aiImporterDesc", "ImportFormat", "import_format_test.dart"); // ### TODO: writeImportFormatTester
+    generateTest<aiLogStream>("aiLogStream", "", "log_stream_test.dart"); // ### TODO: writeLogStreamTester
     generateTest<aiMaterial>("aiMaterial", "Material", "material_test.dart", writeMaterialTester);
+    generateTest<aiMaterialProperty>("aiMaterialProperty", "MaterialProperty", "material_property_test.dart"); // ### TODO: writeMaterialPropertyTester
     generateTest<aiMatrix3x3>("aiMatrix3x3", "AssimpMatrix3", "matrix3_test.dart");
     generateTest<aiMatrix4x4>("aiMatrix4x4", "AssimpMatrix4", "matrix4_test.dart");
     generateTest<aiMemoryInfo>("aiMemoryInfo", "MemoryInfo", "memory_info_test.dart", writeMemoryInfoTester);
     generateTest<aiMesh>("aiMesh", "Mesh", "mesh_test.dart", writeMeshTester);
+    generateTest<aiMeshKey>("aiMeshKey", "MeshKey", "mesh_key_test.dart");
+    generateTest<aiMeshMorphAnim>("aiMeshMorphAnim", "MeshMorphAnim", "mesh_morph_anim_test.dart"); // ### TODO: writeMeshMorpAnimTester
+    generateTest<aiMeshMorphKey>("aiMeshMorphKey", "MeshMorphKey", "mesh_morph_key_test.dart");
     generateTest<aiMetadata>("aiMetadata", "MetaData", "meta_data_test.dart", writeMetaDataTester);
+    generateTest<aiMetadataEntry>("aiMetadataEntry", "", "meta_data_entry_test.dart");
     generateTest<aiNode>("aiNode", "Node", "node_test.dart", writeNodeTester);
+    generateTest<aiNodeAnim>("aiNodeAnim", "NodeAnim", "node_anim_test.dart"); // ### TODO: writeNodeAnimTester
     generateTest<aiPlane>("aiPlane", "AssimpPlane", "plane_test.dart");
+    generateTest<aiPropertyStore>("aiPropertyStore", "", "property_store_test.dart");
+    generateTest<aiQuatKey>("aiQuatKey", "QuaternionKey", "quaternion_key_test.dart");
     generateTest<aiRay>("aiRay", "AssimpRay", "ray_test.dart");
     generateTest<aiScene>("aiScene", "Scene", "scene_test.dart", writeSceneTester);
+    generateTest<aiString>("aiString", "AssimpString", "string_test.dart");
+    generateTest<aiTexel>("aiTexel", "Texel", "texel_test.dart"); // ### TODO: writeTexelTester
     generateTest<aiTexture>("aiTexture", "Texture", "texture_test.dart", writeTextureTester);
+    generateTest<aiUVTransform>("aiUVTransform", "", "uv_transform_test.dart");
     generateTest<aiVector2D>("aiVector2D", "AssimpVector2", "vector2_test.dart");
     generateTest<aiVector3D>("aiVector3D", "AssimpVector3", "vector3_test.dart");
     generateTest<aiVertexWeight>("aiVertexWeight", "VertexWeight", "vertex_weight_test.dart");
