@@ -54,7 +54,7 @@ import 'libassimp.dart';
 import 'light.dart';
 import 'material.dart';
 import 'mesh.dart';
-import 'meta_data.dart';
+import 'metadata.dart';
 import 'node.dart';
 import 'texture.dart';
 import 'type.dart';

@@ -46,7 +46,7 @@ import 'dart:ffi';
 import 'package:vector_math/vector_math.dart';
 
 import 'bindings.dart';
-import 'meta_data.dart';
+import 'metadata.dart';
 import 'extensions.dart';
 import 'type.dart';
 
