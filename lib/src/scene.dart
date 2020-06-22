@@ -200,6 +200,21 @@ class Scene extends AssimpType<aiScene> {
     return Scene._fromBuffer(cbuffer.cast(), bytes.length, flags, hint);
   }
 
+  /// Create a modifiable copy of a scene.
+  /// This is useful to import files via Assimp, change their topology and
+  /// export them again. Since the scene returned by the various importer functions
+  /// is const, a modifiable copy is needed.
+  /// @param pIn Valid scene to be copied
+  /// @param pOut Receives a modifyable copy of the scene. Use aiFreeScene() to
+  /// delete it again.
+  Scene copy() {
+    Pointer<Pointer<aiScene>> out = allocate<Pointer<aiScene>>();
+    aiCopyScene(ptr, out);
+    Scene scene = Scene.fromNative(out[0]);
+    free(out);
+    return scene;
+  }
+
   /// Any combination of the AI_SCENE_FLAGS_XXX flags. By default
   /// this value is 0, no flags are set. Most applications will
   /// want to reject all scenes with the AI_SCENE_FLAGS_INCOMPLETE

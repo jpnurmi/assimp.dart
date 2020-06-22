@@ -42,6 +42,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'package:test/test.dart';
 import 'package:assimp/assimp.dart';
 
+import 'test_utils.dart';
+
 void main() {
   test('version', () {
     expect(Assimp.versionMajor, equals(5));
@@ -98,5 +100,15 @@ void main() {
       expect(format.extensions, isNotEmpty);
       expect(format.extensions, allOf(isNotEmpty));
     }
+  });
+
+  test('copy', () {
+    Scene original = Scene.fromFile(testModelPath('3mf/spider.3mf'));
+    Scene copy = original.copy();
+    expect(copy.ptr.address, isNot(equals(original.ptr.address)));
+    expect(copy.meshes, isNotEmpty);
+    expect(copy.meshes.length, equals(original.meshes.length));
+    copy.dispose();
+    original.dispose();
   });
 }
