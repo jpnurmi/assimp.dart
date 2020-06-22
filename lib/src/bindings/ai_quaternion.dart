@@ -44,11 +44,6 @@ import 'dart:ffi';
 
 import 'ai_matrix.dart';
 
-typedef aiCreateQuaternionFromMatrix_t = Void Function(
-    Pointer<aiQuaternion> quat, Pointer<aiMatrix3x3> mat);
-typedef aiCreateQuaternionFromMatrix_f = void Function(
-    Pointer<aiQuaternion> quat, Pointer<aiMatrix3x3> mat);
-
 class aiQuaternion extends Struct {
   @Float() // ai_real
   double w, x, y, z;

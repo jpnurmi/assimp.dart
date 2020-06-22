@@ -46,46 +46,6 @@ import 'dart:ffi';
 import 'ai_vector.dart';
 import 'ai_quaternion.dart';
 
-typedef aiDecomposeMatrix_t = Void Function(
-    Pointer<aiMatrix4x4> mat,
-    Pointer<aiVector3D> scaling,
-    Pointer<aiQuaternion> rotation,
-    Pointer<aiVector3D> position);
-typedef aiDecomposeMatrix_f = void Function(
-    Pointer<aiMatrix4x4> mat,
-    Pointer<aiVector3D> scaling,
-    Pointer<aiQuaternion> rotation,
-    Pointer<aiVector3D> position);
-
-typedef aiTransposeMatrix3_t = Void Function(Pointer<aiMatrix3x3> mat);
-typedef aiTransposeMatrix3_f = void Function(Pointer<aiMatrix3x3> mat);
-
-typedef aiTransformVecByMatrix3_t = Void Function(
-    Pointer<aiVector3D> vec, Pointer<aiMatrix3x3> mat);
-typedef aiTransformVecByMatrix3_f = void Function(
-    Pointer<aiVector3D> vec, Pointer<aiMatrix3x3> mat);
-
-typedef aiTransformVecByMatrix4_t = Void Function(
-    Pointer<aiVector3D> vec, Pointer<aiMatrix4x4> mat);
-typedef aiTransformVecByMatrix4_f = void Function(
-    Pointer<aiVector3D> vec, Pointer<aiMatrix4x4> mat);
-
-typedef aiMultiplyMatrix4_t = Void Function(
-    Pointer<aiMatrix4x4> dst, Pointer<aiMatrix4x4> src);
-typedef aiMultiplyMatrix4_f = void Function(
-    Pointer<aiMatrix4x4> dst, Pointer<aiMatrix4x4> src);
-
-typedef aiMultiplyMatrix3_t = Void Function(
-    Pointer<aiMatrix3x3> dst, Pointer<aiMatrix3x3> src);
-typedef aiMultiplyMatrix3_f = void Function(
-    Pointer<aiMatrix3x3> dst, Pointer<aiMatrix3x3> src);
-
-typedef aiIdentityMatrix3_t = Void Function(Pointer<aiMatrix3x3> mat);
-typedef aiIdentityMatrix3_f = void Function(Pointer<aiMatrix3x3> mat);
-
-typedef aiIdentityMatrix4_t = Void Function(Pointer<aiMatrix4x4> mat);
-typedef aiIdentityMatrix4_f = void Function(Pointer<aiMatrix4x4> mat);
-
 class aiMatrix3x3 extends Struct {
   @Float() // ai_real
   double a1, a2, a3;

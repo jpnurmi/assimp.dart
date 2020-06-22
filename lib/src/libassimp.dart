@@ -76,12 +76,6 @@ get aiCreatePropertyStore => _aiCreatePropertyStore ??=
     libassimp.lookupFunction<aiCreatePropertyStore_t, aiCreatePropertyStore_f>(
         'aiCreatePropertyStore');
 
-aiCreateQuaternionFromMatrix_f _aiCreateQuaternionFromMatrix;
-get aiCreateQuaternionFromMatrix =>
-    _aiCreateQuaternionFromMatrix ??= libassimp.lookupFunction<
-        aiCreateQuaternionFromMatrix_t,
-        aiCreateQuaternionFromMatrix_f>('aiCreateQuaternionFromMatrix');
-
 aiDetachAllLogStreams_f _aiDetachAllLogStreams;
 get aiDetachAllLogStreams => _aiDetachAllLogStreams ??=
     libassimp.lookupFunction<aiDetachAllLogStreams_t, aiDetachAllLogStreams_f>(
@@ -223,16 +217,6 @@ get aiGetPredefinedLogStream => _aiGetPredefinedLogStream ??= libassimp
     .lookupFunction<aiGetPredefinedLogStream_t, aiGetPredefinedLogStream_f>(
         'aiGetPredefinedLogStream');
 
-aiIdentityMatrix3_f _aiIdentityMatrix3;
-get aiIdentityMatrix3 => _aiIdentityMatrix3 ??=
-    libassimp.lookupFunction<aiIdentityMatrix3_t, aiIdentityMatrix3_f>(
-        'aiIdentityMatrix3');
-
-aiIdentityMatrix4_f _aiIdentityMatrix4;
-get aiIdentityMatrix4 => _aiIdentityMatrix4 ??=
-    libassimp.lookupFunction<aiIdentityMatrix4_t, aiIdentityMatrix4_f>(
-        'aiIdentityMatrix4');
-
 aiImportFile_f _aiImportFile;
 get aiImportFile => _aiImportFile ??=
     libassimp.lookupFunction<aiImportFile_t, aiImportFile_f>('aiImportFile');
@@ -264,16 +248,6 @@ get aiIsExtensionSupported => _aiIsExtensionSupported ??= libassimp
     .lookupFunction<aiIsExtensionSupported_t, aiIsExtensionSupported_f>(
         'aiIsExtensionSupported');
 
-aiMultiplyMatrix3_f _aiMultiplyMatrix3;
-get aiMultiplyMatrix3 => _aiMultiplyMatrix3 ??=
-    libassimp.lookupFunction<aiMultiplyMatrix3_t, aiMultiplyMatrix3_f>(
-        'aiMultiplyMatrix3');
-
-aiMultiplyMatrix4_f _aiMultiplyMatrix4;
-get aiMultiplyMatrix4 => _aiMultiplyMatrix4 ??=
-    libassimp.lookupFunction<aiMultiplyMatrix4_t, aiMultiplyMatrix4_f>(
-        'aiMultiplyMatrix4');
-
 aiReleaseExportBlob_f _aiReleaseExportBlob;
 get aiReleaseExportBlob => _aiReleaseExportBlob ??=
     libassimp.lookupFunction<aiReleaseExportBlob_t, aiReleaseExportBlob_f>(
@@ -304,27 +278,7 @@ get aiSetImportPropertyInteger => _aiSetImportPropertyInteger ??= libassimp
     .lookupFunction<aiSetImportPropertyInteger_t, aiSetImportPropertyInteger_f>(
         'aiSetImportPropertyInteger');
 
-aiSetImportPropertyMatrix_f _aiSetImportPropertyMatrix;
-get aiSetImportPropertyMatrix => _aiSetImportPropertyMatrix ??= libassimp
-    .lookupFunction<aiSetImportPropertyMatrix_t, aiSetImportPropertyMatrix_f>(
-        'aiSetImportPropertyMatrix');
-
 aiSetImportPropertyString_f _aiSetImportPropertyString;
 get aiSetImportPropertyString => _aiSetImportPropertyString ??= libassimp
     .lookupFunction<aiSetImportPropertyString_t, aiSetImportPropertyString_f>(
         'aiSetImportPropertyString');
-
-aiTransposeMatrix3_f _aiTransposeMatrix3;
-get aiTransposeMatrix3 => _aiTransposeMatrix3 ??=
-    libassimp.lookupFunction<aiTransposeMatrix3_t, aiTransposeMatrix3_f>(
-        'aiTransposeMatrix3');
-
-aiTransformVecByMatrix3_f _aiTransformVecByMatrix3;
-get aiTransformVecByMatrix3 => _aiTransformVecByMatrix3 ??= libassimp
-    .lookupFunction<aiTransformVecByMatrix3_t, aiTransformVecByMatrix3_f>(
-        'aiTransformVecByMatrix3');
-
-aiTransformVecByMatrix4_f _aiTransformVecByMatrix4;
-get aiTransformVecByMatrix4 => _aiTransformVecByMatrix4 ??= libassimp
-    .lookupFunction<aiTransformVecByMatrix4_t, aiTransformVecByMatrix4_f>(
-        'aiTransformVecByMatrix4');
