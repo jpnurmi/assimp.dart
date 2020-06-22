@@ -5,6 +5,8 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 
+static const int Dec = 9;
+
 static QDir testFileDir() { return QDir::current(); }
 static QString testFilePath(const QString &fileName) { return testFileDir().filePath(fileName); }
 
@@ -22,17 +24,17 @@ static QString isEmptyOrNot(int num) { return num ? "isNotEmpty" : "isEmpty"; }
 static QString isZeroOrNot(int num) { return num ? "isNonZero" : "isZero"; }
 static QString isNullOrNot(const void *ptr) { return ptr ? "isNotNull" : "isNull"; }
 
-static QString color3ToString(const aiColor3D &c) { return QString("Vector3(%1, %2, %3)").arg(c.r).arg(c.g).arg(c.b); }
-static QString color4ToString(const aiColor4D &c) { return QString("Vector4(%1, %2, %3, %4)").arg(c.r).arg(c.g).arg(c.b).arg(c.a); }
-static QString matrix4ToString(const aiMatrix4x4 &m) { return QString("Matrix4(%1, %2, %3, %4, %5 ,%6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16)").arg(m.a1).arg(m.a2).arg(m.a3).arg(m.a4).arg(m.b1).arg(m.b2).arg(m.b3).arg(m.b4).arg(m.c1).arg(m.c2).arg(m.c3).arg(m.c4).arg(m.d1).arg(m.d2).arg(m.d3).arg(m.d4); }
-static QString quaternionToString(const aiQuaternion &q) { return QString("Quaternion(%1, %2, %3, %4)").arg(q.x).arg(q.y).arg(q.z).arg(q.z); }
-static QString vector3ToString(const aiVector3D &v) { return QString("Vector3(%1, %2, %3)").arg(v.x).arg(v.y).arg(v.z); }
+static QString color3ToString(const aiColor3D &c) { return QString("Vector3(%1, %2, %3)").arg(c.r, 0, 'g', Dec).arg(c.g, 0, 'g', Dec).arg(c.b, 0, 'g', Dec); }
+static QString color4ToString(const aiColor4D &c) { return QString("Vector4(%1, %2, %3, %4)").arg(c.r, 0, 'g', Dec).arg(c.g, 0, 'g', Dec).arg(c.b, 0, 'g', Dec).arg(c.a, 0, 'g', Dec); }
+static QString matrix4ToString(const aiMatrix4x4 &m) { return QString("Matrix4(%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16)").arg(m.a1, 0, 'g', Dec).arg(m.a2, 0, 'g', Dec).arg(m.a3, 0, 'g', Dec).arg(m.a4, 0, 'g', Dec).arg(m.b1, 0, 'g', Dec).arg(m.b2, 0, 'g', Dec).arg(m.b3, 0, 'g', Dec).arg(m.b4, 0, 'g', Dec).arg(m.c1, 0, 'g', Dec).arg(m.c2, 0, 'g', Dec).arg(m.c3, 0, 'g', Dec).arg(m.c4, 0, 'g', Dec).arg(m.d1, 0, 'g', Dec).arg(m.d2, 0, 'g', Dec).arg(m.d3, 0, 'g', Dec).arg(m.d4, 0, 'g', Dec); }
+static QString quaternionToString(const aiQuaternion &q) { return QString("Quaternion(%1, %2, %3, %4)").arg(q.x, 0, 'g', Dec).arg(q.y, 0, 'g', Dec).arg(q.z, 0, 'g', Dec).arg(q.z, 0, 'g', Dec); }
+static QString vector3ToString(const aiVector3D &v) { return QString("Vector3(%1, %2, %3)").arg(v.x, 0, 'g', Dec).arg(v.y, 0, 'g', Dec).arg(v.z, 0, 'g', Dec); }
 static QString aabbToString(const aiAABB &a) { return QString("Aabb3.minMax(%1, %2)").arg(vector3ToString(a.mMin)).arg(vector3ToString(a.mMax)); }
 
 static QString equalsTo(const QString &value) { return QString("equals(%1)").arg(value); }
 static QString equalsToInt(int value) { return value ? equalsTo(QString::number(value)) : "isZero"; }
-static QString equalsToFloat(float value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
-static QString equalsToDouble(double value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value); }
+static QString equalsToFloat(float value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value, 0, 'g', Dec); }
+static QString equalsToDouble(double value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value, 0, 'g', Dec); }
 static QString equalsToString(const char *str, uint len) { return len ? equalsTo(QString("'%1'").arg(QString::fromUtf8(str, len).replace("\\", "\\\\").replace("$", "\\$"))) : "isEmpty"; }
 static QString equalsToString(const aiString &str) { return equalsToString(str.data, str.length); }
 static QString equalsToAabb(const aiAABB &a) { return QString("aabb3MoreOrLessEquals(%1)").arg(aabbToString(a)); }

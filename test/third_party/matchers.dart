@@ -16,7 +16,7 @@ import 'package:vector_math/vector_math.dart';
 /// This is used in various places in the framework to allow for floating point
 /// precision loss in calculations. Differences below this threshold are safe to
 /// disregard.
-const double precisionErrorTolerance = 1e-5;
+const double precisionErrorTolerance = 1e-6;
 
 double relativeAabb3Error(Aabb3 calculated, Aabb3 correct) {
   return math.max(absoluteError(calculated.min, correct.min),

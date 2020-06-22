@@ -55,10 +55,10 @@ void main() {
       expect(camera_0.position, vector3MoreOrLessEquals(Vector3(0, 0, 0)));
       expect(camera_0.up, vector3MoreOrLessEquals(Vector3(0, 1, 0)));
       expect(camera_0.lookAt, vector3MoreOrLessEquals(Vector3(1, 0, 0)));
-      expect(camera_0.horizontalFov, moreOrLessEquals(0.857556));
+      expect(camera_0.horizontalFov, moreOrLessEquals(0.857556045));
       expect(camera_0.clipPlaneNear, moreOrLessEquals(10));
       expect(camera_0.clipPlaneFar, moreOrLessEquals(10000));
-      expect(camera_0.aspect, moreOrLessEquals(1.33333));
+      expect(camera_0.aspect, moreOrLessEquals(1.33333337));
     });
   });
 
