@@ -41,21 +41,41 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-/// Dart bindings for Assimp
-library assimp;
+import 'dart:ffi';
 
-export 'src/animation.dart';
-export 'src/assimp.dart';
-export 'src/camera.dart';
-export 'src/export.dart';
-export 'src/import.dart';
-export 'src/extensions.dart';
-export 'src/light.dart';
-export 'src/material.dart';
-export 'src/meminfo.dart';
-export 'src/mesh.dart';
-export 'src/metadata.dart';
-export 'src/node.dart';
-export 'src/postprocess.dart';
-export 'src/scene.dart';
-export 'src/texture.dart';
+import 'package:ffi/ffi.dart';
+
+import 'bindings.dart';
+import 'extensions.dart';
+import 'libassimp.dart';
+import 'type.dart';
+
+/// Describes an file format which Assimp can export to. Use #aiGetExportFormatCount() to
+/// learn how many export formats the current Assimp build supports and #aiGetExportFormatDescription()
+/// to retrieve a description of an export format option.
+class ExportFormat extends AssimpType<aiExportFormatDesc> {
+  aiExportFormatDesc get _desc => ptr.ref;
+
+  ExportFormat._(Pointer<aiExportFormatDesc> ptr) : super(ptr);
+  factory ExportFormat.fromNative(Pointer<aiExportFormatDesc> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return ExportFormat._(ptr);
+  }
+
+  /// a short string ID to uniquely identify the export format. Use this ID string to
+  /// specify which file format you want to export to when calling #aiExportScene().
+  /// Example: "dae" or "obj"
+  String get id => Utf8.fromUtf8(_desc.id);
+
+  /// A short description of the file format to present to users. Useful if you want
+  /// to allow the user to select an export format.
+  String get description => Utf8.fromUtf8(_desc.description);
+
+  /// Recommended file extension for the exported file in lower case.
+  String get extension => Utf8.fromUtf8(_desc.fileExtension);
+
+  /// Release a description of the nth export file format. Must be returned by
+  /// aiGetExportFormatDescription
+  /// @param desc Pointer to the description
+  void dispose() => aiReleaseExportFormatDescription(ptr);
+}
