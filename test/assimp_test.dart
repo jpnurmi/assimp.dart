@@ -45,8 +45,8 @@ import 'package:assimp/assimp.dart';
 void main() {
   test('version', () {
     expect(Assimp.versionMajor, equals(5));
-    expect(Assimp.versionMinor, equals(0));
-    expect(Assimp.versionRevision, equals(0));
+    expect(Assimp.versionMinor, isNonNegative);
+    expect(Assimp.versionRevision, isNonNegative);
   });
 
   test('legalString', () {
@@ -66,7 +66,7 @@ void main() {
   });
 
   test('build', () {
-    expect(Assimp.branchName, isEmpty);
+    expect(Assimp.branchName, isNotNull);
     expect(Assimp.compileFlags, isNonZero);
   });
 
