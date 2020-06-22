@@ -31,11 +31,13 @@ static QString quaternionToString(const aiQuaternion &q) { return QString("Quate
 static QString vector3ToString(const aiVector3D &v) { return QString("Vector3(%1, %2, %3)").arg(v.x, 0, 'g', Dec).arg(v.y, 0, 'g', Dec).arg(v.z, 0, 'g', Dec); }
 static QString aabbToString(const aiAABB &a) { return QString("Aabb3.minMax(%1, %2)").arg(vector3ToString(a.mMin)).arg(vector3ToString(a.mMax)); }
 
+static QString escaped(QString str) { return str.replace("\\", "\\\\").replace("$", "\\$"); }
+
 static QString equalsTo(const QString &value) { return QString("equals(%1)").arg(value); }
 static QString equalsToInt(int value) { return value ? equalsTo(QString::number(value)) : "isZero"; }
 static QString equalsToFloat(float value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value, 0, 'g', Dec); }
 static QString equalsToDouble(double value) { return qFuzzyIsNull(value) ? "isZero" : QString("moreOrLessEquals(%1)").arg(value, 0, 'g', Dec); }
-static QString equalsToString(const char *str, uint len) { return len ? equalsTo(QString("'%1'").arg(QString::fromUtf8(str, len).replace("\\", "\\\\").replace("$", "\\$"))) : "isEmpty"; }
+static QString equalsToString(const char *str, uint len) { return len ? equalsTo(QString("'%1'").arg(escaped(QString::fromUtf8(str, len)))) : "isEmpty"; }
 static QString equalsToString(const aiString &str) { return equalsToString(str.data, str.length); }
 static QString equalsToAabb(const aiAABB &a) { return QString("aabb3MoreOrLessEquals(%1)").arg(aabbToString(a)); }
 static QString equalsToColor3(const aiColor3D &c) { return QString("vector3MoreOrLessEquals(%1)").arg(color3ToString(c)); }
@@ -47,6 +49,7 @@ static QString equalsToByteArray(const char *arr, uint len) { QStringList v; for
 static QString equalsToIntArray(const int *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return equalsTo("[%1]").arg(v.join(", ")); }
 static QString equalsToUintArray(const uint *arr, uint len) { return equalsToIntArray(reinterpret_cast<const int*>(arr), len); }
 static QString equalsToDoubleArray(const double *arr, uint len) { QStringList v; for (uint i = 0; i < len; ++i) v += QString::number(arr[i]); return equalsTo("[%1]").arg(v.join(", ")); }
+static QString equalsToStringArray(const QStringList &arr) { if (arr.isEmpty()) return equalsTo("[]"); QStringList v; for (int i = 0; i < arr.length(); ++i) v += escaped(arr[i]); return equalsTo("['%1']").arg(v.join("', '")); }
 
 static QString equalsToAnimBehavior(int value)
 {
@@ -370,6 +373,18 @@ static void writeLightTester(QTextStream &out, const aiScene *scene, const QStri
     out << "    });\n";
 }
 
+static QStringList materialTextures(const aiMaterial *material, aiTextureType type)
+{
+    QStringList textures;
+    uint count = aiGetMaterialTextureCount(material, type);
+    for  (uint i = 0; i < count; ++i) {
+        aiString path;
+        aiGetMaterialTexture(material, type, i, &path);
+        textures += QString::fromUtf8(path.data, path.length);
+    }
+    return textures;
+}
+
 static void writeMaterialTester(QTextStream &out, const aiScene *scene, const QString &fileName)
 {
     out << "    testScene('" << fileName << "', (scene) {\n"
@@ -411,6 +426,24 @@ static void writeMaterialTester(QTextStream &out, const aiScene *scene, const QS
             out << "      expect(" << indexed("property", i, j) << ".index, " << equalsToInt(property->mIndex) << ");\n"
                 << "      expect(" << indexed("property", i, j) << ".semantic, " << equalsToInt(property->mSemantic) << ");\n";
         }
+
+        out << "      expect(" << indexed("material", i) << ".textures(TextureType.diffuse), " << equalsToStringArray(materialTextures(material, aiTextureType_DIFFUSE)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.specular), " << equalsToStringArray(materialTextures(material, aiTextureType_SPECULAR)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.ambient), " << equalsToStringArray(materialTextures(material, aiTextureType_AMBIENT)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.emissive), " << equalsToStringArray(materialTextures(material, aiTextureType_EMISSIVE)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.height), " << equalsToStringArray(materialTextures(material, aiTextureType_HEIGHT)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.normals), " << equalsToStringArray(materialTextures(material, aiTextureType_NORMALS)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.shininess), " << equalsToStringArray(materialTextures(material, aiTextureType_SHININESS)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.opacity), " << equalsToStringArray(materialTextures(material, aiTextureType_OPACITY)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.displacement), " << equalsToStringArray(materialTextures(material, aiTextureType_DISPLACEMENT)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.lightmap), " << equalsToStringArray(materialTextures(material, aiTextureType_LIGHTMAP)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.reflection), " << equalsToStringArray(materialTextures(material, aiTextureType_REFLECTION)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.baseColor), " << equalsToStringArray(materialTextures(material, aiTextureType_BASE_COLOR)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.normalCamera), " << equalsToStringArray(materialTextures(material, aiTextureType_NORMAL_CAMERA)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.emissionColor), " << equalsToStringArray(materialTextures(material, aiTextureType_EMISSION_COLOR)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.metalness), " << equalsToStringArray(materialTextures(material, aiTextureType_METALNESS)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.diffuseRoughness), " << equalsToStringArray(materialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS)) << ");\n"
+            << "      expect(" << indexed("material", i) << ".textures(TextureType.ambientOcclusion), " << equalsToStringArray(materialTextures(material, aiTextureType_AMBIENT_OCCLUSION)) << ");\n";
         out << (i < scene->mNumMaterials - 1 ? "\n" : "");
     }
     out << "    });\n";
