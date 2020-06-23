@@ -8,7 +8,11 @@ void main() {
 
   var tempDir;
   setUp(() => tempDir = Directory.systemTemp.createTempSync());
-  tearDown(() => tempDir.deleteSync(recursive: true));
+  tearDown(() {
+    tempDir.deleteSync(recursive: true);
+    final blobfile = File('\$blobfile');
+    if (blobfile.existsSync()) blobfile.deleteSync();
+  });
 
   test('exportFile', () {
     final importPath = testModelPath('spider.3mf');
@@ -23,6 +27,24 @@ void main() {
     expect(exportFile.statSync().size, greaterThan(0));
 
     final exportScene = Scene.fromFile(exportPath);
+    expect(exportScene, isNotNull);
+    expect(exportScene.meshes.length, importScene.meshes.length);
+
+    exportScene.dispose();
+    importScene.dispose();
+  });
+
+  test('exportData', () {
+    final importScene = Scene.fromFile(testModelPath('spider.3mf'));
+
+    expect(importScene.exportData(format: ''), isNull);
+
+    ExportData exportData = importScene.exportData(format: 'obj');
+    expect(exportData, isNotNull);
+    expect(exportData.data, isNotNull);
+    expect(exportData.data.length, greaterThan(0));
+
+    final exportScene = Scene.fromBytes(exportData.data);
     expect(exportScene, isNotNull);
     expect(exportScene.meshes.length, importScene.meshes.length);
 

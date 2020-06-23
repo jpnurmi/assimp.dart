@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 import 'package:meta/meta.dart';
@@ -80,6 +81,48 @@ class ExportFormat extends AssimpType<aiExportFormatDesc> {
   /// aiGetExportFormatDescription
   /// @param desc Pointer to the description
   void dispose() => aiReleaseExportFormatDescription(ptr);
+}
+
+/// Describes a blob of exported scene data. Use #aiExportSceneToBlob() to create a blob containing an
+/// exported scene. The memory referred by this structure is owned by Assimp.
+/// to free its resources. Don't try to free the memory on your side - it will crash for most build configurations
+/// due to conflicting heaps.
+///
+/// Blobs can be nested - each blob may reference another blob, which may in turn reference another blob and so on.
+/// This is used when exporters write more than one output file for a given #aiScene. See the remarks for
+/// #aiExportDataBlob::name for more information.
+class ExportData extends AssimpType<aiExportDataBlob> {
+  aiExportDataBlob get _data => ptr.ref;
+
+  ExportData._(Pointer<aiExportDataBlob> ptr) : super(ptr);
+  factory ExportData.fromNative(Pointer<aiExportDataBlob> ptr) {
+    if (AssimpPointer.isNull(ptr)) return null;
+    return ExportData._(ptr);
+  }
+
+  /// The data
+  Uint8List get data => _data.data.cast<Uint8>().asTypedList(_data.size);
+
+  /// Name of the blob. An empty string always
+  /// indicates the first (and primary) blob,
+  /// which contains the actual file data.
+  /// Any other blobs are auxiliary files produced
+  /// by exporters (i.e. material files). Existence
+  /// of such files depends on the file format. Most
+  /// formats don't split assets across multiple files.
+  ///
+  /// If used, blob names usually contain the file
+  /// extension that should be used when writing
+  /// the data to disc.
+  String get name => AssimpString.fromNative(_data.mName);
+
+  /// Pointer to the next blob in the chain or NULL if there is none.
+  ExportData get next => ExportData.fromNative(_data.next);
+
+  /// Releases the memory associated with the given exported data. Use this function to free a data blob
+  /// returned by aiExportScene().
+  /// @param pData the data blob returned by #aiExportSceneToBlob
+  void dispose() => aiReleaseExportBlob(ptr);
 }
 
 extension SceneExport on Scene {
@@ -127,5 +170,20 @@ extension SceneExport on Scene {
     free(cpath);
     free(cformat);
     return res == 0;
+  }
+
+  /// Exports the given scene to a chosen file format. Returns the exported data as a binary blob which
+  /// you can write into a file or something. When you're done with the data, use #aiReleaseExportBlob()
+  /// to free the resources associated with the export.
+  /// @param pScene The scene to export. Stays in possession of the caller, is not changed by the function.
+  /// @param pFormatId ID string to specify to which format you want to export to. Use
+  /// #aiGetExportFormatCount() / #aiGetExportFormatDescription() to learn which export formats are available.
+  /// @param pPreprocessing Please see the documentation for #aiExportScene
+  /// @return the exported data or NULL in case of error
+  ExportData exportData({@required String format, int flags = 0}) {
+    Pointer<Utf8> cformat = Utf8.toUtf8(format);
+    Pointer<aiExportDataBlob> data = aiExportSceneToBlob(ptr, cformat, flags);
+    free(cformat);
+    return ExportData.fromNative(data);
   }
 }
