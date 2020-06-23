@@ -63,7 +63,12 @@ void main() {
   });
 
   test('collada', () {
-    testScene('anims.DAE', (scene) {
+    testScene('anims.dae', (scene) {
+      final cameras = scene.cameras;
+      expect(cameras, isEmpty);
+      expect(cameras.length, isZero);
+    });
+    testScene('lib.dae', (scene) {
       final cameras = scene.cameras;
       expect(cameras, isEmpty);
       expect(cameras.length, isZero);

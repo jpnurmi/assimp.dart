@@ -2962,7 +2962,7 @@ void main() {
   });
 
   test('collada', () {
-    testScene('anims.DAE', (scene) {
+    testScene('anims.dae', (scene) {
       final mesh_0 = scene.meshes.elementAt(0);
       final face_0_0 = mesh_0.faces.elementAt(0);
       expect(face_0_0.indices, equals([0, 1, 2, 3]));
@@ -3795,6 +3795,61 @@ void main() {
       expect(face_63_4.indices, equals([16, 17, 18, 19]));
       final face_63_5 = mesh_63.faces.elementAt(5);
       expect(face_63_5.indices, equals([20, 21, 22, 23]));
+    });
+    testScene('lib.dae', (scene) {
+      final mesh_0 = scene.meshes.elementAt(0);
+      final face_0_0 = mesh_0.faces.elementAt(0);
+      expect(face_0_0.indices, equals([0, 1, 2, 3]));
+      final face_0_1 = mesh_0.faces.elementAt(1);
+      expect(face_0_1.indices, equals([4, 5, 6, 7]));
+      final face_0_2 = mesh_0.faces.elementAt(2);
+      expect(face_0_2.indices, equals([8, 9, 10, 11]));
+      final face_0_3 = mesh_0.faces.elementAt(3);
+      expect(face_0_3.indices, equals([12, 13, 14, 15]));
+      final face_0_4 = mesh_0.faces.elementAt(4);
+      expect(face_0_4.indices, equals([16, 17, 18, 19]));
+      final face_0_5 = mesh_0.faces.elementAt(5);
+      expect(face_0_5.indices, equals([20, 21, 22, 23]));
+      final face_0_6 = mesh_0.faces.elementAt(6);
+      expect(face_0_6.indices, equals([24, 25, 26, 27]));
+      final face_0_7 = mesh_0.faces.elementAt(7);
+      expect(face_0_7.indices, equals([28, 29, 30, 31]));
+      final face_0_8 = mesh_0.faces.elementAt(8);
+      expect(face_0_8.indices, equals([32, 33, 34, 35]));
+      final face_0_9 = mesh_0.faces.elementAt(9);
+      expect(face_0_9.indices, equals([36, 37, 38, 39]));
+      final face_0_10 = mesh_0.faces.elementAt(10);
+      expect(face_0_10.indices, equals([40, 41, 42, 43]));
+      final face_0_11 = mesh_0.faces.elementAt(11);
+      expect(face_0_11.indices, equals([44, 45, 46, 47]));
+      final face_0_12 = mesh_0.faces.elementAt(12);
+      expect(face_0_12.indices, equals([48, 49, 50, 51]));
+      final face_0_13 = mesh_0.faces.elementAt(13);
+      expect(face_0_13.indices, equals([52, 53, 54, 55]));
+      final face_0_14 = mesh_0.faces.elementAt(14);
+      expect(face_0_14.indices, equals([56, 57, 58, 59]));
+      final face_0_15 = mesh_0.faces.elementAt(15);
+      expect(face_0_15.indices, equals([60, 61, 62, 63]));
+      final face_0_16 = mesh_0.faces.elementAt(16);
+      expect(face_0_16.indices, equals([64, 65, 66, 67]));
+      final face_0_17 = mesh_0.faces.elementAt(17);
+      expect(face_0_17.indices, equals([68, 69, 70, 71]));
+      final face_0_18 = mesh_0.faces.elementAt(18);
+      expect(face_0_18.indices, equals([72, 73, 74, 75]));
+      final face_0_19 = mesh_0.faces.elementAt(19);
+      expect(face_0_19.indices, equals([76, 77, 78, 79]));
+      final face_0_20 = mesh_0.faces.elementAt(20);
+      expect(face_0_20.indices, equals([80, 81, 82, 83]));
+      final face_0_21 = mesh_0.faces.elementAt(21);
+      expect(face_0_21.indices, equals([84, 85, 86, 87]));
+      final face_0_22 = mesh_0.faces.elementAt(22);
+      expect(face_0_22.indices, equals([88, 89, 90, 91]));
+      final face_0_23 = mesh_0.faces.elementAt(23);
+      expect(face_0_23.indices, equals([92, 93, 94, 95]));
+      final face_0_24 = mesh_0.faces.elementAt(24);
+      expect(face_0_24.indices, equals([96, 97, 98, 99]));
+      final face_0_25 = mesh_0.faces.elementAt(25);
+      expect(face_0_25.indices, equals([100, 101, 102, 103]));
     });
   });
 

@@ -129,7 +129,7 @@ void main() {
   });
 
   test('collada', () {
-    testScene('anims.DAE', (scene) {
+    testScene('anims.dae', (scene) {
       final metaData = scene.metaData;
       expect(metaData, isNotNull);
       expect(metaData.keys.length, equals(3));
@@ -150,6 +150,33 @@ void main() {
       final value_2 = metaData.values.elementAt(2);
       expect(value_2.runtimeType, String);
       expect(value_2, equals('2015-02-03T10:29:10Z'));
+    });
+    testScene('lib.dae', (scene) {
+      final metaData = scene.metaData;
+      expect(metaData, isNotNull);
+      expect(metaData.keys.length, equals(4));
+      expect(metaData.values.length, equals(4));
+      expect(metaData.properties.length, equals(4));
+      final key_0 = metaData.keys.elementAt(0);
+      expect(key_0, equals('Author'));
+      final value_0 = metaData.values.elementAt(0);
+      expect(value_0.runtimeType, String);
+      expect(value_0, equals('Anonymous '));
+      final key_1 = metaData.keys.elementAt(1);
+      expect(key_1, equals('AuthoringTool'));
+      final value_1 = metaData.values.elementAt(1);
+      expect(value_1.runtimeType, String);
+      expect(value_1, equals('Collada Exporter for Blender 2.6+, by Juan Linietsky (juan@codenix.com) '));
+      final key_2 = metaData.keys.elementAt(2);
+      expect(key_2, equals('Created'));
+      final value_2 = metaData.values.elementAt(2);
+      expect(value_2.runtimeType, String);
+      expect(value_2, equals('2016-02-04T00:44:39Z     '));
+      final key_3 = metaData.keys.elementAt(3);
+      expect(key_3, equals('Modified'));
+      final value_3 = metaData.values.elementAt(3);
+      expect(value_3.runtimeType, String);
+      expect(value_3, equals('2016-02-04T00:44:39Z'));
     });
   });
 

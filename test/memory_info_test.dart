@@ -75,7 +75,7 @@ void main() {
   });
 
   test('collada', () {
-    testScene('anims.DAE', (scene) {
+    testScene('anims.dae', (scene) {
       final mem = MemoryInfo.fromScene(scene);
       expect(mem, isNotNull);
       expect(mem.textures, isZero);
@@ -86,6 +86,18 @@ void main() {
       expect(mem.cameras, isZero);
       expect(mem.lights, isZero);
       expect(mem.total, equals(392344));
+    });
+    testScene('lib.dae', (scene) {
+      final mem = MemoryInfo.fromScene(scene);
+      expect(mem, isNotNull);
+      expect(mem.textures, isZero);
+      expect(mem.materials, equals(293));
+      expect(mem.meshes, equals(13240));
+      expect(mem.nodes, equals(9212));
+      expect(mem.animations, equals(30704));
+      expect(mem.cameras, isZero);
+      expect(mem.lights, isZero);
+      expect(mem.total, equals(53577));
     });
   });
 

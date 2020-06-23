@@ -70,7 +70,12 @@ void main() {
   });
 
   test('collada', () {
-    testScene('anims.DAE', (scene) {
+    testScene('anims.dae', (scene) {
+      final lights = scene.lights;
+      expect(lights, isEmpty);
+      expect(lights.length, isZero);
+    });
+    testScene('lib.dae', (scene) {
       final lights = scene.lights;
       expect(lights, isEmpty);
       expect(lights.length, isZero);

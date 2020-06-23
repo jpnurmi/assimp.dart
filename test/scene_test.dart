@@ -75,13 +75,25 @@ void main() {
   });
 
   test('collada', () {
-    testScene('anims.DAE', (scene) {
+    testScene('anims.dae', (scene) {
       expect(scene, isNotNull);
       expect(scene.flags, isZero);
       expect(scene.rootNode, isNotNull);
       expect(scene.meshes.length, equals(64));
       expect(scene.materials.length, equals(1));
       expect(scene.animations.length, equals(1));
+      expect(scene.textures.length, isZero);
+      expect(scene.lights.length, isZero);
+      expect(scene.cameras.length, isZero);
+      expect(scene.metaData, isNotNull);
+    });
+    testScene('lib.dae', (scene) {
+      expect(scene, isNotNull);
+      expect(scene.flags, isZero);
+      expect(scene.rootNode, isNotNull);
+      expect(scene.meshes.length, equals(1));
+      expect(scene.materials.length, equals(1));
+      expect(scene.animations.length, equals(2));
       expect(scene.textures.length, isZero);
       expect(scene.lights.length, isZero);
       expect(scene.cameras.length, isZero);

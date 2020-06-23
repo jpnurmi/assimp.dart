@@ -54,7 +54,12 @@ void main() {
   });
 
   test('collada', () {
-    testScene('anims.DAE', (scene) {
+    testScene('anims.dae', (scene) {
+      final textures = scene.textures;
+      expect(textures, isEmpty);
+      expect(textures.length, isZero);
+    });
+    testScene('lib.dae', (scene) {
       final textures = scene.textures;
       expect(textures, isEmpty);
       expect(textures.length, isZero);

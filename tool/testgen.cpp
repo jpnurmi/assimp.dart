@@ -16,6 +16,7 @@ static QString testModelPath(const QString &fileName) { return testModelDir().fi
 static QString indexed(const QString id, int i) { return QString("%1_%2").arg(id).arg(i); }
 static QString indexed(const QString id, int i, int j) { return QString("%1_%2_%3").arg(id).arg(i).arg(j); }
 static QString indexed(const QString id, int i, int j, int k) { return QString("%1_%2_%3_%4").arg(id).arg(i).arg(j).arg(k); }
+static QString indexed(const QString id, int i, int j, int k, int l) { return QString("%1_%2_%3_%4_%5").arg(id).arg(i).arg(j).arg(k).arg(l); }
 
 static QString import(const QString &package) { return QString("import '%1';").arg(package); }
 
@@ -41,7 +42,7 @@ static QString equalsToString(const char *str, uint len) { return len ? equalsTo
 static QString equalsToString(const aiString &str) { return equalsToString(str.data, str.length); }
 static QString equalsToAabb(const aiAABB &a) { return QString("aabb3MoreOrLessEquals(%1)").arg(aabbToString(a)); }
 static QString equalsToColor3(const aiColor3D &c) { return QString("vector3MoreOrLessEquals(%1)").arg(color3ToString(c)); }
-static QString equalsToColor4(const aiColor4D &c) { return QString("vector3MoreOrLessEquals(%1)").arg(color4ToString(c)); }
+static QString equalsToColor4(const aiColor4D &c) { return QString("vector4MoreOrLessEquals(%1)").arg(color4ToString(c)); }
 static QString equalsToQuaternion(const aiQuaternion &q) { return QString("quaternionMoreOrLessEquals(%1)").arg(quaternionToString(q)); }
 static QString equalsToVector3(const aiVector3D &v) { return QString("vector3MoreOrLessEquals(%1)").arg(vector3ToString(v)); }
 static QString equalsToMatrix4(const aiMatrix4x4 &m) { return QString("matrix4MoreOrLessEquals(%1)").arg(matrix4ToString(m)); }
@@ -230,52 +231,52 @@ static void writeAnimMeshTester(QTextStream &out, const aiScene *scene, const QS
                 << "      expect(" << indexed("animMesh", i, j) << ".weight, " << equalsToFloat(animMesh->mWeight) << ");\n";
 
             const uint numVertices = animMesh->mNumVertices;
-            out << "      expect(" << indexed("mesh", i) << ".vertices.length, " << equalsToInt(animMesh->mNumVertices) << ");\n";
-            for (uint j = 0; j < numVertices; ++j) {
-                out << "      final "  << indexed("vertex", i, j) << " = "  << indexed("mesh", i) << ".vertices.elementAt(" << j << ");\n"
-                    << "      expect(" << indexed("vertex", i, j) << ", " << equalsToVector3(animMesh->mVertices[j]) << ");\n";
+            out << "      expect(" << indexed("animMesh", i, j) << ".vertices.length, " << equalsToInt(animMesh->mNumVertices) << ");\n";
+            for (uint k = 0; k < numVertices; ++k) {
+                out << "      final "  << indexed("vertex", i, j, k) << " = "  << indexed("animMesh", i, j) << ".vertices.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("vertex", i, j, k) << ", " << equalsToVector3(animMesh->mVertices[k]) << ");\n";
             }
 
             const uint numNormals = animMesh->mNormals ? animMesh->mNumVertices : 0;
-            out << "      expect(" << indexed("mesh", i) << ".normals.length, " << equalsToInt(numNormals) << ");\n";
-            for (uint j = 0; j <  numNormals; ++j) {
-                out << "      final "  << indexed("normal", i, j) << " = "  << indexed("mesh", i) << ".normals.elementAt(" << j << ");\n"
-                    << "      expect(" << indexed("normal", i, j) << ", " << equalsToVector3(animMesh->mNormals[j]) << ");\n";
+            out << "      expect(" << indexed("animMesh", i, j) << ".normals.length, " << equalsToInt(numNormals) << ");\n";
+            for (uint k = 0; k <  numNormals; ++k) {
+                out << "      final "  << indexed("normal", i, j, k) << " = "  << indexed("animMesh", i, j) << ".normals.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("normal", i, j, k) << ", " << equalsToVector3(animMesh->mNormals[k]) << ");\n";
             }
 
             const uint numTangents = animMesh->mTangents ? animMesh->mNumVertices : 0;
-            out << "      expect(" << indexed("mesh", i) << ".tangents.length, " << equalsToInt(numTangents) << ");\n";
-            for (uint j = 0; j < numTangents; ++j) {
-                out << "      final "  << indexed("tangent", i, j) << " = "  << indexed("mesh", i) << ".tangents.elementAt(" << j << ");\n"
-                    << "      expect(" << indexed("tangent", i, j) << ", " << equalsToVector3(animMesh->mTangents[j]) << ");\n";
+            out << "      expect(" << indexed("animMesh", i, j) << ".tangents.length, " << equalsToInt(numTangents) << ");\n";
+            for (uint k = 0; k < numTangents; ++k) {
+                out << "      final "  << indexed("tangent", i, j, k) << " = "  << indexed("animMesh", i, j) << ".tangents.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("tangent", i, j, k) << ", " << equalsToVector3(animMesh->mTangents[k]) << ");\n";
             }
 
             const uint numBitangents = animMesh->mBitangents ? animMesh->mNumVertices : 0;
-            out << "      expect(" << indexed("mesh", i) << ".bitangents.length, " << equalsToInt(numBitangents) << ");\n";
-            for (uint j = 0; j < numBitangents; ++j) {
-                out << "      final "  << indexed("bitangent", i, j) << " = "  << indexed("mesh", i) << ".bitangents.elementAt(" << j << ");\n"
-                    << "      expect(" << indexed("bitangent", i, j) << ", " << equalsToVector3(animMesh->mBitangents[j]) << ");\n";
+            out << "      expect(" << indexed("animMesh", i, j) << ".bitangents.length, " << equalsToInt(numBitangents) << ");\n";
+            for (uint k = 0; k < numBitangents; ++k) {
+                out << "      final "  << indexed("bitangent", i, j, k) << " = "  << indexed("animMesh", i, j) << ".bitangents.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("bitangent", i, j, k) << ", " << equalsToVector3(animMesh->mBitangents[k]) << ");\n";
             }
 
             const uint numColorChannels = arraySize(animMesh->mColors);
-            out << "      expect(" << indexed("mesh", i) << ".colors.length, " << equalsToInt(numColorChannels) << ");\n";
-            for (uint j = 0; j < numColorChannels; ++j) {
-                out << "      final "  << indexed("colors", i, j) << " = "  << indexed("mesh", i) << ".colors.elementAt(" << j << ");\n"
-                    << "      expect(" << indexed("colors", i, j) << ".length, " << equalsToInt(numVertices) << ");\n";
-                for (uint k = 0; k < numVertices; ++k) {
-                    out << "      final "  << indexed("color", i, j, k) << " = .colors.elementAt(" << k << ");\n"
-                        << "      expect(" << indexed("color", i, j, k) << ", " << equalsToColor4(animMesh->mColors[j][k]) << ");\n";
+            out << "      expect(" << indexed("animMesh", i, j) << ".colors.length, " << equalsToInt(numColorChannels) << ");\n";
+            for (uint k = 0; k < numColorChannels; ++k) {
+                out << "      final "  << indexed("colors", i, j, k) << " = "  << indexed("animMesh", i, j) << ".colors.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("colors", i, j, k) << ".length, " << equalsToInt(numVertices) << ");\n";
+                for (uint l = 0; l < numVertices; ++l) {
+                    out << "      final "  << indexed("color", i, j, k, l) << " = "  << indexed("colors", i, j, k) << ".elementAt(" << l << ");\n"
+                        << "      expect(" << indexed("color", i, j, k, l) << ", " << equalsToColor4(animMesh->mColors[k][l]) << ");\n";
                 }
             }
 
             const uint numTextureCoords = arraySize(animMesh->mTextureCoords);
-            out << "      expect(" << indexed("mesh", i) << ".textureCoords.length, " << equalsToInt(numTextureCoords) << ");\n";
-            for (uint j = 0; j < numTextureCoords; ++j) {
-                out << "      final "  << indexed("textureCoords", i, j) << " = "  << indexed("mesh", i) << ".textureCoords.elementAt(" << j << ");\n"
-                    << "      expect(" << indexed("textureCoords", i, j) << ".length, " << equalsToInt(numVertices) << ");\n";
-                for (uint k = 0; k < numVertices; ++k) {
-                    out << "      final "  << indexed("textureCoord", i, j, k) << " = " << indexed("textureCoords", i, j) << ".elementAt(" << k << ");\n"
-                        << "      expect(" << indexed("textureCoord", i, j, k) << ", " << equalsToVector3(animMesh->mTextureCoords[j][k]) << ");\n";
+            out << "      expect(" << indexed("animMesh", i, j) << ".textureCoords.length, " << equalsToInt(numTextureCoords) << ");\n";
+            for (uint k = 0; k < numTextureCoords; ++k) {
+                out << "      final "  << indexed("textureCoords", i, j, k) << " = "  << indexed("animMesh", i, j) << ".textureCoords.elementAt(" << k << ");\n"
+                    << "      expect(" << indexed("textureCoords", i, j, k) << ".length, " << equalsToInt(numVertices) << ");\n";
+                for (uint l = 0; l < numVertices; ++l) {
+                    out << "      final "  << indexed("textureCoord", i, j, k, l) << " = " << indexed("textureCoords", i, j, k) << ".elementAt(" << l << ");\n"
+                        << "      expect(" << indexed("textureCoord", i, j, k, l) << ", " << equalsToVector3(animMesh->mTextureCoords[k][l]) << ");\n";
                 }
             }
         }
@@ -513,7 +514,7 @@ static void writeMeshTester(QTextStream &out, const aiScene *scene, const QStrin
             out << "      final "  << indexed("colors", i, j) << " = "  << indexed("mesh", i) << ".colors.elementAt(" << j << ");\n"
                 << "      expect(" << indexed("colors", i, j) << ".length, " << equalsToInt(numVertices) << ");\n";
             for (uint k = 0; k < numVertices; ++k) {
-                out << "      final "  << indexed("color", i, j, k) << " = .colors.elementAt(" << k << ");\n"
+                out << "      final "  << indexed("color", i, j, k) << " = "  << indexed("colors", i, j) << ".elementAt(" << k << ");\n"
                     << "      expect(" << indexed("color", i, j, k) << ", " << equalsToColor4(mesh->mColors[j][k]) << ");\n";
             }
         }
@@ -692,7 +693,8 @@ static void generateTest(const QString &nativeName, const QString &dartName, con
             writeSceneTest(out, "huesitos.fbx", writer);
         });
         writeGroup(out, "collada", [&]() {
-            writeSceneTest(out, "anims.DAE", writer);
+            writeSceneTest(out, "anims.dae", writer);
+            writeSceneTest(out, "lib.dae", writer);
         });
         writeGroup(out, "obj", [&]() {
             writeSceneTest(out, "spider.obj", writer);

@@ -90,7 +90,7 @@ void main() {
   });
 
   test('collada', () {
-    testScene('anims.DAE', (scene) {
+    testScene('anims.dae', (scene) {
       final meshes = scene.meshes;
       final mesh_0 = meshes.elementAt(0);
       expect(mesh_0.animMeshes.length, isZero);
@@ -220,6 +220,11 @@ void main() {
       expect(mesh_62.animMeshes.length, isZero);
       final mesh_63 = meshes.elementAt(63);
       expect(mesh_63.animMeshes.length, isZero);
+    });
+    testScene('lib.dae', (scene) {
+      final meshes = scene.meshes;
+      final mesh_0 = meshes.elementAt(0);
+      expect(mesh_0.animMeshes.length, isZero);
     });
   });
 

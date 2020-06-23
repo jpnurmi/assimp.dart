@@ -59,6 +59,12 @@ Matcher vector3MoreOrLessEquals(Vector3 value,
       relativeError, value, precisionErrorTolerance);
 }
 
+Matcher vector4MoreOrLessEquals(Vector4 value,
+    {double epsilon = precisionErrorTolerance}) {
+  return _IsWithinDistance<Vector4>(
+      relativeError, value, precisionErrorTolerance);
+}
+
 /// Asserts that two [double]s are equal, within some tolerated error.
 ///
 /// {@template flutter.flutter_test.moreOrLessEquals.epsilon}
