@@ -52,9 +52,6 @@ typedef aiCopyScene_t = Void Function(
 typedef aiCopyScene_f = void Function(
     Pointer<aiScene> scene, Pointer<Pointer<aiScene>> out);
 
-typedef aiFreeScene_t = Void Function(Pointer<aiScene> scene);
-typedef aiFreeScene_f = void Function(Pointer<aiScene> scene);
-
 typedef aiExportScene_t = Uint32 Function(Pointer<aiScene> scene,
     Pointer<Utf8> formatId, Pointer<Utf8> fileName, Uint32 preprocessing);
 typedef aiExportScene_f = int Function(Pointer<aiScene> scene,

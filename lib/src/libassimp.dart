@@ -104,10 +104,6 @@ get aiExportSceneToBlob => _aiExportSceneToBlob ??=
     libassimp.lookupFunction<aiExportSceneToBlob_t, aiExportSceneToBlob_f>(
         'aiExportSceneToBlob');
 
-aiFreeScene_f _aiFreeScene;
-get aiFreeScene => _aiFreeScene ??=
-    libassimp.lookupFunction<aiFreeScene_t, aiFreeScene_f>('aiFreeScene');
-
 aiGetBranchName_f _aiGetBranchName;
 get aiGetBranchName => _aiGetBranchName ??= libassimp
     .lookupFunction<aiGetBranchName_t, aiGetBranchName_f>('aiGetBranchName');
