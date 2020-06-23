@@ -69,7 +69,6 @@ export 'bindings/ai_mesh_morph_anim.dart';
 export 'bindings/ai_metadata.dart';
 export 'bindings/ai_node_anim.dart';
 export 'bindings/ai_node.dart';
-export 'bindings/ai_plane.dart';
 export 'bindings/ai_post_processing.dart';
 export 'bindings/ai_property_store.dart';
 export 'bindings/ai_quaternion.dart';

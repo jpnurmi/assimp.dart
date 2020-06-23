@@ -48,7 +48,7 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:vector_math/vector_math.dart';
 export 'package:vector_math/vector_math.dart'
-    show Aabb3, Matrix3, Matrix4, Plane, Quaternion, Vector2, Vector3, Vector4;
+    show Aabb3, Matrix3, Matrix4, Quaternion, Vector2, Vector3, Vector4;
 
 import 'bindings.dart';
 
@@ -177,22 +177,6 @@ extension AssimpMatrix4 on Matrix4 {
 //    ptr.ref.d2 = matrix.row3.y;
 //    ptr.ref.d3 = matrix.row3.z;
 //    ptr.ref.d4 = matrix.row3.w;
-//    return ptr;
-//  }
-}
-
-extension AssimpPlane on Plane {
-  static Plane fromNative(Pointer<aiPlane> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Plane.components(ptr.ref.a, ptr.ref.b, ptr.ref.c, ptr.ref.d);
-  }
-
-//  static Pointer<aiPlane> toNative(Plane plane) {
-//    final Pointer<aiPlane> ptr = allocate();
-//    ptr.ref.a = plane.normal.x;
-//    ptr.ref.b = plane.normal.y;
-//    ptr.ref.c = plane.normal.z;
-//    ptr.ref.d = plane.constant;
 //    return ptr;
 //  }
 }

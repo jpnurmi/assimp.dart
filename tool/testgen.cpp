@@ -733,7 +733,6 @@ int main(int argc, char *argv[])
     generateTest<aiMetadataEntry>("aiMetadataEntry", "", "meta_data_entry_test.dart");
     generateTest<aiNode>("aiNode", "Node", "node_test.dart", writeNodeTester);
     generateTest<aiNodeAnim>("aiNodeAnim", "NodeAnim", "node_anim_test.dart"); // ### TODO: writeNodeAnimTester
-    generateTest<aiPlane>("aiPlane", "AssimpPlane", "plane_test.dart");
     generateTest<aiPropertyStore>("aiPropertyStore", "", "property_store_test.dart");
     generateTest<aiQuatKey>("aiQuatKey", "QuaternionKey", "quaternion_key_test.dart");
     generateTest<aiScene>("aiScene", "Scene", "scene_test.dart", writeSceneTester);
