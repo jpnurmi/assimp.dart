@@ -39,15 +39,26 @@ void main() {
 
     expect(importScene.exportData(format: ''), isNull);
 
-    ExportData exportData = importScene.exportData(format: 'obj');
+    final exportData = importScene.exportData(format: 'obj');
     expect(exportData, isNotNull);
+    expect(exportData.name, isNotNull);
     expect(exportData.data, isNotNull);
     expect(exportData.data.length, greaterThan(0));
+    expect(exportData.next, isNotNull);
+
+    var nextData = exportData.next;
+    while (nextData != null) {
+      expect(nextData.name, isNotNull);
+      expect(nextData.data, isNotNull);
+      expect(nextData.data.length, greaterThan(0));
+      nextData = nextData.next;
+    }
 
     final exportScene = Scene.fromBytes(exportData.data);
     expect(exportScene, isNotNull);
     expect(exportScene.meshes.length, importScene.meshes.length);
 
+    exportData.dispose();
     exportScene.dispose();
     importScene.dispose();
   });
