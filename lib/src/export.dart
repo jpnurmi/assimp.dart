@@ -44,10 +44,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
+import 'package:meta/meta.dart';
 
 import 'bindings.dart';
 import 'extensions.dart';
 import 'libassimp.dart';
+import 'scene.dart';
 import 'type.dart';
 
 /// Describes an file format which Assimp can export to. Use #aiGetExportFormatCount() to
@@ -78,4 +80,52 @@ class ExportFormat extends AssimpType<aiExportFormatDesc> {
   /// aiGetExportFormatDescription
   /// @param desc Pointer to the description
   void dispose() => aiReleaseExportFormatDescription(ptr);
+}
+
+extension SceneExport on Scene {
+  /// Exports the given scene to a chosen file format and writes the result file(s) to disk.
+  /// @param pScene The scene to export. Stays in possession of the caller, is not changed by the function.
+  ///   The scene is expected to conform to Assimp's Importer output format as specified
+  ///   in the @link data Data Structures Page @endlink. In short, this means the model data
+  ///   should use a right-handed coordinate systems, face winding should be counter-clockwise
+  ///   and the UV coordinate origin is assumed to be in the upper left. If your input data
+  ///   uses different conventions, have a look at the last parameter.
+  /// @param pFormatId ID string to specify to which format you want to export to. Use
+  /// aiGetExportFormatCount() / aiGetExportFormatDescription() to learn which export formats are available.
+  /// @param pFileName Output file to write
+  /// @param pPreprocessing Accepts any choice of the #aiPostProcessSteps enumerated
+  ///   flags, but in reality only a subset of them makes sense here. Specifying
+  ///   'preprocessing' flags is useful if the input scene does not conform to
+  ///   Assimp's default conventions as specified in the @link data Data Structures Page @endlink.
+  ///   In short, this means the geometry data should use a right-handed coordinate systems, face
+  ///   winding should be counter-clockwise and the UV coordinate origin is assumed to be in
+  ///   the upper left. The #aiProcess_MakeLeftHanded, #aiProcess_FlipUVs and
+  ///   #aiProcess_FlipWindingOrder flags are used in the import side to allow users
+  ///   to have those defaults automatically adapted to their conventions. Specifying those flags
+  ///   for exporting has the opposite effect, respectively. Some other of the
+  ///   #aiPostProcessSteps enumerated values may be useful as well, but you'll need
+  ///   to try out what their effect on the exported file is. Many formats impose
+  ///   their own restrictions on the structure of the geometry stored therein,
+  ///   so some preprocessing may have little or no effect at all, or may be
+  ///   redundant as exporters would apply them anyhow. A good example
+  ///   is triangulation - whilst you can enforce it by specifying
+  ///   the #aiProcess_Triangulate flag, most export formats support only
+  ///   triangulate data so they would run the step anyway.
+  ///
+  ///   If assimp detects that the input scene was directly taken from the importer side of
+  ///   the library (i.e. not copied using aiCopyScene and potetially modified afterwards),
+  ///   any postprocessing steps already applied to the scene will not be applied again, unless
+  ///   they show non-idempotent behaviour (#aiProcess_MakeLeftHanded, #aiProcess_FlipUVs and
+  ///   #aiProcess_FlipWindingOrder).
+  /// @return a status code indicating the result of the export
+  /// @note Use aiCopyScene() to get a modifiable copy of a previously
+  ///   imported scene.
+  bool exportFile(String path, {@required String format, int flags = 0}) {
+    Pointer<Utf8> cpath = Utf8.toUtf8(path);
+    Pointer<Utf8> cformat = Utf8.toUtf8(format);
+    int res = aiExportScene(ptr, cformat, cpath, flags);
+    free(cpath);
+    free(cformat);
+    return res == 0;
+  }
 }

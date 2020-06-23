@@ -48,8 +48,6 @@ import 'package:meta/meta.dart';
 import 'extensions.dart';
 
 abstract class AssimpType<T extends NativeType> {
-  @protected
-  @visibleForTesting
   final Pointer<T> ptr;
 
   AssimpType(this.ptr) : assert(AssimpPointer.isNotNull(ptr));
