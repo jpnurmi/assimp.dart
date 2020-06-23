@@ -56,6 +56,6 @@ export 'src/meminfo.dart';
 export 'src/mesh.dart';
 export 'src/metadata.dart';
 export 'src/node.dart';
-export 'src/postprocess.dart';
+export 'src/process.dart';
 export 'src/scene.dart';
 export 'src/texture.dart';

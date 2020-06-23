@@ -5,7 +5,7 @@
 /// See also:
 /// - [Scene.fromFile()]
 /// - [Scene.setProperty()]
-class PostProcess {
+class ProcessFlags {
   /// Calculates the tangents and bitangents for the imported meshes.
   ///
   /// Does nothing if a mesh does not have normals. You might want this post
@@ -450,9 +450,9 @@ class PostProcess {
   /// The output data matches Direct3D's conventions: left-handed geometry, upper-left
   /// origin for UV coordinates and finally clockwise face order, suitable for CCW culling.
   @deprecated
-  static const int convertToLeftHanded = PostProcess.makeLeftHanded |
-      PostProcess.flipUVs |
-      PostProcess.flipWindingOrder;
+  static const int convertToLeftHanded = ProcessFlags.makeLeftHanded |
+      ProcessFlags.flipUVs |
+      ProcessFlags.flipWindingOrder;
 
   /// Default post-process configuration optimizing the data for real-time rendering.
   ///
@@ -466,12 +466,12 @@ class PostProcess {
   /// **Note:** Please take the time to read the docs for the steps enabled by this preset.
   /// Some of them offer further configurable properties, while some of them might not be of
   /// use for you so it might be better to not specify them.
-  static const int targetRealtime_Fast = PostProcess.calculateTangentSpace |
-      PostProcess.generateNormals |
-      PostProcess.joinIdenticalVertices |
-      PostProcess.triangulate |
-      PostProcess.generateUVCoords |
-      PostProcess.sortByPType;
+  static const int targetRealtime_Fast = ProcessFlags.calculateTangentSpace |
+      ProcessFlags.generateNormals |
+      ProcessFlags.joinIdenticalVertices |
+      ProcessFlags.triangulate |
+      ProcessFlags.generateUVCoords |
+      ProcessFlags.sortByPType;
 
   /// Default post-process configuration optimizing the data for real-time rendering.
   ///
@@ -487,18 +487,18 @@ class PostProcess {
   /// **Note:** Please take the time to read the docs for the steps enabled by this preset.
   /// Some of them offer further configurable properties, while some of them might not be
   /// of use for you so it might be better to not specify them.
-  static const int targetRealtime_Quality = PostProcess.calculateTangentSpace |
-      PostProcess.generateSmoothNormals |
-      PostProcess.joinIdenticalVertices |
-      PostProcess.improveCacheLocality |
-      PostProcess.limitBoneWeights |
-      PostProcess.removeRedundantMaterials |
-      PostProcess.splitLargeMeshes |
-      PostProcess.triangulate |
-      PostProcess.generateUVCoords |
-      PostProcess.sortByPType |
-      PostProcess.findDegenerates |
-      PostProcess.findInvalidData;
+  static const int targetRealtime_Quality = ProcessFlags.calculateTangentSpace |
+      ProcessFlags.generateSmoothNormals |
+      ProcessFlags.joinIdenticalVertices |
+      ProcessFlags.improveCacheLocality |
+      ProcessFlags.limitBoneWeights |
+      ProcessFlags.removeRedundantMaterials |
+      ProcessFlags.splitLargeMeshes |
+      ProcessFlags.triangulate |
+      ProcessFlags.generateUVCoords |
+      ProcessFlags.sortByPType |
+      ProcessFlags.findDegenerates |
+      ProcessFlags.findInvalidData;
 
   /// Default post-process configuration optimizing the data for real-time rendering.
   ///
@@ -514,7 +514,7 @@ class PostProcess {
   /// Some of them offer further configurable properties, while some of them might not be
   /// of use for you so it might be better to not specify them.
   static const int targetRealtime_MaxQuality = targetRealtime_Quality |
-      PostProcess.findInstances |
-      PostProcess.validateDataStructure |
-      PostProcess.optimizeMeshes;
+      ProcessFlags.findInstances |
+      ProcessFlags.validateDataStructure |
+      ProcessFlags.optimizeMeshes;
 }
