@@ -91,10 +91,6 @@ get aiEnableVerboseLogging => _aiEnableVerboseLogging ??= libassimp
     .lookupFunction<aiEnableVerboseLogging_t, aiEnableVerboseLogging_f>(
         'aiEnableVerboseLogging');
 
-aiExportScene_f _aiExportScene;
-get aiExportScene => _aiExportScene ??=
-    libassimp.lookupFunction<aiExportScene_t, aiExportScene_f>('aiExportScene');
-
 aiExportSceneEx_f _aiExportSceneEx;
 get aiExportSceneEx => _aiExportSceneEx ??= libassimp
     .lookupFunction<aiExportSceneEx_t, aiExportSceneEx_f>('aiExportSceneEx');

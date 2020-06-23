@@ -166,7 +166,8 @@ extension SceneExport on Scene {
   bool exportFile(String path, {@required String format, int flags = 0}) {
     Pointer<Utf8> cpath = Utf8.toUtf8(path);
     Pointer<Utf8> cformat = Utf8.toUtf8(format);
-    int res = aiExportScene(ptr, cformat, cpath, flags);
+    // ### TODO: add custom io support
+    int res = aiExportSceneEx(ptr, cformat, cpath, nullptr, flags);
     free(cpath);
     free(cformat);
     return res == 0;
