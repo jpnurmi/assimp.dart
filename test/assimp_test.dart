@@ -110,6 +110,7 @@ void main() {
       expect(format.description, isNotNull);
       expect(format.extension, isNotEmpty);
     }
+    formats.forEach((fmt) => fmt.dispose());
   });
 
   test('copy', () {
