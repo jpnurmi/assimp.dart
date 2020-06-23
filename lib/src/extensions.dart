@@ -48,16 +48,7 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:vector_math/vector_math.dart';
 export 'package:vector_math/vector_math.dart'
-    show
-        Aabb3,
-        Matrix3,
-        Matrix4,
-        Plane,
-        Quaternion,
-        Ray,
-        Vector2,
-        Vector3,
-        Vector4;
+    show Aabb3, Matrix3, Matrix4, Plane, Quaternion, Vector2, Vector3, Vector4;
 
 import 'bindings.dart';
 
@@ -223,22 +214,6 @@ extension AssimpQuaternion on Quaternion {
 //    ptr.ref.y = quaternion.y;
 //    ptr.ref.z = quaternion.z;
 //    ptr.ref.w = quaternion.w;
-//    return ptr;
-//  }
-}
-
-extension AssimpRay on Ray {
-  static Ray fromNative(Pointer<aiRay> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    final pos = AssimpVector3.fromNative(ptr.ref.pos);
-    final dir = AssimpVector3.fromNative(ptr.ref.dir);
-    return Ray.originDirection(pos, dir);
-  }
-
-//  static Pointer<bindings.aiRay> toNative(Ray ray) {
-//    final Pointer<bindings.aiRay> ptr = allocate();
-//    ptr.ref.pos = AssimpVector3.toNative(ray.origin);
-//    ptr.ref.dir = AssimpVector3.toNative(ray.direction);
 //    return ptr;
 //  }
 }

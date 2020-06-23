@@ -73,7 +73,6 @@ export 'bindings/ai_plane.dart';
 export 'bindings/ai_post_processing.dart';
 export 'bindings/ai_property_store.dart';
 export 'bindings/ai_quaternion.dart';
-export 'bindings/ai_ray.dart';
 export 'bindings/ai_scene.dart';
 export 'bindings/ai_string.dart';
 export 'bindings/ai_texel.dart';

@@ -736,7 +736,6 @@ int main(int argc, char *argv[])
     generateTest<aiPlane>("aiPlane", "AssimpPlane", "plane_test.dart");
     generateTest<aiPropertyStore>("aiPropertyStore", "", "property_store_test.dart");
     generateTest<aiQuatKey>("aiQuatKey", "QuaternionKey", "quaternion_key_test.dart");
-    generateTest<aiRay>("aiRay", "AssimpRay", "ray_test.dart");
     generateTest<aiScene>("aiScene", "Scene", "scene_test.dart", writeSceneTester);
     generateTest<aiString>("aiString", "AssimpString", "string_test.dart");
     generateTest<aiTexel>("aiTexel", "Texel", "texel_test.dart"); // ### TODO: writeTexelTester
