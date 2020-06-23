@@ -43,6 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'animesh.dart';
 import 'bindings.dart';
 import 'extensions.dart';
 import 'type.dart';
@@ -135,109 +136,6 @@ class Bone extends AssimpType<aiBone> {
   /// It is sometimes called an inverse-bind matrix,
   /// or inverse bind pose matrix.
   Matrix4 get offset => AssimpMatrix4.fromNative(_bone.mOffsetMatrix);
-}
-
-/// An AnimMesh is an attachment to an #aiMesh stores per-vertex
-/// animations for a particular frame.
-///
-/// You may think of an #aiAnimMesh as a `patch` for the host mesh, which
-/// replaces only certain vertex data streams at a particular time.
-/// Each mesh stores n attached attached meshes (#aiMesh::mAnimMeshes).
-/// The actual relationship between the time line and anim meshes is
-/// established by #aiMeshAnim, which references singular mesh attachments
-/// by their ID and binds them to a time offset.
-class AnimMesh extends AssimpType<aiAnimMesh> {
-  aiAnimMesh get _animMesh => ptr.ref;
-
-  AnimMesh._(Pointer<aiAnimMesh> ptr) : super(ptr);
-  factory AnimMesh.fromNative(Pointer<aiAnimMesh> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return AnimMesh._(ptr);
-  }
-
-  /// Anim Mesh name
-  String get name => AssimpString.fromNative(_animMesh.mName);
-
-  /// Replacement for aiMesh::mVertices. If this array is non-NULL,
-  /// it *must* contain mNumVertices entries. The corresponding
-  /// array in the host mesh must be non-NULL as well - animation
-  /// meshes may neither add or nor remove vertex components (if
-  /// a replacement array is NULL and the corresponding source
-  /// array is not, the source data is taken instead)
-  Iterable<Vector3> get vertices {
-    return Iterable.generate(
-      _animMesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_animMesh.mVertices.elementAt(i)),
-    );
-  }
-
-  /// Replacement for aiMesh::mNormals.
-  Iterable<Vector3> get normals {
-    return Iterable.generate(
-      _animMesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_animMesh.mNormals.elementAt(i)),
-    );
-  }
-
-  /// Replacement for aiMesh::mTangents.
-  Iterable<Vector3> get tangents {
-    return Iterable.generate(
-      _animMesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_animMesh.mTangents.elementAt(i)),
-    );
-  }
-
-  /// Replacement for aiMesh::mBitangents.
-  Iterable<Vector3> get bitangents {
-    return Iterable.generate(
-      _animMesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_animMesh.mBitangents.elementAt(i)),
-    );
-  }
-
-  /// Replacement for aiMesh::mColors.
-  Iterable<Iterable<Vector4>> get colors {
-    var n = 0;
-    while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
-        AssimpPointer.isNotNull(_animMesh.mColors?.elementAt(n))) ++n;
-    return Iterable.generate(
-      n,
-      (i) => Iterable.generate(
-        _animMesh.mNumVertices,
-        (j) => AssimpColor4.fromNative(_animMesh.mColors[i].elementAt(j)),
-      ),
-    );
-  }
-
-  /// Replacement for aiMesh::mTextureCoords.
-  Iterable<Iterable<Vector3>> get textureCoords {
-    var n = 0;
-    while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        AssimpPointer.isNotNull(_animMesh.mTextureCoords?.elementAt(n))) ++n;
-    return Iterable.generate(
-      n,
-      (i) => Iterable.generate(
-        _animMesh.mNumVertices,
-        (j) =>
-            AssimpVector3.fromNative(_animMesh.mTextureCoords[i].elementAt(j)),
-      ),
-    );
-  }
-
-  /// Weight of the AnimMesh.
-  double get weight => _animMesh.mWeight;
-}
-
-/// Enumerates the methods of mesh morphing supported by Assimp.
-class MorphingMethod {
-  /// Interpolation between morph targets
-  static const int vertexBlend = 0x1;
-
-  /// Normalized morphing between morph targets
-  static const int morphNormalized = 0x2;
-
-  /// Relative morphing between morph targets
-  static const int morphRelative = 0x3;
 }
 
 /// The types of geometric primitives supported by Assimp.

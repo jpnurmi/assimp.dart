@@ -45,6 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 library assimp;
 
 export 'src/animation.dart';
+export 'src/animesh.dart';
 export 'src/assimp.dart';
 export 'src/camera.dart';
 export 'src/export.dart';
