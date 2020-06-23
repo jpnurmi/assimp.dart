@@ -138,7 +138,8 @@ class Scene extends AssimpType<aiScene> {
   /// @return Pointer to the imported data or NULL if the import failed.
   factory Scene.fromFile(String path, {int flags = 0}) {
     final cpath = Utf8.toUtf8(path);
-    final ptr = aiImportFile(cpath, flags);
+    // ### TODO: add support for properties
+    final ptr = aiImportFileExWithProperties(cpath, flags, nullptr, nullptr);
     free(cpath);
     return Scene.fromNative(ptr);
   }
@@ -146,7 +147,9 @@ class Scene extends AssimpType<aiScene> {
   factory Scene._fromBuffer(
       Pointer<Utf8> cstr, int length, flags, String hint) {
     final chint = Utf8.toUtf8(hint);
-    final ptr = aiImportFileFromMemory(cstr, length, flags, chint);
+    // ### TODO: add support for properties
+    final ptr = aiImportFileFromMemoryWithProperties(
+        cstr, length, flags, chint, nullptr);
     free(cstr);
     free(chint);
     return Scene.fromNative(ptr);

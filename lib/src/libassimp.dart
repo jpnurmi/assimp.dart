@@ -213,24 +213,11 @@ get aiGetPredefinedLogStream => _aiGetPredefinedLogStream ??= libassimp
     .lookupFunction<aiGetPredefinedLogStream_t, aiGetPredefinedLogStream_f>(
         'aiGetPredefinedLogStream');
 
-aiImportFile_f _aiImportFile;
-get aiImportFile => _aiImportFile ??=
-    libassimp.lookupFunction<aiImportFile_t, aiImportFile_f>('aiImportFile');
-
-aiImportFileEx_f _aiImportFileEx;
-get aiImportFileEx => _aiImportFileEx ??= libassimp
-    .lookupFunction<aiImportFileEx_t, aiImportFileEx_f>('aiImportFileEx');
-
 aiImportFileExWithProperties_f _aiImportFileExWithProperties;
 get aiImportFileExWithProperties =>
     _aiImportFileExWithProperties ??= libassimp.lookupFunction<
         aiImportFileExWithProperties_t,
         aiImportFileExWithProperties_f>('aiImportFileExWithProperties');
-
-aiImportFileFromMemory_f _aiImportFileFromMemory;
-get aiImportFileFromMemory => _aiImportFileFromMemory ??= libassimp
-    .lookupFunction<aiImportFileFromMemory_t, aiImportFileFromMemory_f>(
-        'aiImportFileFromMemory');
 
 aiImportFileFromMemoryWithProperties_f _aiImportFileFromMemoryWithProperties;
 get aiImportFileFromMemoryWithProperties =>

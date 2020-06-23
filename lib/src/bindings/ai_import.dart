@@ -49,16 +49,6 @@ import 'ai_file_io.dart';
 import 'ai_property_store.dart';
 import 'ai_scene.dart';
 
-typedef aiImportFile_t = Pointer<aiScene> Function(
-    Pointer<Utf8> file, Uint32 flags);
-typedef aiImportFile_f = Pointer<aiScene> Function(
-    Pointer<Utf8> file, int flags);
-
-typedef aiImportFileEx_t = Pointer<aiScene> Function(
-    Pointer<Utf8> file, Uint32 flags, Pointer<aiFileIO> fs);
-typedef aiImportFileEx_f = Pointer<aiScene> Function(
-    Pointer<Utf8> file, int flags, Pointer<aiFileIO> fs);
-
 typedef aiImportFileExWithProperties_t = Pointer<aiScene> Function(
     Pointer<Utf8> file,
     Uint32 flags,
@@ -69,11 +59,6 @@ typedef aiImportFileExWithProperties_f = Pointer<aiScene> Function(
     int flags,
     Pointer<aiFileIO> fs,
     Pointer<aiPropertyStore> props);
-
-typedef aiImportFileFromMemory_t = Pointer<aiScene> Function(
-    Pointer<Utf8> buffer, Uint32 length, Uint32 flags, Pointer<Utf8> hint);
-typedef aiImportFileFromMemory_f = Pointer<aiScene> Function(
-    Pointer<Utf8> buffer, int length, int flags, Pointer<Utf8> hint);
 
 typedef aiImportFileFromMemoryWithProperties_t = Pointer<aiScene> Function(
     Pointer<Utf8> buffer,
