@@ -1,0 +1,22 @@
+name: example
+description: Dart bindings for Assimp example app
+publish_to: 'none'
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+
+dependencies:
+  assimp:
+    path: ../
+  flutter:
+    sdk: flutter
+  path:
+  vector_math:
+
+flutter:
+  assets:
+    - models/box.obj
+    - models/box.3mf
+    - models/mug.obj
+    - models/spider.3mf
+  uses-material-design: true
