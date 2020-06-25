@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'animesh.dart';
 import 'bindings.dart';
@@ -79,6 +80,9 @@ class Face extends AssimpType<aiFace> {
 
   /// Pointer to the indices array. Size of the array is given in numIndices.
   Iterable<int> get indices => _face.mIndices.asTypedList(_face.mNumIndices);
+
+  Uint32List get indexData =>
+      _face.mIndices.cast<Uint32>().asTypedList(_face.mNumIndices);
 }
 
 /// A single influence of a bone on a vertex.
@@ -211,6 +215,9 @@ class Mesh extends AssimpType<aiMesh> {
     );
   }
 
+  Float32List get vertexData =>
+      _mesh.mVertices.cast<Float>().asTypedList(_mesh.mNumVertices * 3);
+
   /// Vertex normals.
   /// The array contains normalized vectors, NULL if not present.
   /// The array is mNumVertices in size. Normals are undefined for
@@ -237,6 +244,10 @@ class Mesh extends AssimpType<aiMesh> {
     );
   }
 
+  Float32List get normalData => AssimpPointer.isNotNull(_mesh.mNormals)
+      ? _mesh.mNormals.cast<Float>().asTypedList(_mesh.mNumVertices * 3)
+      : null;
+
   /// Vertex tangents.
   /// The tangent of a vertex points in the direction of the positive
   /// X texture axis. The array contains normalized vectors, NULL if
@@ -255,6 +266,10 @@ class Mesh extends AssimpType<aiMesh> {
     );
   }
 
+  Float32List get tangentData => AssimpPointer.isNotNull(_mesh.mTangents)
+      ? _mesh.mTangents.cast<Float>().asTypedList(_mesh.mNumVertices * 3)
+      : null;
+
   /// Vertex bitangents.
   /// The bitangent of a vertex points in the direction of the positive
   /// Y texture axis. The array contains normalized vectors, NULL if not
@@ -267,6 +282,10 @@ class Mesh extends AssimpType<aiMesh> {
       (i) => AssimpVector3.fromNative(_mesh.mBitangents.elementAt(i)),
     );
   }
+
+  Float32List get bitangentData => AssimpPointer.isNotNull(_mesh.mBitangents)
+      ? _mesh.mBitangents.cast<Float>().asTypedList(_mesh.mNumVertices * 3)
+      : null;
 
   /// Vertex color sets.
   /// A mesh may contain 0 to #AI_MAX_NUMBER_OF_COLOR_SETS vertex
