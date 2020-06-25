@@ -348,6 +348,36 @@ class Mesh extends AssimpType<aiMesh> {
     );
   }
 
+  int get _numIndices {
+    switch (primitiveTypes) {
+      case PrimitiveType.point:
+        return _mesh.mNumFaces;
+      case PrimitiveType.line:
+        return _mesh.mNumFaces * 2;
+      case PrimitiveType.triangle:
+        return _mesh.mNumFaces * 3;
+      default:
+        assert(false);
+    }
+  }
+
+  /// Experimental
+  Uint16List createIndexData() {
+    assert(primitiveTypes == PrimitiveType.point ||
+        primitiveTypes == PrimitiveType.line ||
+        primitiveTypes == PrimitiveType.triangle);
+    var i = 0;
+    final indices = Uint16List(_numIndices);
+    for (final face in faces) {
+      final idx = face.indexData;
+      indices[i * 3] = idx[0];
+      indices[i * 3 + 1] = idx[1];
+      indices[i * 3 + 2] = idx[2];
+      ++i;
+    }
+    return indices;
+  }
+
   /// The bones of this mesh.
   /// A bone consists of a name by which it can be found in the
   /// frame hierarchy and a set of vertex weights.
