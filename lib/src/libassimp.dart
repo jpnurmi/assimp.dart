@@ -48,14 +48,22 @@ import 'bindings.dart';
 
 String get _dlprefix => Platform.isWindows ? '' : 'lib';
 String get _dlsuffix => Platform.isWindows
-    ? 'dll'
-    : Platform.isMacOS || Platform.isIOS ? 'dylib' : 'so';
-String _dlpath(String path, String name) => '$path$_dlprefix$name.$_dlsuffix';
-DynamicLibrary _dlopen(String name, {String path = ''}) =>
-    DynamicLibrary.open(_dlpath(path, name));
+    ? '.dll'
+    : Platform.isMacOS || Platform.isIOS ? '.dylib' : '.so';
+String get _dlname => _dlprefix + 'assimp' + _dlsuffix;
+
+DynamicLibrary _dlopen() {
+  var path = Platform.environment['ASSIMP_LIBRARY_PATH'] ?? '';
+  if (path.isEmpty || Directory(path).statSync().type == FileSystemEntityType.directory) {
+    final name = Platform.environment['ASSIMP_LIBRARY_NAME'] ?? _dlname;
+    if (path.isNotEmpty && !path.endsWith('/')) path += '/';
+    path += name;
+  }
+  return DynamicLibrary.open(path);
+}
 
 DynamicLibrary _libassimp;
-DynamicLibrary get libassimp => _libassimp ?? _dlopen('assimp');
+DynamicLibrary get libassimp => _libassimp ?? _dlopen();
 
 aiApplyPostProcessing_f _aiApplyPostProcessing;
 get aiApplyPostProcessing => _aiApplyPostProcessing ??=
