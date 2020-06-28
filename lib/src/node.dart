@@ -90,6 +90,8 @@ class Node extends AssimpType<aiNode> {
 
   /// The transformation relative to the node's parent.
   Matrix4 get transformation => AssimpMatrix4.fromNative(_node.mTransformation);
+  set transformation(Matrix4 matrix) =>
+      _node.mTransformation.ref.toNative(matrix);
 
   /// Parent node. NULL if this node is the root node.
   Node get parent => Node.fromNative(_node.mParent);

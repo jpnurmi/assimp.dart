@@ -136,7 +136,7 @@ extension AssimpMatrix3 on Matrix3 {
 //  }
 }
 
-extension AssimpMatrix4 on Matrix4 {
+extension AssimpMatrix4 on aiMatrix4x4 {
   static Matrix4 fromNative(Pointer<aiMatrix4x4> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Matrix4(
@@ -159,26 +159,24 @@ extension AssimpMatrix4 on Matrix4 {
     );
   }
 
-//  static Pointer<aiMatrix4x4> toNative(Matrix4 matrix) {
-//    final Pointer<aiMatrix4x4> ptr = allocate();
-//    ptr.ref.a1 = matrix.row0.x;
-//    ptr.ref.a2 = matrix.row0.y;
-//    ptr.ref.a3 = matrix.row0.z;
-//    ptr.ref.a4 = matrix.row0.w;
-//    ptr.ref.b1 = matrix.row1.x;
-//    ptr.ref.b2 = matrix.row1.y;
-//    ptr.ref.b3 = matrix.row1.z;
-//    ptr.ref.b4 = matrix.row1.w;
-//    ptr.ref.c1 = matrix.row2.x;
-//    ptr.ref.c2 = matrix.row2.y;
-//    ptr.ref.c3 = matrix.row2.z;
-//    ptr.ref.c4 = matrix.row2.w;
-//    ptr.ref.d1 = matrix.row3.x;
-//    ptr.ref.d2 = matrix.row3.y;
-//    ptr.ref.d3 = matrix.row3.z;
-//    ptr.ref.d4 = matrix.row3.w;
-//    return ptr;
-//  }
+  void toNative(Matrix4 matrix) {
+    a1 = matrix.row0.x;
+    a2 = matrix.row0.y;
+    a3 = matrix.row0.z;
+    a4 = matrix.row0.w;
+    b1 = matrix.row1.x;
+    b2 = matrix.row1.y;
+    b3 = matrix.row1.z;
+    b4 = matrix.row1.w;
+    c1 = matrix.row2.x;
+    c2 = matrix.row2.y;
+    c3 = matrix.row2.z;
+    c4 = matrix.row2.w;
+    d1 = matrix.row3.x;
+    d2 = matrix.row3.y;
+    d3 = matrix.row3.z;
+    d4 = matrix.row3.w;
+  }
 }
 
 extension AssimpPointer on Pointer {

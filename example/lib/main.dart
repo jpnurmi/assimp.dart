@@ -29,7 +29,6 @@ class ExamplePage extends StatefulWidget {
 class _ExamplePageState extends State<ExamplePage> {
   Scene scene;
   String current;
-  Offset offset = Offset.zero;
   List<Uint16List> indices = [];
 
   @override
@@ -54,6 +53,14 @@ class _ExamplePageState extends State<ExamplePage> {
       scene = newScene;
       indices = newScene.meshes.map((mesh) => createIndexData(mesh)).toList();
     });
+  }
+
+  void rotateScene(Offset delta) {
+    scene.rootNode.transformation = scene.rootNode.transformation
+      ..rotateX(0.01 * delta.dy)
+      ..rotateY(-0.01 * delta.dx);
+    scene.postProcess(ProcessFlags.preTransformVertices);
+    setState(() {});
   }
 
   Uint16List createIndexData(Mesh mesh) {
@@ -93,11 +100,10 @@ class _ExamplePageState extends State<ExamplePage> {
       ),
       body: GestureDetector(
         child: CustomPaint(
-          painter: ScenePainter(scene, indices, offset),
+          painter: ScenePainter(scene, indices),
           size: MediaQuery.of(context).size,
         ),
-        onDoubleTap: () => setState(() => offset = Offset.zero),
-        onPanUpdate: (details) => setState(() => offset += details.delta),
+        onPanUpdate: (details) => rotateScene(details.delta),
       ),
     );
   }
@@ -105,10 +111,9 @@ class _ExamplePageState extends State<ExamplePage> {
 
 class ScenePainter extends CustomPainter {
   final Scene scene;
-  final Offset offset;
   final List<Uint16List> indices;
 
-  ScenePainter(this.scene, this.indices, this.offset);
+  ScenePainter(this.scene, this.indices);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -120,9 +125,7 @@ class ScenePainter extends CustomPainter {
 
     final matrix = transformation
       ..translate(size.width / 2, size.height / 2, 0)
-      ..scale(100.0)
-      ..rotateX(0.01 * offset.dy)
-      ..rotateY(-0.01 * offset.dx);
+      ..scale(100.0);
 
     var m = 0;
     for (final mesh in scene.meshes) {
@@ -162,6 +165,5 @@ class ScenePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(ScenePainter old) =>
-      scene != old.scene || offset != old.offset;
+  bool shouldRepaint(ScenePainter old) => true;
 }
