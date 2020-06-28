@@ -1,5 +1,5 @@
 name: example
-description: Dart bindings for Assimp example app
+description: Assimp for Dart example app
 publish_to: 'none'
 
 environment:
