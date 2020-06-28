@@ -1,11 +1,11 @@
-# Dart bindings for Assimp
+# Assimp for Dart
 
 [![pub](https://img.shields.io/pub/v/assimp.svg)](https://pub.dev/packages/assimp)
 [![license: BSD](https://img.shields.io/badge/license-BSD-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
 ![build](https://github.com/jpnurmi/dart_assimp/workflows/Build/badge.svg)
 [![codecov](https://codecov.io/gh/jpnurmi/dart_assimp/branch/master/graph/badge.svg)](https://codecov.io/gh/jpnurmi/dart_assimp)
 
-This library provides [FFI](https://dart.dev/guides/libraries/c-interop) bindings to
+This library provides Dart [FFI](https://dart.dev/guides/libraries/c-interop) bindings to
 [Open Asset Import Library](http://assimp.org/) aka. Assimp, which is a portable library to import
 and export various well-known [3D model formats](https://github.com/assimp/assimp/blob/master/Readme.md#supported-file-formats)
 in a uniform manner.
