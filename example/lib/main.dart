@@ -46,7 +46,9 @@ class _ExamplePageState extends State<ExamplePage> {
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     final newScene = Scene.fromBytes(bytes,
         hint: extension(key),
-        flags: ProcessFlags.triangulate | ProcessFlags.generateNormals);
+        flags: ProcessFlags.triangulate |
+            ProcessFlags.optimizeMeshes |
+            ProcessFlags.generateNormals);
     setState(() {
       current = key;
       scene = newScene;
@@ -135,21 +137,22 @@ class ScenePainter extends CustomPainter {
         final j = i ~/ 3;
         final v = matrix.transformed3(
             Vector3(vertices[i], vertices[i + 1], vertices[i + 2]));
+        final n = matrix
+            .transformed3(Vector3(normals[i], normals[i + 1], normals[i + 2]));
         positions[j * 2] = v.x;
         positions[j * 2 + 1] = v.y;
 
-        final p =
-            light.dot(Vector3(normals[i], normals[i + 1], normals[i + 2]));
+        final p = light.dot(n).clamp(-255.0, 255.0);
         colors[j] = Color.fromARGB(
           255,
-          (color.red.toDouble() * p).round(),
-          (color.green.toDouble() * p).round(),
-          (color.blue.toDouble() * p).round(),
+          (color.red / 255 * p).round(),
+          (color.green / 255 * p).round(),
+          (color.blue / 255 * p).round(),
         ).value;
       }
 
       final raw = Vertices.raw(
-        VertexMode.triangleFan,
+        VertexMode.triangles,
         positions,
         colors: colors,
         indices: indices[m++],
