@@ -1,3 +1,11 @@
+## [0.0.3] - 2020-06-28
+
+* Added Face.indexData
+* Added Mesh.vertexData, Mesh.normalData, Mesh.tangentData, Mesh.bitangentData
+* Allowed specifying ASSIMP_LIBRARY_PATH and/or ASSIMP_LIBRARY_PATH environment
+  variables
+* Added a preliminary example
+
 ## [0.0.2] - 2020-06-23
 
 * Added ImportFormat & Assimp.importFormats
