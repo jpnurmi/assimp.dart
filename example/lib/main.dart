@@ -54,26 +54,10 @@ class _ExamplePageState extends State<ExamplePage> {
     });
   }
 
-  int indexCount(Mesh mesh) {
-    switch (mesh.primitiveTypes) {
-      case PrimitiveType.point:
-        return mesh.faces.length;
-      case PrimitiveType.line:
-        return mesh.faces.length * 2;
-      case PrimitiveType.triangle:
-        return mesh.faces.length * 3;
-      default:
-        assert(false);
-        return 0;
-    }
-  }
-
   Uint16List createIndexData(Mesh mesh) {
-    assert(mesh.primitiveTypes == PrimitiveType.point ||
-        mesh.primitiveTypes == PrimitiveType.line ||
-        mesh.primitiveTypes == PrimitiveType.triangle);
+    assert(mesh.primitiveTypes == PrimitiveType.triangle);
     var i = 0;
-    final indices = Uint16List(indexCount(mesh));
+    final indices = Uint16List(mesh.faces.length * 3);
     for (final face in mesh.faces) {
       final idx = face.indexData;
       indices[i * 3] = idx[0];
