@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-/// Dart bindings for Assimp
+/// Assimp for Dart
 library assimp;
 
 export 'src/animation.dart';
