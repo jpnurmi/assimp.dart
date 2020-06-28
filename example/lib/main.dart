@@ -109,6 +109,10 @@ class _ExamplePageState extends State<ExamplePage> {
   }
 }
 
+extension Vector3List on Float32List {
+  Vector3 vectorAt(int i) => Vector3(this[i], this[i + 1], this[i + 2]);
+}
+
 class ScenePainter extends CustomPainter {
   final Scene scene;
   final List<Uint16List> indices;
@@ -133,15 +137,13 @@ class ScenePainter extends CustomPainter {
       final vertices = mesh.vertexData;
 
       final count = vertices.length ~/ 3;
-
       final colors = Int32List(count);
       final positions = Float32List(count * 2);
       for (var i = 0; i < vertices.length; i += 3) {
+        final v = matrix.transformed3(vertices.vectorAt(i));
+        final n = matrix.transformed3(normals.vectorAt(i));
+
         final j = i ~/ 3;
-        final v = matrix.transformed3(
-            Vector3(vertices[i], vertices[i + 1], vertices[i + 2]));
-        final n = matrix
-            .transformed3(Vector3(normals[i], normals[i + 1], normals[i + 2]));
         positions[j * 2] = v.x;
         positions[j * 2 + 1] = v.y;
 
