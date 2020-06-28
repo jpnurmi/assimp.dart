@@ -50,8 +50,38 @@ class _ExamplePageState extends State<ExamplePage> {
     setState(() {
       current = key;
       scene = newScene;
-      indices = newScene.meshes.map((mesh) => mesh.createIndexData()).toList();
+      indices = newScene.meshes.map((mesh) => createIndexData(mesh)).toList();
     });
+  }
+
+  int indexCount(Mesh mesh) {
+    switch (mesh.primitiveTypes) {
+      case PrimitiveType.point:
+        return mesh.faces.length;
+      case PrimitiveType.line:
+        return mesh.faces.length * 2;
+      case PrimitiveType.triangle:
+        return mesh.faces.length * 3;
+      default:
+        assert(false);
+        return 0;
+    }
+  }
+
+  Uint16List createIndexData(Mesh mesh) {
+    assert(mesh.primitiveTypes == PrimitiveType.point ||
+        mesh.primitiveTypes == PrimitiveType.line ||
+        mesh.primitiveTypes == PrimitiveType.triangle);
+    var i = 0;
+    final indices = Uint16List(indexCount(mesh));
+    for (final face in mesh.faces) {
+      final idx = face.indexData;
+      indices[i * 3] = idx[0];
+      indices[i * 3 + 1] = idx[1];
+      indices[i * 3 + 2] = idx[2];
+      ++i;
+    }
+    return indices;
   }
 
   @override
