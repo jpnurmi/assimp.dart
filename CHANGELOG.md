@@ -1,3 +1,8 @@
+## [0.0.4] - 2020-06-30
+
+* Overhauled the example app
+* Sorted out Dart Analyzer issues
+
 ## [0.0.3] - 2020-06-28
 
 * Added Face.indexData
