@@ -1,3 +1,4 @@
+import 'dart:math' as Math;
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -28,6 +29,7 @@ class ExamplePage extends StatefulWidget {
 
 class _ExamplePageState extends State<ExamplePage> {
   Scene scene;
+  Aabb3 bounds;
   String current;
 
   @override
@@ -49,6 +51,7 @@ class _ExamplePageState extends State<ExamplePage> {
     setState(() {
       current = key;
       scene = newScene;
+      bounds = newScene.calculateBounds();
     });
   }
 
@@ -82,7 +85,7 @@ class _ExamplePageState extends State<ExamplePage> {
       ),
       body: GestureDetector(
         child: CustomPaint(
-          painter: ScenePainter(scene),
+          painter: ScenePainter(scene, bounds),
           size: MediaQuery.of(context).size,
         ),
         onPanUpdate: (details) => rotateScene(details.delta),
@@ -95,22 +98,57 @@ extension Vector3List on Float32List {
   Vector3 vectorAt(int i) => Vector3(this[i], this[i + 1], this[i + 2]);
 }
 
+extension Vector3Bounds on Vector3 {
+  Vector3 minV(Vector3 other) {
+    return Vector3(
+      Math.min(x, other.x),
+      Math.min(y, other.y),
+      Math.min(z, other.z),
+    );
+  }
+
+  Vector3 maxV(Vector3 other) {
+    return Vector3(
+      Math.max(x, other.x),
+      Math.max(y, other.y),
+      Math.max(z, other.z),
+    );
+  }
+}
+
+extension SceneBounds on Scene {
+  Aabb3 calculateBounds() {
+    Aabb3 bounds;
+    for (final mesh in meshes) {
+      for (final vertex in mesh.vertices) {
+        bounds = Aabb3.minMax(
+          bounds?.min?.minV(vertex) ?? vertex,
+          bounds?.max?.maxV(vertex) ?? vertex,
+        );
+      }
+    }
+    return bounds;
+  }
+}
+
 class ScenePainter extends CustomPainter {
   final Scene scene;
+  final Aabb3 bounds;
 
-  ScenePainter(this.scene);
+  ScenePainter(this.scene, this.bounds);
 
   @override
   void paint(Canvas canvas, Size size) {
     if (scene == null) return;
 
     final color = Colors.white;
-    final light = Vector3(0.0, 0.0, 5.0);
+    final light = Vector3(0.0, 0.0, bounds.max.z);
+    final extent = bounds.max.distanceTo(bounds.min);
     final transformation = scene.rootNode.transformation;
 
     final matrix = transformation
       ..translate(size.width / 2, size.height / 2, 0)
-      ..scale(25.0);
+      ..scale(size.shortestSide / extent);
 
     for (final mesh in scene.meshes) {
       final normals = mesh.normalData;
