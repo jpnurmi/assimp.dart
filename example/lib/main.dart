@@ -29,7 +29,6 @@ class ExamplePage extends StatefulWidget {
 class _ExamplePageState extends State<ExamplePage> {
   Scene scene;
   String current;
-  List<Uint16List> indices = [];
 
   @override
   void initState() {
@@ -38,8 +37,6 @@ class _ExamplePageState extends State<ExamplePage> {
   }
 
   Future<void> loadScene(String key) async {
-    Stopwatch stopwatch = Stopwatch();
-    stopwatch.start();
     final data = await rootBundle.load('models/$key');
     final bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -47,11 +44,11 @@ class _ExamplePageState extends State<ExamplePage> {
         hint: extension(key),
         flags: ProcessFlags.triangulate |
             ProcessFlags.optimizeMeshes |
-            ProcessFlags.generateNormals);
+            ProcessFlags.generateNormals |
+            ProcessFlags.joinIdenticalVertices);
     setState(() {
       current = key;
       scene = newScene;
-      indices = newScene.meshes.map((mesh) => createIndexData(mesh)).toList();
     });
   }
 
@@ -61,20 +58,6 @@ class _ExamplePageState extends State<ExamplePage> {
       ..rotateY(-0.01 * delta.dx);
     scene.postProcess(ProcessFlags.preTransformVertices);
     setState(() {});
-  }
-
-  Uint16List createIndexData(Mesh mesh) {
-    assert(mesh.primitiveTypes == PrimitiveType.triangle);
-    var i = 0;
-    final indices = Uint16List(mesh.faces.length * 3);
-    for (final face in mesh.faces) {
-      final idx = face.indexData;
-      indices[i * 3] = idx[0];
-      indices[i * 3 + 1] = idx[1];
-      indices[i * 3 + 2] = idx[2];
-      ++i;
-    }
-    return indices;
   }
 
   @override
@@ -100,7 +83,7 @@ class _ExamplePageState extends State<ExamplePage> {
       ),
       body: GestureDetector(
         child: CustomPaint(
-          painter: ScenePainter(scene, indices),
+          painter: ScenePainter(scene),
           size: MediaQuery.of(context).size,
         ),
         onPanUpdate: (details) => rotateScene(details.delta),
@@ -115,9 +98,8 @@ extension Vector3List on Float32List {
 
 class ScenePainter extends CustomPainter {
   final Scene scene;
-  final List<Uint16List> indices;
 
-  ScenePainter(this.scene, this.indices);
+  ScenePainter(this.scene);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -131,38 +113,43 @@ class ScenePainter extends CustomPainter {
       ..translate(size.width / 2, size.height / 2, 0)
       ..scale(100.0);
 
-    var m = 0;
     for (final mesh in scene.meshes) {
       final normals = mesh.normalData;
       final vertices = mesh.vertexData;
 
-      final count = vertices.length ~/ 3;
+      final count = mesh.faces.length * 3;
       final colors = Int32List(count);
+      final indices = Uint16List(count);
       final positions = Float32List(count * 2);
-      for (var i = 0; i < vertices.length; i += 3) {
-        final v = matrix.transformed3(vertices.vectorAt(i));
-        final n = matrix.transformed3(normals.vectorAt(i));
 
-        final j = i ~/ 3;
-        positions[j * 2] = v.x;
-        positions[j * 2 + 1] = v.y;
+      var i = 0;
+      for (final face in mesh.faces) {
+        for (final j in face.indices) {
+          final c = light.dot(matrix.transformed3(normals.vectorAt(j * 3)));
+          if (c < 0 || c.isNaN) continue;
 
-        final p = light.dot(n).clamp(-255.0, 255.0);
-        colors[j] = Color.fromARGB(
-          255,
-          (color.red / 255 * p).round(),
-          (color.green / 255 * p).round(),
-          (color.blue / 255 * p).round(),
-        ).value;
+          colors[i] = Color.fromARGB(
+            255,
+            (color.red / 255 * c).round(),
+            (color.green / 255 * c).round(),
+            (color.blue / 255 * c).round(),
+          ).value;
+
+          final v = matrix.transformed3(vertices.vectorAt(j * 3));
+          positions[i * 2] = v.x;
+          positions[i * 2 + 1] = v.y;
+
+          indices[i] = i++;
+        }
       }
 
       final raw = Vertices.raw(
         VertexMode.triangles,
-        positions,
-        colors: colors,
-        indices: indices[m++],
+        positions.sublist(0, i * 2),
+        colors: colors.sublist(0, i),
+        indices: indices,
       );
-      canvas.drawVertices(raw, BlendMode.clear, Paint());
+      canvas.drawVertices(raw, BlendMode.src, Paint());
     }
   }
 
