@@ -16,7 +16,6 @@ dependencies:
 flutter:
   assets:
     - models/box.obj
-    - models/box.3mf
-    - models/mug.obj
-    - models/spider.3mf
+    - models/ear.stl
+    - models/spider.stl
   uses-material-design: true

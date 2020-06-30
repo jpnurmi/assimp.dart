@@ -67,16 +67,15 @@ class _ExamplePageState extends State<ExamplePage> {
         title: Text('Assimp for Dart'),
         actions: [
           PopupMenuButton<String>(
-            itemBuilder: (context) =>
-                ['box.3mf', 'box.obj', 'mug.obj', 'spider.3mf']
-                    .map(
-                      (model) => CheckedPopupMenuItem<String>(
-                        value: model,
-                        checked: model == current,
-                        child: Text(model),
-                      ),
-                    )
-                    .toList(),
+            itemBuilder: (context) => ['box.obj', 'ear.stl', 'spider.stl']
+                .map(
+                  (model) => CheckedPopupMenuItem<String>(
+                    value: model,
+                    checked: model == current,
+                    child: Text(model),
+                  ),
+                )
+                .toList(),
             onSelected: (value) => loadScene(value),
           ),
         ],
@@ -106,12 +105,12 @@ class ScenePainter extends CustomPainter {
     if (scene == null) return;
 
     final color = Colors.white;
-    final light = Vector3(0.0, 0.0, 1.0);
+    final light = Vector3(0.0, 0.0, 5.0);
     final transformation = scene.rootNode.transformation;
 
     final matrix = transformation
       ..translate(size.width / 2, size.height / 2, 0)
-      ..scale(100.0);
+      ..scale(25.0);
 
     for (final mesh in scene.meshes) {
       final normals = mesh.normalData;
@@ -143,13 +142,15 @@ class ScenePainter extends CustomPainter {
         }
       }
 
-      final raw = Vertices.raw(
-        VertexMode.triangles,
-        positions.sublist(0, i * 2),
-        colors: colors.sublist(0, i),
-        indices: indices,
-      );
-      canvas.drawVertices(raw, BlendMode.src, Paint());
+      if (i != 0) {
+        final raw = Vertices.raw(
+          VertexMode.triangles,
+          positions.sublist(0, i * 2),
+          colors: colors.sublist(0, i),
+          indices: indices,
+        );
+        canvas.drawVertices(raw, BlendMode.src, Paint());
+      }
     }
   }
 
