@@ -42,8 +42,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'ai_node.dart';
-
 // pahole libassimpd.so -M -C aiFace
 class aiFace extends Struct {
   // unsigned int               mNumIndices;          /*     0     4 */

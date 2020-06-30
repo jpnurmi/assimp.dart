@@ -45,7 +45,6 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:ffi/ffi.dart';
 import 'package:vector_math/vector_math.dart';
 export 'package:vector_math/vector_math.dart'
     show Aabb3, Matrix3, Matrix4, Quaternion, Vector2, Vector3, Vector4;

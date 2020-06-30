@@ -42,7 +42,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'ai_node.dart';
 import 'ai_matrix.dart';
 import 'ai_string.dart';
 import 'ai_vertex_weight.dart';

@@ -295,7 +295,9 @@ class Mesh extends AssimpType<aiMesh> {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
         _mesh.mColors != null &&
-        AssimpPointer.isNotNull(_mesh.mColors[n])) ++n;
+        AssimpPointer.isNotNull(_mesh.mColors[n])) {
+      ++n;
+    }
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
@@ -312,7 +314,9 @@ class Mesh extends AssimpType<aiMesh> {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
         _mesh.mTextureCoords != null &&
-        AssimpPointer.isNotNull(_mesh.mTextureCoords[n])) ++n;
+        AssimpPointer.isNotNull(_mesh.mTextureCoords[n])) {
+      ++n;
+    }
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
@@ -332,7 +336,9 @@ class Mesh extends AssimpType<aiMesh> {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
         _mesh.mNumUVComponents != null &&
-        _mesh.mNumUVComponents.elementAt(n).value > 0) ++n;
+        _mesh.mNumUVComponents.elementAt(n).value > 0) {
+      ++n;
+    }
     return n > 0 ? _mesh.mNumUVComponents.asTypedList(n) : [];
   }
 

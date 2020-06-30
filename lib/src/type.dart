@@ -43,8 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:meta/meta.dart';
-
 import 'extensions.dart';
 
 abstract class AssimpType<T extends NativeType> {
@@ -54,7 +52,7 @@ abstract class AssimpType<T extends NativeType> {
 
   @override
   bool operator ==(Object other) {
-    if (other.runtimeType != this.runtimeType) return false;
+    if (other.runtimeType != runtimeType) return false;
     AssimpType type = other;
     return ptr == type.ptr;
   }

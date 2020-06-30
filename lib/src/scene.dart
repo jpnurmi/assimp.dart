@@ -197,8 +197,8 @@ class Scene extends AssimpType<aiScene> {
     // ### TODO: avoid copy...
     // https://github.com/dart-lang/ffi/issues/31
     // https://github.com/dart-lang/ffi/issues/27
-    final Pointer<Uint8> cbuffer = allocate<Uint8>(count: bytes.length);
-    final Uint8List carray = cbuffer.asTypedList(bytes.length);
+    final cbuffer = allocate<Uint8>(count: bytes.length);
+    final carray = cbuffer.asTypedList(bytes.length);
     carray.setAll(0, bytes);
     return Scene._fromBuffer(cbuffer.cast(), bytes.length, flags, hint);
   }
@@ -211,9 +211,9 @@ class Scene extends AssimpType<aiScene> {
   /// @param pOut Receives a modifyable copy of the scene. Use aiFreeScene() to
   /// delete it again.
   Scene copy() {
-    Pointer<Pointer<aiScene>> out = allocate<Pointer<aiScene>>();
+    final out = allocate<Pointer<aiScene>>();
     aiCopyScene(ptr, out);
-    Scene scene = Scene.fromNative(out[0]);
+    final scene = Scene.fromNative(out[0]);
     free(out);
     return scene;
   }

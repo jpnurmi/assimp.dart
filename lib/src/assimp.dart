@@ -41,8 +41,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-import 'dart:ffi';
-
 import 'package:ffi/ffi.dart';
 
 import 'bindings.dart';
@@ -95,8 +93,8 @@ class Assimp {
   /// Must include a leading dot '.'. Example: ".3ds", ".md3"
   /// @return AI_TRUE if the file extension is supported.
   static bool isSupported(String extension) {
-    Pointer<Utf8> ptr = Utf8.toUtf8(extension);
-    int res = aiIsExtensionSupported(ptr);
+    final ptr = Utf8.toUtf8(extension);
+    final res = aiIsExtensionSupported(ptr);
     free(ptr);
     return res != 0;
   }
@@ -108,9 +106,9 @@ class Assimp {
   /// @param szOut String to receive the extension list.
   /// Format of the list: "*.3ds;*.obj;*.dae". NULL is not a valid parameter.
   static Iterable<String> get extensions {
-    Pointer<aiString> ptr = aiString.alloc();
+    final ptr = aiString.alloc();
     aiGetExtensionList(ptr);
-    String ext = AssimpString.fromNative(ptr);
+    final ext = AssimpString.fromNative(ptr);
     free(ptr);
     return ext.split(';');
   }

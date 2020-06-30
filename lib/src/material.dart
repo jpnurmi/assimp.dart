@@ -138,10 +138,10 @@ class Material extends AssimpType<aiMaterial> {
     return Iterable.generate(
       aiGetMaterialTextureCount(ptr, type.index),
       (i) {
-        Pointer<aiString> str = aiString.alloc();
+        final str = aiString.alloc();
         aiGetMaterialTexture(ptr, type.index, i, str, nullptr, nullptr, nullptr,
             nullptr, nullptr, nullptr);
-        String path = AssimpString.fromNative(str);
+        final path = AssimpString.fromNative(str);
         free(str);
         return path;
       },

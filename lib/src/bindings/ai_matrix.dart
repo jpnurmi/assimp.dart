@@ -43,9 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'ai_vector.dart';
-import 'ai_quaternion.dart';
-
 class aiMatrix3x3 extends Struct {
   @Float() // ai_real
   double a1, a2, a3;

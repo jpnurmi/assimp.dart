@@ -121,7 +121,9 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   Iterable<Iterable<Vector4>> get colors {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
-        AssimpPointer.isNotNull(_animMesh.mColors?.elementAt(n))) ++n;
+        AssimpPointer.isNotNull(_animMesh.mColors?.elementAt(n))) {
+      ++n;
+    }
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
@@ -135,7 +137,9 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        AssimpPointer.isNotNull(_animMesh.mTextureCoords?.elementAt(n))) ++n;
+        AssimpPointer.isNotNull(_animMesh.mTextureCoords?.elementAt(n))) {
+      ++n;
+    }
     return Iterable.generate(
       n,
       (i) => Iterable.generate(

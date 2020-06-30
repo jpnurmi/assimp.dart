@@ -164,10 +164,10 @@ extension SceneExport on Scene {
   /// @note Use aiCopyScene() to get a modifiable copy of a previously
   ///   imported scene.
   bool exportFile(String path, {@required String format, int flags = 0}) {
-    Pointer<Utf8> cpath = Utf8.toUtf8(path);
-    Pointer<Utf8> cformat = Utf8.toUtf8(format);
+    final cpath = Utf8.toUtf8(path);
+    final cformat = Utf8.toUtf8(format);
     // ### TODO: add custom io support
-    int res = aiExportSceneEx(ptr, cformat, cpath, nullptr, flags);
+    final res = aiExportSceneEx(ptr, cformat, cpath, nullptr, flags);
     free(cpath);
     free(cformat);
     return res == 0;
@@ -182,8 +182,8 @@ extension SceneExport on Scene {
   /// @param pPreprocessing Please see the documentation for #aiExportScene
   /// @return the exported data or NULL in case of error
   ExportData exportData({@required String format, int flags = 0}) {
-    Pointer<Utf8> cformat = Utf8.toUtf8(format);
-    Pointer<aiExportDataBlob> data = aiExportSceneToBlob(ptr, cformat, flags);
+    final cformat = Utf8.toUtf8(format);
+    final data = aiExportSceneToBlob(ptr, cformat, flags);
     free(cformat);
     return ExportData.fromNative(data);
   }

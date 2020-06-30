@@ -35,7 +35,7 @@ class ProcessFlags {
   /// away from the viewer.
   ///
   /// You'll probably want to consider this flag if you use Direct3D for
-  /// rendering. The [convertToLeftHanded] flag supersedes this
+  /// rendering. The `convertToLeftHanded` flag supersedes this
   /// setting and bundles all conversions typically required for D3D-based
   /// applications.
   static const int makeLeftHanded = 0x4;
@@ -372,7 +372,7 @@ class ProcessFlags {
   /// ```
   ///
   /// You'll probably want to consider this flag if you use Direct3D for
-  /// rendering. The [convertToLeftHanded] flag supersedes this
+  /// rendering. The `convertToLeftHanded` flag supersedes this
   /// setting and bundles all conversions typically required for D3D-based
   /// applications.
   static const int flipUVs = 0x800000;
@@ -460,7 +460,7 @@ class ProcessFlags {
   /// maybe for direct use in game.
   ///
   /// If you're using DirectX, don't forget to combine this value with
-  /// the [convertToLeftHanded] step. If you don't support UV transformations
+  /// the `convertToLeftHanded` step. If you don't support UV transformations
   /// in your application apply the [transformUVCoords] step, too.
   ///
   /// **Note:** Please take the time to read the docs for the steps enabled by this preset.
@@ -481,7 +481,7 @@ class ProcessFlags {
   /// environment where import speed is not so important.
   ///
   /// If you're using DirectX, don't forget to combine this value with
-  /// the [convertToLeftHanded] step. If you don't support UV transformations
+  /// the `convertToLeftHanded` step. If you don't support UV transformations
   /// in your application apply the [transformUVCoords] step, too.
   ///
   /// **Note:** Please take the time to read the docs for the steps enabled by this preset.
@@ -507,7 +507,7 @@ class ProcessFlags {
   /// is not important.
   ///
   /// If you're using DirectX, don't forget to combine this value with
-  /// the [convertToLeftHanded] step. If you don't support UV transformations
+  /// the `convertToLeftHanded` step. If you don't support UV transformations
   /// in your application, apply the [transformUVCoords] step, too.
   ///
   /// **Note:** Please take the time to read the docs for the steps enabled by this preset.
