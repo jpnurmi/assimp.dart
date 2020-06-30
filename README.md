@@ -21,6 +21,10 @@ for (final mesh in scene.meshes) {
 }
 ```
 
+A little example of what you can do with Assimp - still lacking Z-sorting:
+
+![Assimp](https://raw.githubusercontent.com/jpnurmi/dart_assimp/master/doc/images/assimp.gif "Assimp")
+
 To use this package, add `assimp` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
 ## Status
