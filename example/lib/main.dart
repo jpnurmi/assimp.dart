@@ -31,6 +31,8 @@ class _ExamplePageState extends State<ExamplePage> {
   Scene scene;
   Aabb3 bounds;
   String current;
+  Offset focalPoint;
+  double scale = 1;
 
   @override
   void initState() {
@@ -55,12 +57,13 @@ class _ExamplePageState extends State<ExamplePage> {
     });
   }
 
-  void rotateScene(Offset delta) {
+  void transformScene({double scale, Offset delta}) {
+    if (scene == null) return;
     scene.rootNode.transformation = scene.rootNode.transformation
-      ..rotateX(0.01 * delta.dy)
-      ..rotateY(-0.01 * delta.dx);
+      ..rotateX(-0.01 * delta.dy)
+      ..rotateY(0.01 * delta.dx);
     scene.postProcess(ProcessFlags.preTransformVertices);
-    setState(() {});
+    setState(() => this.scale = scale);
   }
 
   @override
@@ -85,10 +88,18 @@ class _ExamplePageState extends State<ExamplePage> {
       ),
       body: GestureDetector(
         child: CustomPaint(
-          painter: ScenePainter(scene, bounds),
+          painter: ScenePainter(scene, bounds, scale),
           size: MediaQuery.of(context).size,
         ),
-        onPanUpdate: (details) => rotateScene(details.delta),
+        onScaleStart: (details) => focalPoint = details.focalPoint,
+        onScaleUpdate: (details) {
+          final scaled = details.scale != 1.0 || details.rotation != 0.0;
+          transformScene(
+            delta: details.focalPoint - focalPoint,
+            scale: scaled ? details.scale : scale,
+          );
+          focalPoint = details.focalPoint;
+        },
       ),
     );
   }
@@ -134,21 +145,22 @@ extension SceneBounds on Scene {
 class ScenePainter extends CustomPainter {
   final Scene scene;
   final Aabb3 bounds;
+  final double scale;
 
-  ScenePainter(this.scene, this.bounds);
+  ScenePainter(this.scene, this.bounds, this.scale);
 
   @override
   void paint(Canvas canvas, Size size) {
     if (scene == null) return;
 
     final color = Colors.white;
-    final light = Vector3(0.0, 0.0, bounds.max.z);
+    final light = Vector3(0.0, 0.0, bounds.max.z / scale);
     final extent = bounds.max.distanceTo(bounds.min);
     final transformation = scene.rootNode.transformation;
 
     final matrix = transformation
       ..translate(size.width / 2, size.height / 2, 0)
-      ..scale(size.shortestSide / extent);
+      ..scale(size.shortestSide / extent * scale);
 
     for (final mesh in scene.meshes) {
       final normals = mesh.normalData;
