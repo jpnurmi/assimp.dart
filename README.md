@@ -29,10 +29,16 @@ To use this package, add `assimp` as a [dependency in your pubspec.yaml file](ht
 
 ## Status
 
-This package is currently in **alpha stage** and supports **read-only imports with Assimp 5.x**,
-and has so far been developed and tested on **64-bit desktop platforms** only. The documentation
-is still more or less direct copy-paste from the original library, and is therefore full of broken
-references.
+This package is currently in **alpha stage**. It supports **Assimp 5.x** , and has been tried out
+on the following platforms:
+- macOS (`brew install assimp`)
+- Linux (`apt install libassimp5`)
+- Windows (`vcpkg install assimp:x64-windows`)
+- [Android](https://github.com/jpnurmi/dart_assimp/wiki/Android)
+- [iOS](https://github.com/jpnurmi/dart_assimp/wiki/iOS)
+
+The documentation is still more or less direct copy-paste from the original library, and is
+therefore full of broken references.
 
 Notice also that [dart:ffi](https://dart.dev/guides/libraries/c-interop) is still in
 [beta](https://github.com/dart-lang/sdk/issues/34452), and many fundamentally important features
