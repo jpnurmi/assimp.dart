@@ -43,6 +43,14 @@ android {
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        externalNativeBuild {
+            cmake {
+                // <ndk>/build/cmake/android.toolchain.cmake defines -g in ANDROID_COMPILER_FLAGS
+                cFlags "-g0"
+                cppFlags "-g0"
+                arguments "-DCMAKE_BUILD_TYPE=Release", "-DASSIMP_BUILD_SAMPLES=OFF", "-DASSIMP_BUILD_TESTS=OFF", "-DASSIMP_BUILD_ASSIMP_TOOLS=OFF"
+            }
+        }
     }
 
     buildTypes {
@@ -50,6 +58,12 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "~/Projects/assimp/CMakeLists.txt"
         }
     }
 }

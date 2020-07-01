@@ -30,6 +30,7 @@ build-*
 .packages
 .pub-cache/
 .pub/
+.cxx
 build/
 pubspec.lock
 .test_coverage.dart
