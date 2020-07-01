@@ -31,8 +31,9 @@ class _ExamplePageState extends State<ExamplePage> {
   Scene scene;
   Aabb3 bounds;
   String current;
-  Offset focalPoint;
+  Offset startPoint;
   double scale = 1;
+  double startScale = 1;
 
   @override
   void initState() {
@@ -91,14 +92,17 @@ class _ExamplePageState extends State<ExamplePage> {
           painter: ScenePainter(scene, bounds, scale),
           size: MediaQuery.of(context).size,
         ),
-        onScaleStart: (details) => focalPoint = details.focalPoint,
+        onScaleStart: (details) {
+          startScale = scale;
+          startPoint = details.focalPoint;
+        },
         onScaleUpdate: (details) {
           final scaled = details.scale != 1.0 || details.rotation != 0.0;
           transformScene(
-            delta: details.focalPoint - focalPoint,
-            scale: scaled ? details.scale : scale,
+            delta: details.focalPoint - startPoint,
+            scale: scaled ? startScale * details.scale : scale,
           );
-          focalPoint = details.focalPoint;
+          startPoint = details.focalPoint;
         },
       ),
     );
