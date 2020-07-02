@@ -12,6 +12,12 @@ import 'package:vector_math/vector_math.dart' hide Colors;
 
 void main() => runApp(ExampleApp());
 
+const Map<String, Offset> models = {
+  'box.obj': Offset(50, 50),
+  'ear.stl': Offset(-325, -325),
+  'spider.stl': Offset(-325, -325),
+};
+
 class ExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -39,24 +45,22 @@ class _ExamplePageState extends State<ExamplePage> {
   @override
   void initState() {
     super.initState();
-    loadScene('box.obj');
+    loadScene(models.keys.first);
   }
 
   Future<void> loadScene(String key) async {
     final data = await rootBundle.load('models/$key');
     final bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    final newScene = Scene.fromBytes(bytes,
+    scene = Scene.fromBytes(bytes,
         hint: extension(key),
         flags: ProcessFlags.triangulate |
             ProcessFlags.optimizeMeshes |
             ProcessFlags.generateNormals |
             ProcessFlags.joinIdenticalVertices);
-    setState(() {
-      current = key;
-      scene = newScene;
-      bounds = newScene.calculateBounds();
-    });
+    current = key;
+    bounds = scene.calculateBounds();
+    transformScene(scale: 1, delta: models[key]);
   }
 
   void transformScene({double scale, Offset delta}) {
@@ -75,7 +79,7 @@ class _ExamplePageState extends State<ExamplePage> {
         title: Text('Assimp for Dart'),
         actions: [
           PopupMenuButton<String>(
-            itemBuilder: (context) => ['box.obj', 'ear.stl', 'spider.stl']
+            itemBuilder: (context) => models.keys
                 .map(
                   (model) => CheckedPopupMenuItem<String>(
                     value: model,
