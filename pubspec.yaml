@@ -1,5 +1,5 @@
 name: assimp
-version: 0.0.4
+version: 0.0.5
 description: >-
   Open Asset Import Library aka Assimp for Dart. Assimp can import
   various well-known 3D model formats in a uniform manner.

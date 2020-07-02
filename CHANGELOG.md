@@ -1,3 +1,8 @@
+## [0.0.5] - 2020-07-02
+
+* Added support for import properties
+* Improved the example app
+
 ## [0.0.4] - 2020-06-30
 
 * Overhauled the example app
