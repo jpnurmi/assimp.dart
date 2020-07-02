@@ -44,6 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:assimp/src/properties.dart';
 import 'package:ffi/ffi.dart';
 
 import 'animation.dart';
@@ -136,30 +137,35 @@ class Scene extends AssimpType<aiScene> {
   ///   a successful import. Provide a bitwise combination of the
   ///   #aiPostProcessSteps flags.
   /// @return Pointer to the imported data or NULL if the import failed.
-  factory Scene.fromFile(String path, {int flags = 0}) {
+  factory Scene.fromFile(String path,
+      {int flags = 0, Map<String, dynamic> properties}) {
     final cpath = Utf8.toUtf8(path);
-    // ### TODO: add support for properties
-    final ptr = aiImportFileExWithProperties(cpath, flags, nullptr, nullptr);
+    final store = PropertyStore.fromMap(properties);
+    final ptr = aiImportFileExWithProperties(cpath, flags, nullptr, store?.ptr ?? nullptr);
     free(cpath);
+    store?.dispose();
     return Scene.fromNative(ptr);
   }
 
-  factory Scene._fromBuffer(
-      Pointer<Utf8> cstr, int length, flags, String hint) {
+  factory Scene._fromBuffer(Pointer<Utf8> cstr, int length, flags,
+      Map<String, dynamic> properties, String hint) {
     final chint = Utf8.toUtf8(hint);
-    // ### TODO: add support for properties
+    final store = PropertyStore.fromMap(properties);
     final ptr = aiImportFileFromMemoryWithProperties(
-        cstr, length, flags, chint, nullptr);
+        cstr, length, flags, chint, store?.ptr ?? nullptr);
     free(cstr);
     free(chint);
+    store?.dispose();
     return Scene.fromNative(ptr);
   }
 
   /// Reads the given file from a given string.
   ///
   /// @{macro assimp.scene.import}
-  factory Scene.fromString(String str, {int flags = 0, String hint = ''}) {
-    return Scene._fromBuffer(Utf8.toUtf8(str), str.length, flags, hint);
+  factory Scene.fromString(String str,
+      {int flags = 0, Map<String, dynamic> properties, String hint = ''}) {
+    return Scene._fromBuffer(
+        Utf8.toUtf8(str), str.length, flags, properties, hint);
   }
 
   /// Reads the given file from a given memory buffer.
@@ -193,14 +199,16 @@ class Scene extends AssimpType<aiScene> {
   /// a custom IOSystem to make Assimp find these files and use
   /// the regular aiImportFileEx()/aiImportFileExWithProperties() API.
   /// @{endtemplate assimp.scene.import}
-  factory Scene.fromBytes(Uint8List bytes, {int flags = 0, String hint = ''}) {
+  factory Scene.fromBytes(Uint8List bytes,
+      {int flags = 0, Map<String, dynamic> properties, String hint = ''}) {
     // ### TODO: avoid copy...
     // https://github.com/dart-lang/ffi/issues/31
     // https://github.com/dart-lang/ffi/issues/27
     final cbuffer = allocate<Uint8>(count: bytes.length);
     final carray = cbuffer.asTypedList(bytes.length);
     carray.setAll(0, bytes);
-    return Scene._fromBuffer(cbuffer.cast(), bytes.length, flags, hint);
+    return Scene._fromBuffer(
+        cbuffer.cast(), bytes.length, flags, properties, hint);
   }
 
   /// Create a modifiable copy of a scene.

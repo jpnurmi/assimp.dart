@@ -178,6 +178,29 @@ extension AssimpMatrix4 on aiMatrix4x4 {
   }
 }
 
+extension DartMatrix4 on Matrix4 {
+  Pointer<aiMatrix4x4> toNative() {
+    final ptr = aiMatrix4x4.alloc();
+    ptr.ref.a1 = row0.x;
+    ptr.ref.a2 = row0.y;
+    ptr.ref.a3 = row0.z;
+    ptr.ref.a4 = row0.w;
+    ptr.ref.b1 = row1.x;
+    ptr.ref.b2 = row1.y;
+    ptr.ref.b3 = row1.z;
+    ptr.ref.b4 = row1.w;
+    ptr.ref.c1 = row2.x;
+    ptr.ref.c2 = row2.y;
+    ptr.ref.c3 = row2.z;
+    ptr.ref.c4 = row2.w;
+    ptr.ref.d1 = row3.x;
+    ptr.ref.d2 = row3.y;
+    ptr.ref.d3 = row3.z;
+    ptr.ref.d4 = row3.w;
+    return ptr;
+  }
+}
+
 extension AssimpPointer on Pointer {
   static bool isNull(Pointer ptr) => ptr == null || ptr.address == 0;
   static bool isNotNull(Pointer ptr) => ptr != null && ptr.address != 0;
@@ -212,6 +235,16 @@ extension AssimpString on String {
     final str = Uint8List.view(
         ptr.ref.data.cast<Uint8>().asTypedList(len).buffer, 0, len);
     return utf8.decode(str);
+  }
+
+  Pointer<aiString> toNative() {
+    final ptr = aiString.alloc();
+    ptr.ref.length = length;
+    final units = utf8.encode(this);
+    final data = ptr.ref.data.cast<Uint8>().asTypedList(units.length + 1);
+    data.setAll(0, units);
+    data[units.length] = 0;
+    return ptr;
   }
 
 //  static String fromUtf8(Pointer<Utf8> ptr, int len) {

@@ -58,5 +58,6 @@ export 'src/mesh.dart';
 export 'src/metadata.dart';
 export 'src/node.dart';
 export 'src/process.dart';
+export 'src/properties.dart';
 export 'src/scene.dart';
 export 'src/texture.dart';

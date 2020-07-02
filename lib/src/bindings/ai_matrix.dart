@@ -43,6 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'package:ffi/ffi.dart';
+
 class aiMatrix3x3 extends Struct {
   @Float() // ai_real
   double a1, a2, a3;
@@ -53,6 +55,8 @@ class aiMatrix3x3 extends Struct {
 }
 
 class aiMatrix4x4 extends Struct {
+  static Pointer<aiMatrix4x4> alloc() => allocate<aiMatrix4x4>();
+
   @Float() // ai_real
   double a1, a2, a3, a4;
   @Float() // ai_real

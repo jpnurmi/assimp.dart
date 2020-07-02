@@ -280,6 +280,12 @@ aiSetImportPropertyInteger_f get aiSetImportPropertyInteger =>
         aiSetImportPropertyInteger_t,
         aiSetImportPropertyInteger_f>('aiSetImportPropertyInteger');
 
+aiSetImportPropertyMatrix_f _aiSetImportPropertyMatrix;
+aiSetImportPropertyMatrix_f get aiSetImportPropertyMatrix =>
+    _aiSetImportPropertyMatrix ??= libassimp.lookupFunction<
+        aiSetImportPropertyMatrix_t,
+        aiSetImportPropertyMatrix_f>('aiSetImportPropertyMatrix');
+
 aiSetImportPropertyString_f _aiSetImportPropertyString;
 aiSetImportPropertyString_f get aiSetImportPropertyString =>
     _aiSetImportPropertyString ??= libassimp.lookupFunction<
