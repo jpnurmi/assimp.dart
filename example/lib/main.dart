@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math' as Math;
 import 'dart:typed_data';
 import 'dart:ui';
@@ -170,13 +171,23 @@ class ScenePainter extends CustomPainter {
       final normals = mesh.normalData;
       final vertices = mesh.vertexData;
 
-      final count = mesh.faces.length * 3;
+      double faceDepth(Uint32List indices, Float32List vertices) {
+        return (vertices[indices[0] * 3 + 2] +
+                vertices[indices[1] * 3 + 2] +
+                vertices[indices[2] * 3 + 2]) /
+            3;
+      }
+
+      final faces = SplayTreeMap<double, Face>.fromIterable(mesh.faces,
+          key: (f) => faceDepth(f.indexData, vertices), value: (f) => f);
+
+      final count = faces.length * 3;
       final colors = Int32List(count);
       final indices = Uint16List(count);
       final positions = Float32List(count * 2);
 
       var i = 0;
-      for (final face in mesh.faces) {
+      for (final face in faces.values) {
         for (final j in face.indices) {
           final c = light.dot(matrix.transformed3(normals.vectorAt(j * 3)));
           if (c < 0 || c.isNaN) continue;
