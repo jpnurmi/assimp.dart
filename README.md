@@ -21,7 +21,7 @@ for (final mesh in scene.meshes) {
 }
 ```
 
-A little example of what you can do with Assimp - still lacking Z-sorting:
+A little example of what you can do with Assimp:
 
 ![Assimp](https://raw.githubusercontent.com/jpnurmi/dart_assimp/master/doc/images/assimp.gif "Assimp")
 
@@ -29,7 +29,7 @@ To use this package, add `assimp` as a [dependency in your pubspec.yaml file](ht
 
 ## Status
 
-This package is currently in **alpha stage**. It supports **Assimp 5.x** , and has been tried out
+This package is currently in **alpha stage**. It supports **64-bit Assimp 5.x**, and has been tried out
 on the following platforms:
 - macOS (`brew install assimp`)
 - Linux (`apt install libassimp5`)
