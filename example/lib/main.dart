@@ -216,7 +216,7 @@ class ScenePainter extends CustomPainter {
           VertexMode.triangles,
           positions.sublist(0, i * 2),
           colors: colors.sublist(0, i),
-          indices: indices,
+          indices: indices.sublist(0, i),
         );
         canvas.drawVertices(raw, BlendMode.src, Paint());
       }
