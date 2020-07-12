@@ -92,22 +92,26 @@ class _ExamplePageState extends State<ExamplePage> {
           ),
         ],
       ),
-      body: GestureDetector(
-        child: CustomPaint(
-          painter: ScenePainter(scene, bounds, scale),
-          size: MediaQuery.of(context).size,
-        ),
-        onScaleStart: (details) {
-          startScale = scale;
-          startPoint = details.focalPoint;
-        },
-        onScaleUpdate: (details) {
-          final scaled = details.scale != 1.0 || details.rotation != 0.0;
-          transformScene(
-            delta: details.focalPoint - startPoint,
-            scale: scaled ? startScale * details.scale : scale,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return GestureDetector(
+            child: CustomPaint(
+              painter: ScenePainter(scene, bounds, scale),
+              size: constraints.biggest,
+            ),
+            onScaleStart: (details) {
+              startScale = scale;
+              startPoint = details.focalPoint;
+            },
+            onScaleUpdate: (details) {
+              final scaled = details.scale != 1.0 || details.rotation != 0.0;
+              transformScene(
+                delta: details.focalPoint - startPoint,
+                scale: scaled ? startScale * details.scale : scale,
+              );
+              startPoint = details.focalPoint;
+            },
           );
-          startPoint = details.focalPoint;
         },
       ),
     );
