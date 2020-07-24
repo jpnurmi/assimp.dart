@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:test/test.dart';
-import '../lib/assimp.dart';
+import 'package:assimp/assimp.dart';
 import 'test_utils.dart';
 
 void main() {

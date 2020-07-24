@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:path/path.dart' hide equals;
+import 'package:assimp/assimp.dart';
 
-import '../lib/assimp.dart';
 export 'third_party/matchers.dart';
 
 String testModelPath(String fileName) => 'test/models/' + fileName;
