@@ -48,6 +48,8 @@ import 'package:ffi/ffi.dart';
 import 'ai_matrix.dart';
 import 'ai_string.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiCreatePropertyStore_t = Pointer<aiPropertyStore> Function();
 typedef aiCreatePropertyStore_f = Pointer<aiPropertyStore> Function();
 

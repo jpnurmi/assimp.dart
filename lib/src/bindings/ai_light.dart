@@ -47,6 +47,8 @@ import 'ai_color.dart';
 import 'ai_string.dart';
 import 'ai_vector.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiLight
 class aiLight extends Struct {
   // struct aiString            mName;                /*     0  1028 */

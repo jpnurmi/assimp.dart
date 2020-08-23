@@ -42,6 +42,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiVertexWeight
 class aiVertexWeight extends Struct {
   // unsigned int               mVertexId;            /*     0     4 */

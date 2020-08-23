@@ -47,6 +47,8 @@ import 'package:ffi/ffi.dart';
 
 import 'ai_string.dart';
 
+// ignore_for_file: unused_field
+
 class aiPropertyTypeInfo {
   static const int float = 0x1;
   static const int double = 0x2;

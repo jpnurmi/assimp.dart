@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiString
 class aiString extends Struct {
   static Pointer<aiString> alloc() => allocate<aiString>()..ref.length = 0;

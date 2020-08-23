@@ -43,6 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+// ignore_for_file: unused_field
+
 class aiVector2D extends Struct {
   @Float() // ai_real
   double x, y;

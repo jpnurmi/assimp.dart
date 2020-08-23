@@ -2,5 +2,3 @@ include: package:pedantic/analysis_options.yaml
 
 analyzer:
   exclude: [test/**]
-  errors:
-    unused_field: ignore

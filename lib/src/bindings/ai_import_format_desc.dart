@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiGetImporterDesc_t = Pointer<aiImporterDesc> Function(
     Pointer<Utf8> extension);
 

@@ -43,6 +43,8 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiGetExportFormatCount_t = Uint32 Function();
 typedef aiGetExportFormatCount_f = int Function();
 

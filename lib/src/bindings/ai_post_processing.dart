@@ -44,6 +44,8 @@ import 'dart:ffi';
 
 import 'ai_scene.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiApplyPostProcessing_t = Pointer<aiScene> Function(
     Pointer<aiScene> scene, Uint32 flags);
 typedef aiApplyPostProcessing_f = Pointer<aiScene> Function(

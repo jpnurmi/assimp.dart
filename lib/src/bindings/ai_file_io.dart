@@ -47,6 +47,8 @@ import 'package:ffi/ffi.dart';
 
 import 'ai_file.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiFileOpenProc_t = Pointer<aiFile> Function(
     Pointer<aiFileIO> file, Pointer<Utf8>, Pointer<Utf8>);
 typedef aiFileCloseProc_t = Void Function(

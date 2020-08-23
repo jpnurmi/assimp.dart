@@ -50,6 +50,8 @@ import 'ai_string.dart';
 import 'ai_material_property.dart';
 import 'ai_uv_transform.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiMaterial
 class aiMaterial extends Struct {
   // class aiMaterialProperty * * mProperties;        /*     0     8 */

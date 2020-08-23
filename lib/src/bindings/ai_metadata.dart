@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'ai_string.dart';
 
+// ignore_for_file: unused_field
+
 class aiMetadataType {
   static const int AI_BOOL = 0;
   static const int AI_INT32 = 1;

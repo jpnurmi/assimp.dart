@@ -48,6 +48,8 @@ import 'ai_mesh_anim.dart';
 import 'ai_mesh_morph_anim.dart';
 import 'ai_string.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiAnimation 2>/dev/null
 class aiAnimation extends Struct {
   // struct aiString            mName;                /*     0  1028 */

@@ -46,6 +46,8 @@ import 'ai_matrix.dart';
 import 'ai_string.dart';
 import 'ai_vertex_weight.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiBone
 class aiBone extends Struct {
   // struct aiString            mName;                /*     0  1028 */

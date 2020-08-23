@@ -46,6 +46,8 @@ import 'dart:ffi';
 import 'ai_key.dart';
 import 'ai_string.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiMeshAnim 2>/dev/null
 class aiMeshAnim extends Struct {
   // struct aiString            mName;                /*     0  1028 */

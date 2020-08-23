@@ -48,6 +48,8 @@ import 'package:ffi/ffi.dart';
 import 'ai_string.dart';
 import 'ai_texel.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiTexture
 class aiTexture extends Struct {
   // unsigned int               mWidth;               /*     0     4 */

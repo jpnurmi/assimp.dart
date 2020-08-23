@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'ai_vector.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiUVTransform
 class aiUVTransform extends Struct {
   // aiVector2D                 mTranslation;         /*     0     8 */

@@ -47,6 +47,8 @@ import 'ai_export_data_blob.dart';
 import 'ai_file_io.dart';
 import 'ai_scene.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiCopyScene_t = Void Function(
     Pointer<aiScene> scene, Pointer<Pointer<aiScene>> out);
 typedef aiCopyScene_f = void Function(

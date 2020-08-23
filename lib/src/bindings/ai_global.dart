@@ -47,6 +47,8 @@ import 'package:ffi/ffi.dart';
 
 import 'ai_string.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiGetLegalString_t = Pointer<Utf8> Function();
 typedef aiGetLegalString_f = Pointer<Utf8> Function();
 

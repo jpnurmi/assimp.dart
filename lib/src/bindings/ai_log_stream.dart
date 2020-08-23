@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiLogStreamCallback_t = Void Function(
     Pointer<Utf8> message, Pointer<Utf8> user);
 

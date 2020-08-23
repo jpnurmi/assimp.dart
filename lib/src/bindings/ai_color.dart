@@ -43,6 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiColor3D
 class aiColor3D extends Struct {
   // ai_real                    r;                    /*     0     4 */

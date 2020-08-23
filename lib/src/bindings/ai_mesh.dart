@@ -50,6 +50,8 @@ import 'ai_face.dart';
 import 'ai_string.dart';
 import 'ai_vector.dart';
 
+// ignore_for_file: unused_field
+
 const int AI_MAX_FACE_INDICES = 0x7fff;
 const int AI_MAX_BONE_WEIGHTS = 0x7fffffff;
 const int AI_MAX_VERTICES = 0x7fffffff;

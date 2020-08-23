@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'ai_scene.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiGetMemoryRequirements_t = Void Function(
     Pointer<aiScene> scene, Pointer<aiMemoryInfo> mem);
 typedef aiGetMemoryRequirements_f = void Function(

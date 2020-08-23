@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiFileWriteProc_t = Uint32 Function(
     Pointer<aiFile> file, Pointer<Utf8>, Uint32, Uint32);
 typedef aiFileReadProc_t = Uint32 Function(

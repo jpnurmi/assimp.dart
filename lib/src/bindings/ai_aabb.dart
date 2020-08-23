@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'ai_vector.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiAABB
 class aiAABB extends Struct {
   // aiVector3D                 mMin;                 /*     0    12 */

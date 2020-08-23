@@ -46,6 +46,8 @@ import 'dart:ffi';
 import 'ai_quaternion.dart';
 import 'ai_vector.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiVectorKey
 class aiVectorKey extends Struct {
   // double                     mTime;                /*     0     8 */

@@ -49,6 +49,8 @@ import 'ai_file_io.dart';
 import 'ai_property_store.dart';
 import 'ai_scene.dart';
 
+// ignore_for_file: unused_field
+
 typedef aiImportFileExWithProperties_t = Pointer<aiScene> Function(
     Pointer<Utf8> file,
     Uint32 flags,

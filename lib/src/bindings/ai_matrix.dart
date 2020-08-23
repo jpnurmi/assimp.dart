@@ -45,6 +45,8 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
+// ignore_for_file: unused_field
+
 class aiMatrix3x3 extends Struct {
   @Float() // ai_real
   double a1, a2, a3;

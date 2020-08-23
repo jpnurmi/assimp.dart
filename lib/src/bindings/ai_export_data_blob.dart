@@ -43,6 +43,8 @@ import 'dart:ffi';
 
 import 'ai_string.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiExportDataBlob
 class aiExportDataBlob extends Struct {
   // size_t                     size;                 /*     0     8 */

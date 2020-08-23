@@ -52,6 +52,8 @@ import 'ai_metadata.dart';
 import 'ai_node.dart';
 import 'ai_texture.dart';
 
+// ignore_for_file: unused_field
+
 // pahole libassimpd.so -M -C aiScene
 class aiScene extends Struct {
   // unsigned int               mFlags;               /*     0     4 */
