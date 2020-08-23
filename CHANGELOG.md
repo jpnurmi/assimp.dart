@@ -1,3 +1,7 @@
+## [0.0.6+1] - 2020-08-23
+
+* Reformat scene.dart to address pub score
+
 ## [0.0.6] - 2020-08-23
 
 * Addressed irrelevant (unused fields) static analysis issues in bindings

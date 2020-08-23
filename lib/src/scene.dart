@@ -141,7 +141,8 @@ class Scene extends AssimpType<aiScene> {
       {int flags = 0, Map<String, dynamic> properties}) {
     final cpath = Utf8.toUtf8(path);
     final store = PropertyStore.fromMap(properties);
-    final ptr = aiImportFileExWithProperties(cpath, flags, nullptr, store?.ptr ?? nullptr);
+    final ptr = aiImportFileExWithProperties(
+        cpath, flags, nullptr, store?.ptr ?? nullptr);
     free(cpath);
     store?.dispose();
     return Scene.fromNative(ptr);
