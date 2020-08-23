@@ -1,3 +1,7 @@
+## [0.0.6] - 2020-08-23
+
+* Addressed irrelevant (unused fields) static analysis issues in bindings
+
 ## [0.0.5] - 2020-07-02
 
 * Added support for import properties
