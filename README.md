@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/jpnurmi/dart_assimp/branch/master/graph/badge.svg)](https://codecov.io/gh/jpnurmi/dart_assimp)
 
 This library provides Dart [FFI](https://dart.dev/guides/libraries/c-interop) bindings to
-[Open Asset Import Library](http://assimp.org/) aka. Assimp, which is a portable library to import
+[Open Asset Import Library](https://assimp.org/) aka. Assimp, which is a portable library to import
 and export various well-known [3D model formats](https://github.com/assimp/assimp/blob/master/Readme.md#supported-file-formats)
 in a uniform manner.
 
