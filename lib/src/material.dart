@@ -84,15 +84,15 @@ class MaterialProperty extends AssimpType<aiMaterialProperty> {
   /// The value of the property
   dynamic get value {
     switch (_property.mType) {
-      case aiPropertyTypeInfo.float:
+      case aiPropertyTypeInfo.aiPTI_Float:
         return _property.mData.cast<Float>().value;
-      case aiPropertyTypeInfo.double:
+      case aiPropertyTypeInfo.aiPTI_Double:
         return _property.mData.cast<Double>().value;
-      case aiPropertyTypeInfo.string:
+      case aiPropertyTypeInfo.aiPTI_String:
         return AssimpString.fromNative(_property.mData.cast<aiString>());
-      case aiPropertyTypeInfo.integer:
+      case aiPropertyTypeInfo.aiPTI_Integer:
         return _property.mData.cast<Uint32>().value;
-      case aiPropertyTypeInfo.buffer:
+      case aiPropertyTypeInfo.aiPTI_Buffer:
         return _property.mData.cast<Uint8>().asTypedList(_property.mDataLength);
       default:
         return null;

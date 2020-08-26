@@ -50,11 +50,11 @@ import 'ai_string.dart';
 // ignore_for_file: unused_field
 
 class aiPropertyTypeInfo {
-  static const int float = 0x1;
-  static const int double = 0x2;
-  static const int string = 0x3;
-  static const int integer = 0x4;
-  static const int buffer = 0x5;
+  static const int aiPTI_Float = 0x1;
+  static const int aiPTI_Double = 0x2;
+  static const int aiPTI_String = 0x3;
+  static const int aiPTI_Integer = 0x4;
+  static const int aiPTI_Buffer = 0x5;
 }
 
 // pahole libassimpd.so -M -C aiMaterialProperty
