@@ -141,7 +141,7 @@ class Scene extends AssimpType<aiScene> {
       {int flags = 0, Map<String, dynamic> properties}) {
     final cpath = Utf8.toUtf8(path);
     final store = PropertyStore.fromMap(properties);
-    final ptr = aiImportFileExWithProperties(
+    final ptr = libassimp.aiImportFileExWithProperties(
         cpath, flags, nullptr, store?.ptr ?? nullptr);
     free(cpath);
     store?.dispose();
@@ -152,7 +152,7 @@ class Scene extends AssimpType<aiScene> {
       Map<String, dynamic> properties, String hint) {
     final chint = Utf8.toUtf8(hint);
     final store = PropertyStore.fromMap(properties);
-    final ptr = aiImportFileFromMemoryWithProperties(
+    final ptr = libassimp.aiImportFileFromMemoryWithProperties(
         cstr, length, flags, chint, store?.ptr ?? nullptr);
     free(cstr);
     free(chint);
@@ -221,7 +221,7 @@ class Scene extends AssimpType<aiScene> {
   /// delete it again.
   Scene copy() {
     final out = allocate<Pointer<aiScene>>();
-    aiCopyScene(ptr, out);
+    libassimp.aiCopyScene(ptr, out);
     final scene = Scene.fromNative(out[0]);
     free(out);
     return scene;
@@ -330,11 +330,11 @@ class Scene extends AssimpType<aiScene> {
   ///   case, post processing steps are not really designed to 'fail'. To be exact,
   ///   the #aiProcess_ValidateDataStructure flag is currently the only post processing step
   ///   which can actually cause the scene to be reset to NULL.
-  void postProcess(int flags) => aiApplyPostProcessing(ptr, flags);
+  void postProcess(int flags) => libassimp.aiApplyPostProcessing(ptr, flags);
 
   /// Releases all resources associated with the given import process.
   ///
   /// Call this function after you're done with the imported data.
   /// @param pScene The imported data to release. NULL is a valid value.
-  void dispose() => aiReleaseImport(ptr);
+  void dispose() => libassimp.aiReleaseImport(ptr);
 }

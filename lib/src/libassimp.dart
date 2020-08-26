@@ -63,231 +63,282 @@ DynamicLibrary _dlopen() {
   return DynamicLibrary.open(path);
 }
 
-DynamicLibrary _libassimp;
-DynamicLibrary get libassimp => _libassimp ?? _dlopen();
+LibAssimp _libassimp;
+LibAssimp get libassimp => _libassimp ?? LibAssimp(_dlopen());
 
-aiApplyPostProcessing_f _aiApplyPostProcessing;
-aiApplyPostProcessing_f get aiApplyPostProcessing => _aiApplyPostProcessing ??=
-    libassimp.lookupFunction<aiApplyPostProcessing_t, aiApplyPostProcessing_f>(
-        'aiApplyPostProcessing');
+class LibAssimp {
+  final DynamicLibrary _dylib;
 
-aiAttachLogStream_f _aiAttachLogStream;
-aiAttachLogStream_f get aiAttachLogStream => _aiAttachLogStream ??=
-    libassimp.lookupFunction<aiAttachLogStream_t, aiAttachLogStream_f>(
-        'aiAttachLogStream');
+  LibAssimp(DynamicLibrary dynamicLibrary) : _dylib = dynamicLibrary;
 
-aiCopyScene_f _aiCopyScene;
-aiCopyScene_f get aiCopyScene => _aiCopyScene ??=
-    libassimp.lookupFunction<aiCopyScene_t, aiCopyScene_f>('aiCopyScene');
+  aiApplyPostProcessing_f _aiApplyPostProcessing;
 
-aiCreatePropertyStore_f _aiCreatePropertyStore;
-aiCreatePropertyStore_f get aiCreatePropertyStore => _aiCreatePropertyStore ??=
-    libassimp.lookupFunction<aiCreatePropertyStore_t, aiCreatePropertyStore_f>(
-        'aiCreatePropertyStore');
+  aiApplyPostProcessing_f get aiApplyPostProcessing =>
+      _aiApplyPostProcessing ??= _dylib.lookupFunction<aiApplyPostProcessing_t,
+          aiApplyPostProcessing_f>('aiApplyPostProcessing');
 
-aiDetachAllLogStreams_f _aiDetachAllLogStreams;
-aiDetachAllLogStreams_f get aiDetachAllLogStreams => _aiDetachAllLogStreams ??=
-    libassimp.lookupFunction<aiDetachAllLogStreams_t, aiDetachAllLogStreams_f>(
-        'aiDetachAllLogStreams');
+  aiAttachLogStream_f _aiAttachLogStream;
 
-aiDetachLogStream_f _aiDetachLogStream;
-aiDetachLogStream_f get aiDetachLogStream => _aiDetachLogStream ??=
-    libassimp.lookupFunction<aiDetachLogStream_t, aiDetachLogStream_f>(
-        'aiDetachLogStream');
+  aiAttachLogStream_f get aiAttachLogStream => _aiAttachLogStream ??=
+      _dylib.lookupFunction<aiAttachLogStream_t, aiAttachLogStream_f>(
+          'aiAttachLogStream');
 
-aiEnableVerboseLogging_f _aiEnableVerboseLogging;
-aiEnableVerboseLogging_f get aiEnableVerboseLogging =>
-    _aiEnableVerboseLogging ??= libassimp.lookupFunction<
-        aiEnableVerboseLogging_t,
-        aiEnableVerboseLogging_f>('aiEnableVerboseLogging');
+  aiCopyScene_f _aiCopyScene;
 
-aiExportSceneEx_f _aiExportSceneEx;
-aiExportSceneEx_f get aiExportSceneEx => _aiExportSceneEx ??= libassimp
-    .lookupFunction<aiExportSceneEx_t, aiExportSceneEx_f>('aiExportSceneEx');
+  aiCopyScene_f get aiCopyScene => _aiCopyScene ??=
+      _dylib.lookupFunction<aiCopyScene_t, aiCopyScene_f>('aiCopyScene');
 
-aiExportSceneToBlob_f _aiExportSceneToBlob;
-aiExportSceneToBlob_f get aiExportSceneToBlob => _aiExportSceneToBlob ??=
-    libassimp.lookupFunction<aiExportSceneToBlob_t, aiExportSceneToBlob_f>(
-        'aiExportSceneToBlob');
+  aiCreatePropertyStore_f _aiCreatePropertyStore;
 
-aiGetBranchName_f _aiGetBranchName;
-aiGetBranchName_f get aiGetBranchName => _aiGetBranchName ??= libassimp
-    .lookupFunction<aiGetBranchName_t, aiGetBranchName_f>('aiGetBranchName');
+  aiCreatePropertyStore_f get aiCreatePropertyStore =>
+      _aiCreatePropertyStore ??= _dylib.lookupFunction<aiCreatePropertyStore_t,
+          aiCreatePropertyStore_f>('aiCreatePropertyStore');
 
-aiGetCompileFlags_f _aiGetCompileFlags;
-aiGetCompileFlags_f get aiGetCompileFlags => _aiGetCompileFlags ??=
-    libassimp.lookupFunction<aiGetCompileFlags_t, aiGetCompileFlags_f>(
-        'aiGetCompileFlags');
+  aiDetachAllLogStreams_f _aiDetachAllLogStreams;
 
-aiGetErrorString_f _aiGetErrorString;
-aiGetErrorString_f get aiGetErrorString => _aiGetErrorString ??= libassimp
-    .lookupFunction<aiGetErrorString_t, aiGetErrorString_f>('aiGetErrorString');
+  aiDetachAllLogStreams_f get aiDetachAllLogStreams =>
+      _aiDetachAllLogStreams ??= _dylib.lookupFunction<aiDetachAllLogStreams_t,
+          aiDetachAllLogStreams_f>('aiDetachAllLogStreams');
 
-aiGetExportFormatCount_f _aiGetExportFormatCount;
-aiGetExportFormatCount_f get aiGetExportFormatCount =>
-    _aiGetExportFormatCount ??= libassimp.lookupFunction<
-        aiGetExportFormatCount_t,
-        aiGetExportFormatCount_f>('aiGetExportFormatCount');
+  aiDetachLogStream_f _aiDetachLogStream;
 
-aiGetExportFormatDescription_f _aiGetExportFormatDescription;
-aiGetExportFormatDescription_f get aiGetExportFormatDescription =>
-    _aiGetExportFormatDescription ??= libassimp.lookupFunction<
-        aiGetExportFormatDescription_t,
-        aiGetExportFormatDescription_f>('aiGetExportFormatDescription');
+  aiDetachLogStream_f get aiDetachLogStream => _aiDetachLogStream ??=
+      _dylib.lookupFunction<aiDetachLogStream_t, aiDetachLogStream_f>(
+          'aiDetachLogStream');
 
-aiGetExtensionList_f _aiGetExtensionList;
-aiGetExtensionList_f get aiGetExtensionList => _aiGetExtensionList ??=
-    libassimp.lookupFunction<aiGetExtensionList_t, aiGetExtensionList_f>(
-        'aiGetExtensionList');
+  aiEnableVerboseLogging_f _aiEnableVerboseLogging;
 
-aiGetLegalString_f _aiGetLegalString;
-aiGetLegalString_f get aiGetLegalString => _aiGetLegalString ??= libassimp
-    .lookupFunction<aiGetLegalString_t, aiGetLegalString_f>('aiGetLegalString');
+  aiEnableVerboseLogging_f get aiEnableVerboseLogging =>
+      _aiEnableVerboseLogging ??= _dylib.lookupFunction<
+          aiEnableVerboseLogging_t,
+          aiEnableVerboseLogging_f>('aiEnableVerboseLogging');
 
-aiGetMaterialColor_f _aiGetMaterialColor;
-aiGetMaterialColor_f get aiGetMaterialColor => _aiGetMaterialColor ??=
-    libassimp.lookupFunction<aiGetMaterialColor_t, aiGetMaterialColor_f>(
-        'aiGetMaterialColor');
+  aiExportSceneEx_f _aiExportSceneEx;
 
-aiGetMaterialFloatArray_f _aiGetMaterialFloatArray;
-aiGetMaterialFloatArray_f get aiGetMaterialFloatArray =>
-    _aiGetMaterialFloatArray ??= libassimp.lookupFunction<
-        aiGetMaterialFloatArray_t,
-        aiGetMaterialFloatArray_f>('aiGetMaterialFloatArray');
+  aiExportSceneEx_f get aiExportSceneEx => _aiExportSceneEx ??= _dylib
+      .lookupFunction<aiExportSceneEx_t, aiExportSceneEx_f>('aiExportSceneEx');
 
-aiGetMaterialIntegerArray_f _aiGetMaterialIntegerArray;
-aiGetMaterialIntegerArray_f get aiGetMaterialIntegerArray =>
-    _aiGetMaterialIntegerArray ??= libassimp.lookupFunction<
-        aiGetMaterialIntegerArray_t,
-        aiGetMaterialIntegerArray_f>('aiGetMaterialIntegerArray');
+  aiExportSceneToBlob_f _aiExportSceneToBlob;
 
-aiGetMaterialProperty_f _aiGetMaterialProperty;
-aiGetMaterialProperty_f get aiGetMaterialProperty => _aiGetMaterialProperty ??=
-    libassimp.lookupFunction<aiGetMaterialProperty_t, aiGetMaterialProperty_f>(
-        'aiGetMaterialProperty');
+  aiExportSceneToBlob_f get aiExportSceneToBlob => _aiExportSceneToBlob ??=
+      _dylib.lookupFunction<aiExportSceneToBlob_t, aiExportSceneToBlob_f>(
+          'aiExportSceneToBlob');
 
-aiGetMaterialString_f _aiGetMaterialString;
-aiGetMaterialString_f get aiGetMaterialString => _aiGetMaterialString ??=
-    libassimp.lookupFunction<aiGetMaterialString_t, aiGetMaterialString_f>(
-        'aiGetMaterialString');
+  aiGetBranchName_f _aiGetBranchName;
 
-aiGetMaterialTexture_f _aiGetMaterialTexture;
-aiGetMaterialTexture_f get aiGetMaterialTexture => _aiGetMaterialTexture ??=
-    libassimp.lookupFunction<aiGetMaterialTexture_t, aiGetMaterialTexture_f>(
-        'aiGetMaterialTexture');
+  aiGetBranchName_f get aiGetBranchName => _aiGetBranchName ??= _dylib
+      .lookupFunction<aiGetBranchName_t, aiGetBranchName_f>('aiGetBranchName');
 
-aiGetMaterialTextureCount_f _aiGetMaterialTextureCount;
-aiGetMaterialTextureCount_f get aiGetMaterialTextureCount =>
-    _aiGetMaterialTextureCount ??= libassimp.lookupFunction<
-        aiGetMaterialTextureCount_t,
-        aiGetMaterialTextureCount_f>('aiGetMaterialTextureCount');
+  aiGetCompileFlags_f _aiGetCompileFlags;
 
-aiGetMaterialUVTransform_f _aiGetMaterialUVTransform;
-aiGetMaterialUVTransform_f get aiGetMaterialUVTransform =>
-    _aiGetMaterialUVTransform ??= libassimp.lookupFunction<
-        aiGetMaterialUVTransform_t,
-        aiGetMaterialUVTransform_f>('aiGetMaterialUVTransform');
+  aiGetCompileFlags_f get aiGetCompileFlags => _aiGetCompileFlags ??=
+      _dylib.lookupFunction<aiGetCompileFlags_t, aiGetCompileFlags_f>(
+          'aiGetCompileFlags');
 
-aiGetMemoryRequirements_f _aiGetMemoryRequirements;
-aiGetMemoryRequirements_f get aiGetMemoryRequirements =>
-    _aiGetMemoryRequirements ??= libassimp.lookupFunction<
-        aiGetMemoryRequirements_t,
-        aiGetMemoryRequirements_f>('aiGetMemoryRequirements');
+  aiGetErrorString_f _aiGetErrorString;
 
-aiGetVersionMajor_f _aiGetVersionMajor;
-aiGetVersionMajor_f get aiGetVersionMajor => _aiGetVersionMajor ??=
-    libassimp.lookupFunction<aiGetVersionMajor_t, aiGetVersionMajor_f>(
-        'aiGetVersionMajor');
+  aiGetErrorString_f get aiGetErrorString => _aiGetErrorString ??=
+      _dylib.lookupFunction<aiGetErrorString_t, aiGetErrorString_f>(
+          'aiGetErrorString');
 
-aiGetVersionMinor_f _aiGetVersionMinor;
-aiGetVersionMinor_f get aiGetVersionMinor => _aiGetVersionMinor ??=
-    libassimp.lookupFunction<aiGetVersionMinor_t, aiGetVersionMinor_f>(
-        'aiGetVersionMinor');
+  aiGetExportFormatCount_f _aiGetExportFormatCount;
 
-aiGetVersionRevision_f _aiGetVersionRevision;
-aiGetVersionRevision_f get aiGetVersionRevision => _aiGetVersionRevision ??=
-    libassimp.lookupFunction<aiGetVersionRevision_t, aiGetVersionRevision_f>(
-        'aiGetVersionRevision');
+  aiGetExportFormatCount_f get aiGetExportFormatCount =>
+      _aiGetExportFormatCount ??= _dylib.lookupFunction<
+          aiGetExportFormatCount_t,
+          aiGetExportFormatCount_f>('aiGetExportFormatCount');
 
-aiGetImportFormatCount_f _aiGetImportFormatCount;
-aiGetImportFormatCount_f get aiGetImportFormatCount =>
-    _aiGetImportFormatCount ??= libassimp.lookupFunction<
-        aiGetImportFormatCount_t,
-        aiGetImportFormatCount_f>('aiGetImportFormatCount');
+  aiGetExportFormatDescription_f _aiGetExportFormatDescription;
 
-aiGetImportFormatDescription_f _aiGetImportFormatDescription;
-aiGetImportFormatDescription_f get aiGetImportFormatDescription =>
-    _aiGetImportFormatDescription ??= libassimp.lookupFunction<
-        aiGetImportFormatDescription_t,
-        aiGetImportFormatDescription_f>('aiGetImportFormatDescription');
+  aiGetExportFormatDescription_f get aiGetExportFormatDescription =>
+      _aiGetExportFormatDescription ??= _dylib.lookupFunction<
+          aiGetExportFormatDescription_t,
+          aiGetExportFormatDescription_f>('aiGetExportFormatDescription');
 
-aiGetPredefinedLogStream_f _aiGetPredefinedLogStream;
-aiGetPredefinedLogStream_f get aiGetPredefinedLogStream =>
-    _aiGetPredefinedLogStream ??= libassimp.lookupFunction<
-        aiGetPredefinedLogStream_t,
-        aiGetPredefinedLogStream_f>('aiGetPredefinedLogStream');
+  aiGetExtensionList_f _aiGetExtensionList;
 
-aiImportFileExWithProperties_f _aiImportFileExWithProperties;
-aiImportFileExWithProperties_f get aiImportFileExWithProperties =>
-    _aiImportFileExWithProperties ??= libassimp.lookupFunction<
-        aiImportFileExWithProperties_t,
-        aiImportFileExWithProperties_f>('aiImportFileExWithProperties');
+  aiGetExtensionList_f get aiGetExtensionList => _aiGetExtensionList ??=
+      _dylib.lookupFunction<aiGetExtensionList_t, aiGetExtensionList_f>(
+          'aiGetExtensionList');
 
-aiImportFileFromMemoryWithProperties_f _aiImportFileFromMemoryWithProperties;
-aiImportFileFromMemoryWithProperties_f
-    get aiImportFileFromMemoryWithProperties =>
-        _aiImportFileFromMemoryWithProperties ??= libassimp.lookupFunction<
-                aiImportFileFromMemoryWithProperties_t,
-                aiImportFileFromMemoryWithProperties_f>(
-            'aiImportFileFromMemoryWithProperties');
+  aiGetLegalString_f _aiGetLegalString;
 
-aiIsExtensionSupported_f _aiIsExtensionSupported;
-aiIsExtensionSupported_f get aiIsExtensionSupported =>
-    _aiIsExtensionSupported ??= libassimp.lookupFunction<
-        aiIsExtensionSupported_t,
-        aiIsExtensionSupported_f>('aiIsExtensionSupported');
+  aiGetLegalString_f get aiGetLegalString => _aiGetLegalString ??=
+      _dylib.lookupFunction<aiGetLegalString_t, aiGetLegalString_f>(
+          'aiGetLegalString');
 
-aiReleaseExportBlob_f _aiReleaseExportBlob;
-aiReleaseExportBlob_f get aiReleaseExportBlob => _aiReleaseExportBlob ??=
-    libassimp.lookupFunction<aiReleaseExportBlob_t, aiReleaseExportBlob_f>(
-        'aiReleaseExportBlob');
+  aiGetMaterialColor_f _aiGetMaterialColor;
 
-aiReleaseExportFormatDescription_f _aiReleaseExportFormatDescription;
-aiReleaseExportFormatDescription_f get aiReleaseExportFormatDescription =>
-    _aiReleaseExportFormatDescription ??= libassimp.lookupFunction<
-        aiReleaseExportFormatDescription_t,
-        aiReleaseExportFormatDescription_f>('aiReleaseExportFormatDescription');
+  aiGetMaterialColor_f get aiGetMaterialColor => _aiGetMaterialColor ??=
+      _dylib.lookupFunction<aiGetMaterialColor_t, aiGetMaterialColor_f>(
+          'aiGetMaterialColor');
 
-aiReleaseImport_f _aiReleaseImport;
-aiReleaseImport_f get aiReleaseImport => _aiReleaseImport ??= libassimp
-    .lookupFunction<aiReleaseImport_t, aiReleaseImport_f>('aiReleaseImport');
+  aiGetMaterialFloatArray_f _aiGetMaterialFloatArray;
 
-aiReleasePropertyStore_f _aiReleasePropertyStore;
-aiReleasePropertyStore_f get aiReleasePropertyStore =>
-    _aiReleasePropertyStore ??= libassimp.lookupFunction<
-        aiReleasePropertyStore_t,
-        aiReleasePropertyStore_f>('aiReleasePropertyStore');
+  aiGetMaterialFloatArray_f get aiGetMaterialFloatArray =>
+      _aiGetMaterialFloatArray ??= _dylib.lookupFunction<
+          aiGetMaterialFloatArray_t,
+          aiGetMaterialFloatArray_f>('aiGetMaterialFloatArray');
 
-aiSetImportPropertyFloat_f _aiSetImportPropertyFloat;
-aiSetImportPropertyFloat_f get aiSetImportPropertyFloat =>
-    _aiSetImportPropertyFloat ??= libassimp.lookupFunction<
-        aiSetImportPropertyFloat_t,
-        aiSetImportPropertyFloat_f>('aiSetImportPropertyFloat');
+  aiGetMaterialIntegerArray_f _aiGetMaterialIntegerArray;
 
-aiSetImportPropertyInteger_f _aiSetImportPropertyInteger;
-aiSetImportPropertyInteger_f get aiSetImportPropertyInteger =>
-    _aiSetImportPropertyInteger ??= libassimp.lookupFunction<
-        aiSetImportPropertyInteger_t,
-        aiSetImportPropertyInteger_f>('aiSetImportPropertyInteger');
+  aiGetMaterialIntegerArray_f get aiGetMaterialIntegerArray =>
+      _aiGetMaterialIntegerArray ??= _dylib.lookupFunction<
+          aiGetMaterialIntegerArray_t,
+          aiGetMaterialIntegerArray_f>('aiGetMaterialIntegerArray');
 
-aiSetImportPropertyMatrix_f _aiSetImportPropertyMatrix;
-aiSetImportPropertyMatrix_f get aiSetImportPropertyMatrix =>
-    _aiSetImportPropertyMatrix ??= libassimp.lookupFunction<
-        aiSetImportPropertyMatrix_t,
-        aiSetImportPropertyMatrix_f>('aiSetImportPropertyMatrix');
+  aiGetMaterialProperty_f _aiGetMaterialProperty;
 
-aiSetImportPropertyString_f _aiSetImportPropertyString;
-aiSetImportPropertyString_f get aiSetImportPropertyString =>
-    _aiSetImportPropertyString ??= libassimp.lookupFunction<
-        aiSetImportPropertyString_t,
-        aiSetImportPropertyString_f>('aiSetImportPropertyString');
+  aiGetMaterialProperty_f get aiGetMaterialProperty =>
+      _aiGetMaterialProperty ??= _dylib.lookupFunction<aiGetMaterialProperty_t,
+          aiGetMaterialProperty_f>('aiGetMaterialProperty');
+
+  aiGetMaterialString_f _aiGetMaterialString;
+
+  aiGetMaterialString_f get aiGetMaterialString => _aiGetMaterialString ??=
+      _dylib.lookupFunction<aiGetMaterialString_t, aiGetMaterialString_f>(
+          'aiGetMaterialString');
+
+  aiGetMaterialTexture_f _aiGetMaterialTexture;
+
+  aiGetMaterialTexture_f get aiGetMaterialTexture => _aiGetMaterialTexture ??=
+      _dylib.lookupFunction<aiGetMaterialTexture_t, aiGetMaterialTexture_f>(
+          'aiGetMaterialTexture');
+
+  aiGetMaterialTextureCount_f _aiGetMaterialTextureCount;
+
+  aiGetMaterialTextureCount_f get aiGetMaterialTextureCount =>
+      _aiGetMaterialTextureCount ??= _dylib.lookupFunction<
+          aiGetMaterialTextureCount_t,
+          aiGetMaterialTextureCount_f>('aiGetMaterialTextureCount');
+
+  aiGetMaterialUVTransform_f _aiGetMaterialUVTransform;
+
+  aiGetMaterialUVTransform_f get aiGetMaterialUVTransform =>
+      _aiGetMaterialUVTransform ??= _dylib.lookupFunction<
+          aiGetMaterialUVTransform_t,
+          aiGetMaterialUVTransform_f>('aiGetMaterialUVTransform');
+
+  aiGetMemoryRequirements_f _aiGetMemoryRequirements;
+
+  aiGetMemoryRequirements_f get aiGetMemoryRequirements =>
+      _aiGetMemoryRequirements ??= _dylib.lookupFunction<
+          aiGetMemoryRequirements_t,
+          aiGetMemoryRequirements_f>('aiGetMemoryRequirements');
+
+  aiGetVersionMajor_f _aiGetVersionMajor;
+
+  aiGetVersionMajor_f get aiGetVersionMajor => _aiGetVersionMajor ??=
+      _dylib.lookupFunction<aiGetVersionMajor_t, aiGetVersionMajor_f>(
+          'aiGetVersionMajor');
+
+  aiGetVersionMinor_f _aiGetVersionMinor;
+
+  aiGetVersionMinor_f get aiGetVersionMinor => _aiGetVersionMinor ??=
+      _dylib.lookupFunction<aiGetVersionMinor_t, aiGetVersionMinor_f>(
+          'aiGetVersionMinor');
+
+  aiGetVersionRevision_f _aiGetVersionRevision;
+
+  aiGetVersionRevision_f get aiGetVersionRevision => _aiGetVersionRevision ??=
+      _dylib.lookupFunction<aiGetVersionRevision_t, aiGetVersionRevision_f>(
+          'aiGetVersionRevision');
+
+  aiGetImportFormatCount_f _aiGetImportFormatCount;
+
+  aiGetImportFormatCount_f get aiGetImportFormatCount =>
+      _aiGetImportFormatCount ??= _dylib.lookupFunction<
+          aiGetImportFormatCount_t,
+          aiGetImportFormatCount_f>('aiGetImportFormatCount');
+
+  aiGetImportFormatDescription_f _aiGetImportFormatDescription;
+
+  aiGetImportFormatDescription_f get aiGetImportFormatDescription =>
+      _aiGetImportFormatDescription ??= _dylib.lookupFunction<
+          aiGetImportFormatDescription_t,
+          aiGetImportFormatDescription_f>('aiGetImportFormatDescription');
+
+  aiGetPredefinedLogStream_f _aiGetPredefinedLogStream;
+
+  aiGetPredefinedLogStream_f get aiGetPredefinedLogStream =>
+      _aiGetPredefinedLogStream ??= _dylib.lookupFunction<
+          aiGetPredefinedLogStream_t,
+          aiGetPredefinedLogStream_f>('aiGetPredefinedLogStream');
+
+  aiImportFileExWithProperties_f _aiImportFileExWithProperties;
+
+  aiImportFileExWithProperties_f get aiImportFileExWithProperties =>
+      _aiImportFileExWithProperties ??= _dylib.lookupFunction<
+          aiImportFileExWithProperties_t,
+          aiImportFileExWithProperties_f>('aiImportFileExWithProperties');
+
+  aiImportFileFromMemoryWithProperties_f _aiImportFileFromMemoryWithProperties;
+
+  aiImportFileFromMemoryWithProperties_f
+      get aiImportFileFromMemoryWithProperties =>
+          _aiImportFileFromMemoryWithProperties ??= _dylib.lookupFunction<
+                  aiImportFileFromMemoryWithProperties_t,
+                  aiImportFileFromMemoryWithProperties_f>(
+              'aiImportFileFromMemoryWithProperties');
+
+  aiIsExtensionSupported_f _aiIsExtensionSupported;
+
+  aiIsExtensionSupported_f get aiIsExtensionSupported =>
+      _aiIsExtensionSupported ??= _dylib.lookupFunction<
+          aiIsExtensionSupported_t,
+          aiIsExtensionSupported_f>('aiIsExtensionSupported');
+
+  aiReleaseExportBlob_f _aiReleaseExportBlob;
+
+  aiReleaseExportBlob_f get aiReleaseExportBlob => _aiReleaseExportBlob ??=
+      _dylib.lookupFunction<aiReleaseExportBlob_t, aiReleaseExportBlob_f>(
+          'aiReleaseExportBlob');
+
+  aiReleaseExportFormatDescription_f _aiReleaseExportFormatDescription;
+
+  aiReleaseExportFormatDescription_f get aiReleaseExportFormatDescription =>
+      _aiReleaseExportFormatDescription ??= _dylib.lookupFunction<
+              aiReleaseExportFormatDescription_t,
+              aiReleaseExportFormatDescription_f>(
+          'aiReleaseExportFormatDescription');
+
+  aiReleaseImport_f _aiReleaseImport;
+
+  aiReleaseImport_f get aiReleaseImport => _aiReleaseImport ??= _dylib
+      .lookupFunction<aiReleaseImport_t, aiReleaseImport_f>('aiReleaseImport');
+
+  aiReleasePropertyStore_f _aiReleasePropertyStore;
+
+  aiReleasePropertyStore_f get aiReleasePropertyStore =>
+      _aiReleasePropertyStore ??= _dylib.lookupFunction<
+          aiReleasePropertyStore_t,
+          aiReleasePropertyStore_f>('aiReleasePropertyStore');
+
+  aiSetImportPropertyFloat_f _aiSetImportPropertyFloat;
+
+  aiSetImportPropertyFloat_f get aiSetImportPropertyFloat =>
+      _aiSetImportPropertyFloat ??= _dylib.lookupFunction<
+          aiSetImportPropertyFloat_t,
+          aiSetImportPropertyFloat_f>('aiSetImportPropertyFloat');
+
+  aiSetImportPropertyInteger_f _aiSetImportPropertyInteger;
+
+  aiSetImportPropertyInteger_f get aiSetImportPropertyInteger =>
+      _aiSetImportPropertyInteger ??= _dylib.lookupFunction<
+          aiSetImportPropertyInteger_t,
+          aiSetImportPropertyInteger_f>('aiSetImportPropertyInteger');
+
+  aiSetImportPropertyMatrix_f _aiSetImportPropertyMatrix;
+
+  aiSetImportPropertyMatrix_f get aiSetImportPropertyMatrix =>
+      _aiSetImportPropertyMatrix ??= _dylib.lookupFunction<
+          aiSetImportPropertyMatrix_t,
+          aiSetImportPropertyMatrix_f>('aiSetImportPropertyMatrix');
+
+  aiSetImportPropertyString_f _aiSetImportPropertyString;
+
+  aiSetImportPropertyString_f get aiSetImportPropertyString =>
+      _aiSetImportPropertyString ??= _dylib.lookupFunction<
+          aiSetImportPropertyString_t,
+          aiSetImportPropertyString_f>('aiSetImportPropertyString');
+}

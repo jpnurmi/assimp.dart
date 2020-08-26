@@ -68,7 +68,7 @@ class MemoryInfo extends AssimpType<aiMemoryInfo> {
   /// Get approximated storage required by a scene
   factory MemoryInfo.fromScene(Scene scene) {
     final mem = allocate<aiMemoryInfo>();
-    aiGetMemoryRequirements(scene.ptr, mem);
+    libassimp.aiGetMemoryRequirements(scene.ptr, mem);
     return MemoryInfo.fromNative(mem);
   }
 

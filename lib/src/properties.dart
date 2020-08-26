@@ -819,27 +819,28 @@ class PropertyStore extends AssimpType<aiPropertyStore> {
 
   factory PropertyStore.fromMap(Map<String, dynamic> properties) {
     if (properties == null) return null;
-    final ptr = aiCreatePropertyStore();
+    final ptr = libassimp.aiCreatePropertyStore();
     for (final entry in properties.entries) {
       final name = Utf8.toUtf8(entry.key);
       switch (entry.value.runtimeType) {
         case bool:
-          aiSetImportPropertyInteger(ptr, name, (entry.value as bool) ? 1 : 0);
+          libassimp.aiSetImportPropertyInteger(
+              ptr, name, (entry.value as bool) ? 1 : 0);
           break;
         case int:
-          aiSetImportPropertyInteger(ptr, name, entry.value as int);
+          libassimp.aiSetImportPropertyInteger(ptr, name, entry.value as int);
           break;
         case double:
-          aiSetImportPropertyFloat(ptr, name, entry.value as double);
+          libassimp.aiSetImportPropertyFloat(ptr, name, entry.value as double);
           break;
         case Matrix4:
           final mat = (entry.value as Matrix4).toNative();
-          aiSetImportPropertyMatrix(ptr, name, mat);
+          libassimp.aiSetImportPropertyMatrix(ptr, name, mat);
           free(mat);
           break;
         case String:
           final str = (entry.value as String).toNative();
-          aiSetImportPropertyString(ptr, name, str);
+          libassimp.aiSetImportPropertyString(ptr, name, str);
           free(str);
           break;
         default:
@@ -850,5 +851,5 @@ class PropertyStore extends AssimpType<aiPropertyStore> {
     return PropertyStore._(ptr);
   }
 
-  void dispose() => aiReleasePropertyStore(ptr);
+  void dispose() => libassimp.aiReleasePropertyStore(ptr);
 }

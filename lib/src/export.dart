@@ -80,7 +80,7 @@ class ExportFormat extends AssimpType<aiExportFormatDesc> {
   /// Release a description of the nth export file format. Must be returned by
   /// aiGetExportFormatDescription
   /// @param desc Pointer to the description
-  void dispose() => aiReleaseExportFormatDescription(ptr);
+  void dispose() => libassimp.aiReleaseExportFormatDescription(ptr);
 }
 
 /// Describes a blob of exported scene data. Use #aiExportSceneToBlob() to create a blob containing an
@@ -122,7 +122,7 @@ class ExportData extends AssimpType<aiExportDataBlob> {
   /// Releases the memory associated with the given exported data. Use this function to free a data blob
   /// returned by aiExportScene().
   /// @param pData the data blob returned by #aiExportSceneToBlob
-  void dispose() => aiReleaseExportBlob(ptr);
+  void dispose() => libassimp.aiReleaseExportBlob(ptr);
 }
 
 extension SceneExport on Scene {
@@ -167,7 +167,7 @@ extension SceneExport on Scene {
     final cpath = Utf8.toUtf8(path);
     final cformat = Utf8.toUtf8(format);
     // ### TODO: add custom io support
-    final res = aiExportSceneEx(ptr, cformat, cpath, nullptr, flags);
+    final res = libassimp.aiExportSceneEx(ptr, cformat, cpath, nullptr, flags);
     free(cpath);
     free(cformat);
     return res == 0;
@@ -183,7 +183,7 @@ extension SceneExport on Scene {
   /// @return the exported data or NULL in case of error
   ExportData exportData({@required String format, int flags = 0}) {
     final cformat = Utf8.toUtf8(format);
-    final data = aiExportSceneToBlob(ptr, cformat, flags);
+    final data = libassimp.aiExportSceneToBlob(ptr, cformat, flags);
     free(cformat);
     return ExportData.fromNative(data);
   }

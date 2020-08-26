@@ -59,33 +59,33 @@ class Assimp {
   /// didn't read correctly.
   /// @param d AI_TRUE or AI_FALSE, your decision.
   static void enableVerboseLogging(bool enable) =>
-      aiEnableVerboseLogging(enable ? 1 : 0);
+      libassimp.aiEnableVerboseLogging(enable ? 1 : 0);
 
   /// Returns the error text of the last failed import process.
   ///
   /// @return A textual description of the error that occurred at the last
   /// import process. NULL if there was no error. There can't be an error if you
   /// got a non-NULL #aiScene from #aiImportFile/#aiImportFileEx/#aiApplyPostProcessing.
-  static String get errorString => Utf8.fromUtf8(aiGetErrorString());
+  static String get errorString => Utf8.fromUtf8(libassimp.aiGetErrorString());
 
   /// Returns a string with legal copyright and licensing information
   /// about Assimp. The string may include multiple lines.
-  static String get legalString => Utf8.fromUtf8(aiGetLegalString());
+  static String get legalString => Utf8.fromUtf8(libassimp.aiGetLegalString());
 
   /// Returns the current major version number of Assimp.
-  static int get versionMajor => aiGetVersionMajor();
+  static int get versionMajor => libassimp.aiGetVersionMajor();
 
   /// eturns the current minor version number of Assimp.
-  static int get versionMinor => aiGetVersionMinor();
+  static int get versionMinor => libassimp.aiGetVersionMinor();
 
   /// Returns the repository revision of the Assimp runtime.
-  static int get versionRevision => aiGetVersionRevision();
+  static int get versionRevision => libassimp.aiGetVersionRevision();
 
   /// Returns assimp's compile flags
-  static int get compileFlags => aiGetCompileFlags();
+  static int get compileFlags => libassimp.aiGetCompileFlags();
 
   /// Returns the branchname of the Assimp runtime.
-  static String get branchName => Utf8.fromUtf8(aiGetBranchName());
+  static String get branchName => Utf8.fromUtf8(libassimp.aiGetBranchName());
 
   /// Returns whether a given file extension is supported by ASSIMP
   ///
@@ -94,7 +94,7 @@ class Assimp {
   /// @return AI_TRUE if the file extension is supported.
   static bool isSupported(String extension) {
     final ptr = Utf8.toUtf8(extension);
-    final res = aiIsExtensionSupported(ptr);
+    final res = libassimp.aiIsExtensionSupported(ptr);
     free(ptr);
     return res != 0;
   }
@@ -107,7 +107,7 @@ class Assimp {
   /// Format of the list: "*.3ds;*.obj;*.dae". NULL is not a valid parameter.
   static Iterable<String> get extensions {
     final ptr = aiString.alloc();
-    aiGetExtensionList(ptr);
+    libassimp.aiGetExtensionList(ptr);
     final ext = AssimpString.fromNative(ptr);
     free(ptr);
     return ext.split(';');
@@ -116,16 +116,16 @@ class Assimp {
   /// Import file format descriptions
   static Iterable<ImportFormat> get importFormats {
     return Iterable.generate(
-      aiGetImportFormatCount(),
-      (i) => ImportFormat.fromNative(aiGetImportFormatDescription(i)),
+      libassimp.aiGetImportFormatCount(),
+      (i) => ImportFormat.fromNative(libassimp.aiGetImportFormatDescription(i)),
     );
   }
 
   /// Export file format descriptions
   static Iterable<ExportFormat> get exportFormats {
     return Iterable.generate(
-      aiGetExportFormatCount(),
-      (i) => ExportFormat.fromNative(aiGetExportFormatDescription(i)),
+      libassimp.aiGetExportFormatCount(),
+      (i) => ExportFormat.fromNative(libassimp.aiGetExportFormatDescription(i)),
     );
   }
 }
