@@ -3,9 +3,9 @@ version: 0.0.6+1
 description: >-
   Open Asset Import Library aka Assimp for Dart. Assimp can import
   various well-known 3D model formats in a uniform manner.
-homepage: https://github.com/jpnurmi/dart_assimp
-repository: https://github.com/jpnurmi/dart_assimp
-issue_tracker: https://github.com/jpnurmi/dart_assimp/issues
+homepage: https://github.com/jpnurmi/assimp.dart
+repository: https://github.com/jpnurmi/assimp.dart
+issue_tracker: https://github.com/jpnurmi/assimp.dart/issues
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
