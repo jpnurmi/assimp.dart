@@ -44,7 +44,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:meta/meta.dart';
 
 import 'bindings.dart';
 import 'extensions.dart';
@@ -813,7 +812,15 @@ const String AI_CONFIG_EXPORT_POINT_CLOUDS = 'EXPORT_POINT_CLOUDS';
 /// @brief  Specifies a gobal key factor for scale, float value
 const String AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY = 'GLOBAL_SCALE_FACTOR';
 
-@visibleForTesting
+/// Represents an opaque set of settings to be used during importing.
+///
+/// @see aiCreatePropertyStore
+/// @see aiReleasePropertyStore
+/// @see aiImportFileExWithProperties
+/// @see aiSetPropertyInteger
+/// @see aiSetPropertyFloat
+/// @see aiSetPropertyString
+/// @see aiSetPropertyMatrix
 class PropertyStore extends AssimpType<aiPropertyStore> {
   PropertyStore._(Pointer<aiPropertyStore> ptr) : super(ptr);
 
