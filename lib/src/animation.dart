@@ -53,7 +53,7 @@ class VectorKey extends AssimpType<aiVectorKey> {
   aiVectorKey get _vectorKey => ptr.ref;
 
   VectorKey._(Pointer<aiVectorKey> ptr) : super(ptr);
-  factory VectorKey.fromNative(Pointer<aiVectorKey> ptr) {
+  static VectorKey? fromNative(Pointer<aiVectorKey> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return VectorKey._(ptr);
   }
@@ -66,7 +66,7 @@ class QuaternionKey extends AssimpType<aiQuatKey> {
   aiQuatKey get _quatKey => ptr.ref;
 
   QuaternionKey._(Pointer<aiQuatKey> ptr) : super(ptr);
-  factory QuaternionKey.fromNative(Pointer<aiQuatKey> ptr) {
+  static QuaternionKey? fromNative(Pointer<aiQuatKey> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return QuaternionKey._(ptr);
   }
@@ -79,7 +79,7 @@ class MeshKey extends AssimpType<aiMeshKey> {
   aiMeshKey get _meshKey => ptr.ref;
 
   MeshKey._(Pointer<aiMeshKey> ptr) : super(ptr);
-  factory MeshKey.fromNative(Pointer<aiMeshKey> ptr) {
+  static MeshKey? fromNative(Pointer<aiMeshKey> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MeshKey._(ptr);
   }
@@ -92,7 +92,7 @@ class MeshMorphKey extends AssimpType<aiMeshMorphKey> {
   aiMeshMorphKey get _meshMorphKey => ptr.ref;
 
   MeshMorphKey._(Pointer<aiMeshMorphKey> ptr) : super(ptr);
-  factory MeshMorphKey.fromNative(Pointer<aiMeshMorphKey> ptr) {
+  static MeshMorphKey? fromNative(Pointer<aiMeshMorphKey> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MeshMorphKey._(ptr);
   }
@@ -108,7 +108,7 @@ class NodeAnim extends AssimpType<aiNodeAnim> {
   aiNodeAnim get _nodeAnim => ptr.ref;
 
   NodeAnim._(Pointer<aiNodeAnim> ptr) : super(ptr);
-  factory NodeAnim.fromNative(Pointer<aiNodeAnim> ptr) {
+  static NodeAnim? fromNative(Pointer<aiNodeAnim> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return NodeAnim._(ptr);
   }
@@ -118,21 +118,21 @@ class NodeAnim extends AssimpType<aiNodeAnim> {
   Iterable<VectorKey> get positionKeys {
     return Iterable.generate(
       _nodeAnim.mNumPositionKeys,
-      (i) => VectorKey.fromNative(_nodeAnim.mPositionKeys.elementAt(i)),
+      (i) => VectorKey.fromNative(_nodeAnim.mPositionKeys.elementAt(i))!,
     );
   }
 
   Iterable<QuaternionKey> get rotationKeys {
     return Iterable.generate(
       _nodeAnim.mNumRotationKeys,
-      (i) => QuaternionKey.fromNative(_nodeAnim.mRotationKeys.elementAt(i)),
+      (i) => QuaternionKey.fromNative(_nodeAnim.mRotationKeys.elementAt(i))!,
     );
   }
 
   Iterable<VectorKey> get scalingKeys {
     return Iterable.generate(
       _nodeAnim.mNumScalingKeys,
-      (i) => VectorKey.fromNative(_nodeAnim.mScalingKeys.elementAt(i)),
+      (i) => VectorKey.fromNative(_nodeAnim.mScalingKeys.elementAt(i))!,
     );
   }
 
@@ -144,7 +144,7 @@ class MeshAnim extends AssimpType<aiMeshAnim> {
   aiMeshAnim get _meshAnim => ptr.ref;
 
   MeshAnim._(Pointer<aiMeshAnim> ptr) : super(ptr);
-  factory MeshAnim.fromNative(Pointer<aiMeshAnim> ptr) {
+  static MeshAnim? fromNative(Pointer<aiMeshAnim> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MeshAnim._(ptr);
   }
@@ -154,7 +154,7 @@ class MeshAnim extends AssimpType<aiMeshAnim> {
   Iterable<MeshKey> get keys {
     return Iterable.generate(
       _meshAnim.mNumKeys,
-      (i) => MeshKey.fromNative(_meshAnim.mKeys.elementAt(i)),
+      (i) => MeshKey.fromNative(_meshAnim.mKeys.elementAt(i))!,
     );
   }
 }
@@ -163,7 +163,7 @@ class MeshMorphAnim extends AssimpType<aiMeshMorphAnim> {
   aiMeshMorphAnim get _meshMorphAnim => ptr.ref;
 
   MeshMorphAnim._(Pointer<aiMeshMorphAnim> ptr) : super(ptr);
-  factory MeshMorphAnim.fromNative(Pointer<aiMeshMorphAnim> ptr) {
+  static MeshMorphAnim? fromNative(Pointer<aiMeshMorphAnim> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MeshMorphAnim._(ptr);
   }
@@ -173,7 +173,7 @@ class MeshMorphAnim extends AssimpType<aiMeshMorphAnim> {
   Iterable<MeshMorphKey> get keys {
     return Iterable.generate(
       _meshMorphAnim.mNumKeys,
-      (i) => MeshMorphKey.fromNative(_meshMorphAnim.mKeys.elementAt(i)),
+      (i) => MeshMorphKey.fromNative(_meshMorphAnim.mKeys.elementAt(i))!,
     );
   }
 }
@@ -182,7 +182,7 @@ class Animation extends AssimpType<aiAnimation> {
   aiAnimation get _animation => ptr.ref;
 
   Animation._(Pointer<aiAnimation> ptr) : super(ptr);
-  factory Animation.fromNative(Pointer<aiAnimation> ptr) {
+  static Animation? fromNative(Pointer<aiAnimation> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Animation._(ptr);
   }
@@ -194,21 +194,21 @@ class Animation extends AssimpType<aiAnimation> {
   Iterable<NodeAnim> get channels {
     return Iterable.generate(
       _animation.mNumChannels,
-      (i) => NodeAnim.fromNative(_animation.mChannels[i]),
+      (i) => NodeAnim.fromNative(_animation.mChannels[i])!,
     );
   }
 
   Iterable<MeshAnim> get meshChannels {
     return Iterable.generate(
       _animation.mNumMeshChannels,
-      (i) => MeshAnim.fromNative(_animation.mMeshChannels[i]),
+      (i) => MeshAnim.fromNative(_animation.mMeshChannels[i])!,
     );
   }
 
   Iterable<MeshMorphAnim> get meshMorphChannels {
     return Iterable.generate(
       _animation.mNumMorphMeshChannels,
-      (i) => MeshMorphAnim.fromNative(_animation.mMorphMeshChannels[i]),
+      (i) => MeshMorphAnim.fromNative(_animation.mMorphMeshChannels[i])!,
     );
   }
 }

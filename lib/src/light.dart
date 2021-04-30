@@ -96,7 +96,7 @@ class Light extends AssimpType<aiLight> {
   aiLight get _light => ptr.ref;
 
   Light._(Pointer<aiLight> ptr) : super(ptr);
-  factory Light.fromNative(Pointer<aiLight> ptr) {
+  static Light? fromNative(Pointer<aiLight> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Light._(ptr);
   }

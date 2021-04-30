@@ -54,7 +54,7 @@ class MetaData extends AssimpType<aiMetadata> {
   aiMetadata get _metaData => ptr.ref;
 
   MetaData._(Pointer<aiMetadata> ptr) : super(ptr);
-  factory MetaData.fromNative(Pointer<aiMetadata> ptr) {
+  static MetaData? fromNative(Pointer<aiMetadata> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MetaData._(ptr);
   }
@@ -66,7 +66,7 @@ class MetaData extends AssimpType<aiMetadata> {
   Iterable<String> get keys {
     return Iterable.generate(
       _metaData.mNumProperties,
-      (i) => AssimpString.fromNative(_metaData.mKeys.elementAt(i)),
+      (i) => AssimpString.fromNative(_metaData.mKeys.elementAt(i).ref),
     );
   }
 
@@ -92,9 +92,9 @@ class MetaData extends AssimpType<aiMetadata> {
       case aiMetadataType.AI_DOUBLE:
         return ptr.ref.mData.cast<Double>().value;
       case aiMetadataType.AI_AISTRING:
-        return AssimpString.fromNative(ptr.ref.mData.cast<aiString>());
+        return AssimpString.fromNative(ptr.ref.mData.cast<aiString>().ref);
       case aiMetadataType.AI_AIVECTOR3D:
-        return AssimpVector3.fromNative(ptr.ref.mData.cast<aiVector3D>());
+        return AssimpVector3.fromNative(ptr.ref.mData.cast<aiVector3D>().ref);
       default:
         throw UnimplementedError(ptr.ref.mType.toString());
     }

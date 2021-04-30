@@ -43,23 +43,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
+import 'package:equatable/equatable.dart';
+
 import 'extensions.dart';
 
-abstract class AssimpType<T extends NativeType> {
+abstract class AssimpType<T extends NativeType> extends Equatable {
   final Pointer<T> ptr;
 
   AssimpType(this.ptr) : assert(AssimpPointer.isNotNull(ptr));
 
   @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    AssimpType type = other;
-    return ptr == type.ptr;
-  }
-
-  @override
-  int get hashCode => ptr.hashCode;
-
-  @override
-  String toString() => '$runtimeType($ptr)';
+  List<Object?> get props => [ptr];
 }

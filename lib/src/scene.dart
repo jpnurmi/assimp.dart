@@ -118,7 +118,7 @@ class Scene extends AssimpType<aiScene> {
   Scene._(Pointer<aiScene> ptr) : super(ptr);
 
   /// @internal
-  factory Scene.fromNative(Pointer<aiScene> ptr) {
+  static Scene? fromNative(Pointer<aiScene> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Scene._(ptr);
   }
@@ -137,25 +137,25 @@ class Scene extends AssimpType<aiScene> {
   ///   a successful import. Provide a bitwise combination of the
   ///   #aiPostProcessSteps flags.
   /// @return Pointer to the imported data or NULL if the import failed.
-  factory Scene.fromFile(String path,
-      {int flags = 0, Map<String, dynamic> properties}) {
-    final cpath = Utf8.toUtf8(path);
+  static Scene? fromFile(String path,
+      {int flags = 0, Map<String, dynamic>? properties}) {
+    final cpath = path.toNativeString();
     final store = PropertyStore.fromMap(properties);
     final ptr = libassimp.aiImportFileExWithProperties(
         cpath, flags, nullptr, store?.ptr ?? nullptr);
-    free(cpath);
+    malloc.free(cpath);
     store?.dispose();
     return Scene.fromNative(ptr);
   }
 
-  factory Scene._fromBuffer(Pointer<Utf8> cstr, int length, flags,
-      Map<String, dynamic> properties, String hint) {
-    final chint = Utf8.toUtf8(hint);
+  static Scene? _fromBuffer(Pointer<Int8> cstr, int length, flags,
+      Map<String, dynamic>? properties, String hint) {
+    final chint = hint.toNativeString();
     final store = PropertyStore.fromMap(properties);
     final ptr = libassimp.aiImportFileFromMemoryWithProperties(
         cstr, length, flags, chint, store?.ptr ?? nullptr);
-    free(cstr);
-    free(chint);
+    malloc.free(cstr);
+    malloc.free(chint);
     store?.dispose();
     return Scene.fromNative(ptr);
   }
@@ -163,10 +163,10 @@ class Scene extends AssimpType<aiScene> {
   /// Reads the given file from a given string.
   ///
   /// @{macro assimp.scene.import}
-  factory Scene.fromString(String str,
-      {int flags = 0, Map<String, dynamic> properties, String hint = ''}) {
+  static Scene? fromString(String str,
+      {int flags = 0, Map<String, dynamic>? properties, String hint = ''}) {
     return Scene._fromBuffer(
-        Utf8.toUtf8(str), str.length, flags, properties, hint);
+        str.toNativeString(), str.length, flags, properties, hint);
   }
 
   /// Reads the given file from a given memory buffer.
@@ -200,16 +200,15 @@ class Scene extends AssimpType<aiScene> {
   /// a custom IOSystem to make Assimp find these files and use
   /// the regular aiImportFileEx()/aiImportFileExWithProperties() API.
   /// @{endtemplate assimp.scene.import}
-  factory Scene.fromBytes(Uint8List bytes,
-      {int flags = 0, Map<String, dynamic> properties, String hint = ''}) {
+  static Scene? fromBytes(Uint8List bytes,
+      {int flags = 0, Map<String, dynamic>? properties, String hint = ''}) {
     // ### TODO: avoid copy...
     // https://github.com/dart-lang/ffi/issues/31
     // https://github.com/dart-lang/ffi/issues/27
-    final cbuffer = allocate<Uint8>(count: bytes.length);
+    final cbuffer = malloc<Int8>(bytes.length);
     final carray = cbuffer.asTypedList(bytes.length);
     carray.setAll(0, bytes);
-    return Scene._fromBuffer(
-        cbuffer.cast(), bytes.length, flags, properties, hint);
+    return Scene._fromBuffer(cbuffer, bytes.length, flags, properties, hint);
   }
 
   /// Create a modifiable copy of a scene.
@@ -220,11 +219,11 @@ class Scene extends AssimpType<aiScene> {
   /// @param pOut Receives a modifyable copy of the scene. Use aiFreeScene() to
   /// delete it again.
   Scene copy() {
-    final out = allocate<Pointer<aiScene>>();
+    final out = malloc<Pointer<aiScene>>();
     libassimp.aiCopyScene(ptr, out);
     final scene = Scene.fromNative(out[0]);
-    free(out);
-    return scene;
+    malloc.free(out);
+    return scene!;
   }
 
   /// Any combination of the AI_SCENE_FLAGS_XXX flags. By default
@@ -239,7 +238,7 @@ class Scene extends AssimpType<aiScene> {
   /// was successful (and no special flags have been set).
   /// Presence of further nodes depends on the format and content
   /// of the imported file.
-  Node get rootNode => Node.fromNative(_scene.mRootNode);
+  Node get rootNode => Node.fromNative(_scene.mRootNode)!;
 
   /// The array of meshes.
   ///
@@ -249,7 +248,7 @@ class Scene extends AssimpType<aiScene> {
   Iterable<Mesh> get meshes {
     return Iterable.generate(
       _scene.mNumMeshes,
-      (i) => Mesh.fromNative(_scene.mMeshes[i]),
+      (i) => Mesh.fromNative(_scene.mMeshes[i])!,
     );
   }
 
@@ -261,7 +260,7 @@ class Scene extends AssimpType<aiScene> {
   Iterable<Material> get materials {
     return Iterable.generate(
       _scene.mNumMaterials,
-      (i) => Material.fromNative(_scene.mMaterials[i]),
+      (i) => Material.fromNative(_scene.mMaterials[i])!,
     );
   }
 
@@ -271,7 +270,7 @@ class Scene extends AssimpType<aiScene> {
   Iterable<Animation> get animations {
     return Iterable.generate(
       _scene.mNumAnimations,
-      (i) => Animation.fromNative(_scene.mAnimations[i]),
+      (i) => Animation.fromNative(_scene.mAnimations[i])!,
     );
   }
 
@@ -283,7 +282,7 @@ class Scene extends AssimpType<aiScene> {
   Iterable<Texture> get textures {
     return Iterable.generate(
       _scene.mNumTextures,
-      (i) => Texture.fromNative(_scene.mTextures[i]),
+      (i) => Texture.fromNative(_scene.mTextures[i])!,
     );
   }
 
@@ -293,7 +292,7 @@ class Scene extends AssimpType<aiScene> {
   Iterable<Light> get lights {
     return Iterable.generate(
       _scene.mNumLights,
-      (i) => Light.fromNative(_scene.mLights[i]),
+      (i) => Light.fromNative(_scene.mLights[i])!,
     );
   }
 
@@ -306,7 +305,7 @@ class Scene extends AssimpType<aiScene> {
   Iterable<Camera> get cameras {
     return Iterable.generate(
       _scene.mNumCameras,
-      (i) => Camera.fromNative(_scene.mCameras[i]),
+      (i) => Camera.fromNative(_scene.mCameras[i])!,
     );
   }
 
@@ -315,7 +314,7 @@ class Scene extends AssimpType<aiScene> {
   /// This data contains global metadata which belongs to the scene like
   /// unit-conversions, versions, vendors or other model-specific data. This
   /// can be used to store format-specific metadata as well.
-  MetaData get metaData => MetaData.fromNative(_scene.mMetaData);
+  MetaData? get metaData => MetaData.fromNative(_scene.mMetaData);
 
   /// Post-process a scene.
   ///

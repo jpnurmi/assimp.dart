@@ -60,7 +60,7 @@ class Node extends AssimpType<aiNode> {
   aiNode get _node => ptr.ref;
 
   Node._(Pointer<aiNode> ptr) : super(ptr);
-  factory Node.fromNative(Pointer<aiNode> ptr) {
+  static Node? fromNative(Pointer<aiNode> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Node._(ptr);
   }
@@ -90,17 +90,16 @@ class Node extends AssimpType<aiNode> {
 
   /// The transformation relative to the node's parent.
   Matrix4 get transformation => AssimpMatrix4.fromNative(_node.mTransformation);
-  set transformation(Matrix4 matrix) =>
-      _node.mTransformation.ref.toNative(matrix);
+  set transformation(Matrix4 matrix) => _node.mTransformation.toNative(matrix);
 
   /// Parent node. NULL if this node is the root node.
-  Node get parent => Node.fromNative(_node.mParent);
+  Node? get parent => Node.fromNative(_node.mParent);
 
   /// The child nodes of this node.
   Iterable<Node> get children {
     return Iterable.generate(
       _node.mNumChildren,
-      (i) => Node.fromNative(_node.mChildren[i]),
+      (i) => Node.fromNative(_node.mChildren[i])!,
     );
   }
 
@@ -112,5 +111,5 @@ class Node extends AssimpType<aiNode> {
   /// Whether any metadata is generated depends on the source file format. See the
   /// @link importer_notes @endlink page for more information on every source file
   /// format. Importers that don't document any metadata don't write any.
-  MetaData get metaData => MetaData.fromNative(_node.mMetaData);
+  MetaData? get metaData => MetaData.fromNative(_node.mMetaData);
 }
