@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(AssimpString.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiString>(), equals(1028));
   });

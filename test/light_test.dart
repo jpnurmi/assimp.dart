@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Light.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiLight>(), equals(1132));
   });
 
   test('equals', () {
-    final a = Light.fromNative(allocate<aiLight>());
-    final b = Light.fromNative(allocate<aiLight>());
+    final a = Light.fromNative(calloc<aiLight>());
+    final b = Light.fromNative(calloc<aiLight>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Light.fromNative(allocate<aiLight>()).toString(), matches(r'Light\(Pointer<aiLight>: address=0x[0-f]+\)'));
+    expect(Light.fromNative(calloc<aiLight>()).toString(), matches(r'Light\(Pointer<aiLight>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

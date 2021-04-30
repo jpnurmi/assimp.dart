@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(MetaData.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiMetadata>(), equals(24));
   });
 
   test('equals', () {
-    final a = MetaData.fromNative(allocate<aiMetadata>());
-    final b = MetaData.fromNative(allocate<aiMetadata>());
+    final a = MetaData.fromNative(calloc<aiMetadata>());
+    final b = MetaData.fromNative(calloc<aiMetadata>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(MetaData.fromNative(allocate<aiMetadata>()).toString(), matches(r'MetaData\(Pointer<aiMetadata>: address=0x[0-f]+\)'));
+    expect(MetaData.fromNative(calloc<aiMetadata>()).toString(), matches(r'MetaData\(Pointer<aiMetadata>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Texture.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiTexture>(), equals(1064));
   });
 
   test('equals', () {
-    final a = Texture.fromNative(allocate<aiTexture>());
-    final b = Texture.fromNative(allocate<aiTexture>());
+    final a = Texture.fromNative(calloc<aiTexture>());
+    final b = Texture.fromNative(calloc<aiTexture>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Texture.fromNative(allocate<aiTexture>()).toString(), matches(r'Texture\(Pointer<aiTexture>: address=0x[0-f]+\)'));
+    expect(Texture.fromNative(calloc<aiTexture>()).toString(), matches(r'Texture\(Pointer<aiTexture>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

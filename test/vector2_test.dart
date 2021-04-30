@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(AssimpVector2.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiVector2D>(), equals(8));
   });

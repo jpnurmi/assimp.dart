@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Texel.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiTexel>(), equals(4));
   });

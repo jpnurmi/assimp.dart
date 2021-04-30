@@ -62,7 +62,7 @@ void main() {
     expect(Assimp.errorString, equals('Unable to open file "foobar".'));
     expect(scene1, isNull);
 
-    Scene scene2 = Scene.fromString('foobar');
+    final scene2 = Scene.fromString('foobar');
     expect(Assimp.errorString, startsWith('No suitable reader found for'));
     expect(scene2, isNull);
   });
@@ -114,12 +114,14 @@ void main() {
   });
 
   test('copy', () {
-    Scene original = Scene.fromFile(testModelPath('spider.3mf'));
-    Scene copy = original.copy();
-    expect(copy.ptr.address, isNot(equals(original.ptr.address)));
-    expect(copy.meshes, isNotEmpty);
-    expect(copy.meshes.length, equals(original.meshes.length));
-    copy.dispose();
-    original.dispose();
+    final original = Scene.fromFile(testModelPath('spider.3mf'));
+    expect(original, isNotNull);
+    final copy = original!.copy();
+    expect(copy, isNotNull);
+    expect(copy!.ptr.address, isNot(equals(original!.ptr.address)));
+    expect(copy!.meshes, isNotEmpty);
+    expect(copy!.meshes.length, equals(original!.meshes.length));
+    copy!.dispose();
+    original!.dispose();
   });
 }

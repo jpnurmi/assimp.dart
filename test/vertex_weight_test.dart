@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(VertexWeight.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiVertexWeight>(), equals(8));
   });

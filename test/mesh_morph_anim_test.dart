@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(MeshMorphAnim.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiMeshMorphAnim>(), equals(1040));
   });

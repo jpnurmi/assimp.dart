@@ -115,7 +115,7 @@ typedef DistanceFunction<T> = num Function(T a, T b);
 ///
 /// Calling an instance of this type must either be done dynamically, or by
 /// first casting it to a [DistanceFunction<T>] for some concrete T.
-typedef AnyDistanceFunction = num Function(Null a, Null b);
+typedef AnyDistanceFunction = num Function(Never a, Never b);
 
 const Map<Type, AnyDistanceFunction> _kStandardDistanceFunctions =
     <Type, AnyDistanceFunction>{
@@ -150,9 +150,9 @@ double _doubleDistance(double a, double b) => (b - a).abs();
 ///    specializes in [Rect]s and has an optional `epsilon` parameter.
 ///  * [closeTo], which specializes in numbers only.
 Matcher within<T>({
-  @required num distance,
-  @required T from,
-  DistanceFunction<T> distanceFunction,
+  required num distance,
+  required T from,
+  DistanceFunction<T>? distanceFunction,
 }) {
   distanceFunction ??= _kStandardDistanceFunctions[T] as DistanceFunction<T>;
 
@@ -174,7 +174,7 @@ class _IsWithinDistance<T> extends Matcher {
   final num epsilon;
 
   @override
-  bool matches(Object object, Map<dynamic, dynamic> matchState) {
+  bool matches(dynamic object, Map<dynamic, dynamic> matchState) {
     if (object is! T) return false;
     if (object == value) return true;
     final T test = object as T;
@@ -195,7 +195,7 @@ class _IsWithinDistance<T> extends Matcher {
 
   @override
   Description describeMismatch(
-    Object object,
+    dynamic object,
     Description mismatchDescription,
     Map<dynamic, dynamic> matchState,
     bool verbose,
@@ -213,7 +213,7 @@ class _MoreOrLessEquals extends Matcher {
   final double epsilon;
 
   @override
-  bool matches(Object object, Map<dynamic, dynamic> matchState) {
+  bool matches(dynamic object, Map<dynamic, dynamic> matchState) {
     if (object is! double) return false;
     if (object == value) return true;
     final double test = object as double;
@@ -225,7 +225,7 @@ class _MoreOrLessEquals extends Matcher {
       description.add('$value (±$epsilon)');
 
   @override
-  Description describeMismatch(Object item, Description mismatchDescription,
+  Description describeMismatch(dynamic item, Description mismatchDescription,
       Map<dynamic, dynamic> matchState, bool verbose) {
     return super
         .describeMismatch(item, mismatchDescription, matchState, verbose)

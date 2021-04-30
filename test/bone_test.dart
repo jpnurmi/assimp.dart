@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Bone.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiBone>(), equals(1104));
   });
 
   test('equals', () {
-    final a = Bone.fromNative(allocate<aiBone>());
-    final b = Bone.fromNative(allocate<aiBone>());
+    final a = Bone.fromNative(calloc<aiBone>());
+    final b = Bone.fromNative(calloc<aiBone>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Bone.fromNative(allocate<aiBone>()).toString(), matches(r'Bone\(Pointer<aiBone>: address=0x[0-f]+\)'));
+    expect(Bone.fromNative(calloc<aiBone>()).toString(), matches(r'Bone\(Pointer<aiBone>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

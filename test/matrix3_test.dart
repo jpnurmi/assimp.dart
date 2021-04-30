@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(AssimpMatrix3.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiMatrix3x3>(), equals(36));
   });

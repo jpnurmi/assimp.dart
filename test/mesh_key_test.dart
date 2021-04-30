@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(MeshKey.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiMeshKey>(), equals(16));
   });

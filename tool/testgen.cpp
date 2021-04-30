@@ -113,13 +113,6 @@ static void writeGroup(QTextStream &out, const QString &name, std::function<void
     out << "  });\n\n";
 }
 
-static void writeNullTest(QTextStream &out, const QString &dartName)
-{
-    writeGroup(out, "null", [&]() {
-        out << QString("    expect(%1.fromNative(null), isNull);\n").arg(dartName);
-    });
-}
-
 static void writeSizeTest(QTextStream &out, const QString &nativeName, size_t size)
 {
     writeGroup(out, "size", [&]() {
@@ -130,8 +123,8 @@ static void writeSizeTest(QTextStream &out, const QString &nativeName, size_t si
 static void writeEqualityTest(QTextStream &out, const QString &nativeName, const QString &dartName)
 {
     writeGroup(out, "equals", [&]() {
-        out << QString("    final a = %1.fromNative(allocate<%2>());\n").arg(dartName).arg(nativeName)
-            << QString("    final b = %1.fromNative(allocate<%2>());\n").arg(dartName).arg(nativeName)
+        out << QString("    final a = %1.fromNative(calloc<%2>());\n").arg(dartName).arg(nativeName)
+            << QString("    final b = %1.fromNative(calloc<%2>());\n").arg(dartName).arg(nativeName)
             << QString("    expect(a, equals(a));\n")
             << QString("    expect(b, equals(b));\n")
             << QString("    expect(a, isNot(equals(b)));\n")
@@ -142,7 +135,7 @@ static void writeEqualityTest(QTextStream &out, const QString &nativeName, const
 static void writeToStringTest(QTextStream &out, const QString &nativeName, const QString &dartName)
 {
     writeGroup(out, "toString", [&]() {
-        out << QString("    expect(%1.fromNative(allocate<%2>()).toString(), matches(r'%1\\(Pointer<%2>: address=0x[0-f]+\\)'));\n").arg(dartName).arg(nativeName);
+        out << QString("    expect(%1.fromNative(calloc<%2>()).toString(), matches(r'%1\\(Pointer<%2>: address=0x[0-f]+\\)'));\n").arg(dartName).arg(nativeName);
     });
 }
 
@@ -679,8 +672,6 @@ static void generateTest(const QString &nativeName, const QString &dartName, con
 
     QTextStream out(&file);
     writeHeader(out, fileName);
-    if (!dartName.isEmpty())
-        writeNullTest(out, dartName);
     writeSizeTest(out, nativeName, sizeof(T));
     if (writer) {
         writeEqualityTest(out, nativeName, dartName);

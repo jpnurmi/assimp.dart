@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:test/test.dart';
 import 'package:path/path.dart' hide equals;
 import 'package:assimp/assimp.dart';
 
@@ -26,24 +27,27 @@ class TestFrom {
 void testSceneFromFile(String fileName, void tester(scene)) {
   final filePath = testModelPath(fileName);
   final scene = Scene.fromFile(filePath);
-  tester(scene);
-  scene.dispose();
+  expect(scene, isNotNull);
+  tester(scene!);
+  scene!.dispose();
 }
 
 void testSceneFromBytes(String fileName, void tester(scene)) {
   final filePath = testModelPath(fileName);
   final bytes = File(filePath).readAsBytesSync();
   final scene = Scene.fromBytes(bytes, hint: extension(filePath));
-  tester(scene);
-  scene.dispose();
+  expect(scene, isNotNull);
+  tester(scene!);
+  scene!.dispose();
 }
 
 void testSceneFromString(String fileName, void tester(scene)) {
   final filePath = testModelPath(fileName);
   final str = File(filePath).readAsStringSync();
   final scene = Scene.fromString(str, hint: extension(filePath));
-  tester(scene);
-  scene.dispose();
+  expect(scene, isNotNull);
+  tester(scene!);
+  scene!.dispose();
 }
 
 void testScene(String fileName, void tester(scene),
