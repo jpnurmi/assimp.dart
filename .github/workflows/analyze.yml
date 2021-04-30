@@ -12,7 +12,13 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
-      - name: Analyze package
-        uses: axel-op/dart-package-analyzer@stable
+      # - name: Analyze package
+      #   uses: axel-op/dart-package-analyzer@v3
+      #   with:
+      #     githubToken: ${{secrets.GITHUB_TOKEN}}
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
         with:
-          githubToken: ${{secrets.GITHUB_TOKEN}}
+          sdk: dev
+      - name: Analyze package
+        run: dart analyze

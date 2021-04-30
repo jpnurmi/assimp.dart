@@ -15,7 +15,9 @@ jobs:
     continue-on-error: true
     steps:
     - name: Install Dart
-      uses: DanTup/gh-actions/setup-dart@master
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: dev
     - name: Install Assimp on Ubuntu
       if: matrix.os == 'ubuntu-18.04' || matrix.os == 'ubuntu-20.04'
       run: sudo apt update && sudo apt install -y libassimp-dev
@@ -37,22 +39,22 @@ jobs:
       with:
         submodules: true
     - name: Get dependencies
-      run: pub get
+      run: dart pub get
     - name: Set environment on macOS
       if: matrix.os == 'macos-latest'
-      uses: allenevans/set-env@v1.0.0
+      uses: allenevans/set-env@v2.0.0
       with:
         DYLD_LIBRARY_PATH: '/usr/local/opt/assimp/lib'
         ASSIMP_LIBRARY_PATH: '/usr/local/opt/assimp/lib/libassimp.5.dylib'
     - name: Set environment on Windows
       if: matrix.os == 'windows-latest'
-      uses: allenevans/set-env@v1.0.0
+      uses: allenevans/set-env@v2.0.0
       with:
         ASSIMP_LIBRARY_PATH: '${{github.workspace}}/vcpkg/installed/x64-windows/bin/assimp/assimp-vc142-mt.dll'
     - name: Run tests
-      run: pub run test
+      run: dart test
     - name: Measure coverage
-      run: pub run test_coverage
+      run: dart run test_cov
     - name: Upload coverage
       if: matrix.os == 'ubuntu-20.04'
       uses: codecov/codecov-action@v1
