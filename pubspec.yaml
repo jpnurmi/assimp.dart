@@ -8,7 +8,7 @@ repository: https://github.com/jpnurmi/assimp.dart
 issue_tracker: https://github.com/jpnurmi/assimp.dart/issues
 
 environment:
-  sdk: '>=2.13.0-73.0.dev <3.0.0'
+  sdk: '>=2.14.0-0 <3.0.0'
 
 dependencies:
   dylib: ^0.3.2+1

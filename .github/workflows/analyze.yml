@@ -10,8 +10,8 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v2
+      # - name: Git checkout
+      #   uses: actions/checkout@v2
       # - name: Analyze package
       #   uses: axel-op/dart-package-analyzer@v3
       #   with:
