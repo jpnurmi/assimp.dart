@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(AssimpColor3.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiColor3D>(), equals(12));
   });

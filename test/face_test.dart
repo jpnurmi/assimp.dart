@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Face.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiFace>(), equals(16));
   });
 
   test('equals', () {
-    final a = Face.fromNative(allocate<aiFace>());
-    final b = Face.fromNative(allocate<aiFace>());
+    final a = Face.fromNative(calloc<aiFace>());
+    final b = Face.fromNative(calloc<aiFace>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Face.fromNative(allocate<aiFace>()).toString(), matches(r'Face\(Pointer<aiFace>: address=0x[0-f]+\)'));
+    expect(Face.fromNative(calloc<aiFace>()).toString(), matches(r'Face\(Pointer<aiFace>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

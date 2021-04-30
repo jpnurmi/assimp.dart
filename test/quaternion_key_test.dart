@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(QuaternionKey.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiQuatKey>(), equals(24));
   });

@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Node.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiNode>(), equals(1144));
   });
 
   test('equals', () {
-    final a = Node.fromNative(allocate<aiNode>());
-    final b = Node.fromNative(allocate<aiNode>());
+    final a = Node.fromNative(calloc<aiNode>());
+    final b = Node.fromNative(calloc<aiNode>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Node.fromNative(allocate<aiNode>()).toString(), matches(r'Node\(Pointer<aiNode>: address=0x[0-f]+\)'));
+    expect(Node.fromNative(calloc<aiNode>()).toString(), matches(r'Node\(Pointer<aiNode>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

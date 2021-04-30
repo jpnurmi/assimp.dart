@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Scene.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiScene>(), equals(128));
   });
 
   test('equals', () {
-    final a = Scene.fromNative(allocate<aiScene>());
-    final b = Scene.fromNative(allocate<aiScene>());
+    final a = Scene.fromNative(calloc<aiScene>());
+    final b = Scene.fromNative(calloc<aiScene>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Scene.fromNative(allocate<aiScene>()).toString(), matches(r'Scene\(Pointer<aiScene>: address=0x[0-f]+\)'));
+    expect(Scene.fromNative(calloc<aiScene>()).toString(), matches(r'Scene\(Pointer<aiScene>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

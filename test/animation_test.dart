@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Animation.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiAnimation>(), equals(1096));
   });
 
   test('equals', () {
-    final a = Animation.fromNative(allocate<aiAnimation>());
-    final b = Animation.fromNative(allocate<aiAnimation>());
+    final a = Animation.fromNative(calloc<aiAnimation>());
+    final b = Animation.fromNative(calloc<aiAnimation>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Animation.fromNative(allocate<aiAnimation>()).toString(), matches(r'Animation\(Pointer<aiAnimation>: address=0x[0-f]+\)'));
+    expect(Animation.fromNative(calloc<aiAnimation>()).toString(), matches(r'Animation\(Pointer<aiAnimation>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

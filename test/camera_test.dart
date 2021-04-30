@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Camera.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiCamera>(), equals(1080));
   });
 
   test('equals', () {
-    final a = Camera.fromNative(allocate<aiCamera>());
-    final b = Camera.fromNative(allocate<aiCamera>());
+    final a = Camera.fromNative(calloc<aiCamera>());
+    final b = Camera.fromNative(calloc<aiCamera>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Camera.fromNative(allocate<aiCamera>()).toString(), matches(r'Camera\(Pointer<aiCamera>: address=0x[0-f]+\)'));
+    expect(Camera.fromNative(calloc<aiCamera>()).toString(), matches(r'Camera\(Pointer<aiCamera>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

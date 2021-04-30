@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(Material.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiMaterial>(), equals(16));
   });
 
   test('equals', () {
-    final a = Material.fromNative(allocate<aiMaterial>());
-    final b = Material.fromNative(allocate<aiMaterial>());
+    final a = Material.fromNative(calloc<aiMaterial>());
+    final b = Material.fromNative(calloc<aiMaterial>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(Material.fromNative(allocate<aiMaterial>()).toString(), matches(r'Material\(Pointer<aiMaterial>: address=0x[0-f]+\)'));
+    expect(Material.fromNative(calloc<aiMaterial>()).toString(), matches(r'Material\(Pointer<aiMaterial>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {

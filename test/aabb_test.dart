@@ -11,10 +11,6 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(AssimpAabb3.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiAABB>(), equals(24));
   });

@@ -11,17 +11,13 @@ import 'test_utils.dart';
 void main() {
   prepareTest();
 
-  test('null', () {
-    expect(MemoryInfo.fromNative(null), isNull);
-  });
-
   test('size', () {
     expect(sizeOf<aiMemoryInfo>(), equals(32));
   });
 
   test('equals', () {
-    final a = MemoryInfo.fromNative(allocate<aiMemoryInfo>());
-    final b = MemoryInfo.fromNative(allocate<aiMemoryInfo>());
+    final a = MemoryInfo.fromNative(calloc<aiMemoryInfo>());
+    final b = MemoryInfo.fromNative(calloc<aiMemoryInfo>());
     expect(a, equals(a));
     expect(b, equals(b));
     expect(a, isNot(equals(b)));
@@ -29,7 +25,7 @@ void main() {
   });
 
   test('toString', () {
-    expect(MemoryInfo.fromNative(allocate<aiMemoryInfo>()).toString(), matches(r'MemoryInfo\(Pointer<aiMemoryInfo>: address=0x[0-f]+\)'));
+    expect(MemoryInfo.fromNative(calloc<aiMemoryInfo>()).toString(), matches(r'MemoryInfo\(Pointer<aiMemoryInfo>: address=0x[0-f]+\)'));
   });
 
   test('3mf', () {
