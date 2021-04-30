@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:path/path.dart' hide equals;
+import 'package:path/path.dart' as p;
 import 'package:equatable/equatable.dart';
 import 'package:assimp/assimp.dart';
 
@@ -38,7 +38,7 @@ void testSceneFromFile(String fileName, void tester(scene)) {
 void testSceneFromBytes(String fileName, void tester(scene)) {
   final filePath = testModelPath(fileName);
   final bytes = File(filePath).readAsBytesSync();
-  final scene = Scene.fromBytes(bytes, hint: extension(filePath));
+  final scene = Scene.fromBytes(bytes, hint: p.extension(filePath));
   expect(scene, isNotNull);
   tester(scene!);
   scene!.dispose();
@@ -47,7 +47,7 @@ void testSceneFromBytes(String fileName, void tester(scene)) {
 void testSceneFromString(String fileName, void tester(scene)) {
   final filePath = testModelPath(fileName);
   final str = File(filePath).readAsStringSync();
-  final scene = Scene.fromString(str, hint: extension(filePath));
+  final scene = Scene.fromString(str, hint: p.extension(filePath));
   expect(scene, isNotNull);
   tester(scene!);
   scene!.dispose();

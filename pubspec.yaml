@@ -20,5 +20,6 @@ dependencies:
 
 dev_dependencies:
   ffigen: ^2.4.1
+  path: ^1.8.0
   test: ^1.17.3
   test_cov: ^1.0.1
