@@ -54,6 +54,7 @@ jobs:
     - name: Run tests
       run: dart test
     - name: Measure coverage
+      if: matrix.os == 'ubuntu-20.04'
       run: dart run test_cov
     - name: Upload coverage
       if: matrix.os == 'ubuntu-20.04'
