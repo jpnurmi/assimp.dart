@@ -1,3 +1,8 @@
+## [0.1.0-dev.0] - 2021-04-30
+
+* Migrate to null-safety
+* Use new inline arrays in Dart SDK dev-channel
+
 ## [0.0.6+1] - 2020-08-23
 
 * Reformat scene.dart to address pub score
