@@ -73,7 +73,7 @@ class Face extends AssimpType<aiFace> {
   aiFace get _face => ptr.ref;
 
   Face._(Pointer<aiFace> ptr) : super(ptr);
-  factory Face.fromNative(Pointer<aiFace> ptr) {
+  static Face? fromNative(Pointer<aiFace> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Face._(ptr);
   }
@@ -90,7 +90,7 @@ class VertexWeight extends AssimpType<aiVertexWeight> {
   aiVertexWeight get _vertexWeight => ptr.ref;
 
   VertexWeight._(Pointer<aiVertexWeight> ptr) : super(ptr);
-  factory VertexWeight.fromNative(Pointer<aiVertexWeight> ptr) {
+  static VertexWeight? fromNative(Pointer<aiVertexWeight> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return VertexWeight._(ptr);
   }
@@ -113,7 +113,7 @@ class Bone extends AssimpType<aiBone> {
   aiBone get _bone => ptr.ref;
 
   Bone._(Pointer<aiBone> ptr) : super(ptr);
-  factory Bone.fromNative(Pointer<aiBone> ptr) {
+  static Bone? fromNative(Pointer<aiBone> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Bone._(ptr);
   }
@@ -125,7 +125,7 @@ class Bone extends AssimpType<aiBone> {
   Iterable<VertexWeight> get weights {
     return Iterable.generate(
       _bone.mNumWeights,
-      (i) => VertexWeight.fromNative(_bone.mWeights.elementAt(i)),
+      (i) => VertexWeight.fromNative(_bone.mWeights.elementAt(i))!,
     );
   }
 
@@ -195,7 +195,7 @@ class Mesh extends AssimpType<aiMesh> {
   aiMesh get _mesh => ptr.ref;
 
   Mesh._(Pointer<aiMesh> ptr) : super(ptr);
-  factory Mesh.fromNative(Pointer<aiMesh> ptr) {
+  static Mesh? fromNative(Pointer<aiMesh> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Mesh._(ptr);
   }
@@ -211,7 +211,7 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<Vector3> get vertices {
     return Iterable.generate(
       _mesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_mesh.mVertices.elementAt(i)),
+      (i) => AssimpVector3.fromNative(_mesh.mVertices.elementAt(i).ref),
     );
   }
 
@@ -240,11 +240,11 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<Vector3> get normals {
     return Iterable.generate(
       AssimpPointer.isNotNull(_mesh.mNormals) ? _mesh.mNumVertices : 0,
-      (i) => AssimpVector3.fromNative(_mesh.mNormals.elementAt(i)),
+      (i) => AssimpVector3.fromNative(_mesh.mNormals.elementAt(i).ref),
     );
   }
 
-  Float32List get normalData => AssimpPointer.isNotNull(_mesh.mNormals)
+  Float32List? get normalData => AssimpPointer.isNotNull(_mesh.mNormals)
       ? _mesh.mNormals.cast<Float>().asTypedList(_mesh.mNumVertices * 3)
       : null;
 
@@ -262,11 +262,11 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<Vector3> get tangents {
     return Iterable.generate(
       AssimpPointer.isNotNull(_mesh.mTangents) ? _mesh.mNumVertices : 0,
-      (i) => AssimpVector3.fromNative(_mesh.mTangents.elementAt(i)),
+      (i) => AssimpVector3.fromNative(_mesh.mTangents.elementAt(i).ref),
     );
   }
 
-  Float32List get tangentData => AssimpPointer.isNotNull(_mesh.mTangents)
+  Float32List? get tangentData => AssimpPointer.isNotNull(_mesh.mTangents)
       ? _mesh.mTangents.cast<Float>().asTypedList(_mesh.mNumVertices * 3)
       : null;
 
@@ -279,11 +279,11 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<Vector3> get bitangents {
     return Iterable.generate(
       AssimpPointer.isNotNull(_mesh.mBitangents) ? _mesh.mNumVertices : 0,
-      (i) => AssimpVector3.fromNative(_mesh.mBitangents.elementAt(i)),
+      (i) => AssimpVector3.fromNative(_mesh.mBitangents.elementAt(i).ref),
     );
   }
 
-  Float32List get bitangentData => AssimpPointer.isNotNull(_mesh.mBitangents)
+  Float32List? get bitangentData => AssimpPointer.isNotNull(_mesh.mBitangents)
       ? _mesh.mBitangents.cast<Float>().asTypedList(_mesh.mNumVertices * 3)
       : null;
 
@@ -294,7 +294,6 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<Iterable<Vector4>> get colors {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
-        _mesh.mColors != null &&
         AssimpPointer.isNotNull(_mesh.mColors[n])) {
       ++n;
     }
@@ -302,7 +301,7 @@ class Mesh extends AssimpType<aiMesh> {
       n,
       (i) => Iterable.generate(
         _mesh.mNumVertices,
-        (j) => AssimpColor4.fromNative(_mesh.mColors[i].elementAt(j)),
+        (j) => AssimpColor4.fromNative(_mesh.mColors[i].elementAt(j).ref),
       ),
     );
   }
@@ -313,7 +312,6 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        _mesh.mTextureCoords != null &&
         AssimpPointer.isNotNull(_mesh.mTextureCoords[n])) {
       ++n;
     }
@@ -321,7 +319,8 @@ class Mesh extends AssimpType<aiMesh> {
       n,
       (i) => Iterable.generate(
         _mesh.mNumVertices,
-        (j) => AssimpVector3.fromNative(_mesh.mTextureCoords[i].elementAt(j)),
+        (j) =>
+            AssimpVector3.fromNative(_mesh.mTextureCoords[i].elementAt(j).ref),
       ),
     );
   }
@@ -334,12 +333,11 @@ class Mesh extends AssimpType<aiMesh> {
   /// @note 4D coords are not supported
   Iterable<int> get uvComponents {
     var n = 0;
-    while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        _mesh.mNumUVComponents != null &&
-        _mesh.mNumUVComponents.elementAt(n).value > 0) {
+    while (
+        n < AI_MAX_NUMBER_OF_TEXTURECOORDS && _mesh.mNumUVComponents[n] > 0) {
       ++n;
     }
-    return n > 0 ? _mesh.mNumUVComponents.asTypedList(n) : [];
+    return List.generate(n, (i) => _mesh.mNumUVComponents[i]);
   }
 
   /// The faces the mesh is constructed from.
@@ -350,7 +348,7 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<Face> get faces {
     return Iterable.generate(
       _mesh.mNumFaces,
-      (i) => Face.fromNative(_mesh.mFaces.elementAt(i)),
+      (i) => Face.fromNative(_mesh.mFaces.elementAt(i))!,
     );
   }
 
@@ -360,7 +358,7 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<Bone> get bones {
     return Iterable.generate(
       _mesh.mNumBones,
-      (i) => Bone.fromNative(_mesh.mBones[i]),
+      (i) => Bone.fromNative(_mesh.mBones[i])!,
     );
   }
 
@@ -389,7 +387,7 @@ class Mesh extends AssimpType<aiMesh> {
   Iterable<AnimMesh> get animMeshes {
     return Iterable.generate(
       _mesh.mNumAnimMeshes,
-      (i) => AnimMesh.fromNative(_mesh.mAnimMeshes[i]),
+      (i) => AnimMesh.fromNative(_mesh.mAnimMeshes[i])!,
     );
   }
 

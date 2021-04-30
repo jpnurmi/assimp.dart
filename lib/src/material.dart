@@ -72,7 +72,7 @@ class MaterialProperty extends AssimpType<aiMaterialProperty> {
   aiMaterialProperty get _property => ptr.ref;
 
   MaterialProperty._(Pointer<aiMaterialProperty> ptr) : super(ptr);
-  factory MaterialProperty.fromNative(Pointer<aiMaterialProperty> ptr) {
+  static MaterialProperty? fromNative(Pointer<aiMaterialProperty> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MaterialProperty._(ptr);
   }
@@ -89,7 +89,7 @@ class MaterialProperty extends AssimpType<aiMaterialProperty> {
       case aiPropertyTypeInfo.aiPTI_Double:
         return _property.mData.cast<Double>().value;
       case aiPropertyTypeInfo.aiPTI_String:
-        return AssimpString.fromNative(_property.mData.cast<aiString>());
+        return AssimpString.fromNative(_property.mData.cast<aiString>().ref);
       case aiPropertyTypeInfo.aiPTI_Integer:
         return _property.mData.cast<Uint32>().value;
       case aiPropertyTypeInfo.aiPTI_Buffer:
@@ -120,7 +120,7 @@ class Material extends AssimpType<aiMaterial> {
   aiMaterial get _material => ptr.ref;
 
   Material._(Pointer<aiMaterial> ptr) : super(ptr);
-  factory Material.fromNative(Pointer<aiMaterial> ptr) {
+  static Material? fromNative(Pointer<aiMaterial> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Material._(ptr);
   }
@@ -129,7 +129,7 @@ class Material extends AssimpType<aiMaterial> {
   Iterable<MaterialProperty> get properties {
     return Iterable.generate(
       _material.mNumProperties,
-      (i) => MaterialProperty.fromNative(_material.mProperties[i]),
+      (i) => MaterialProperty.fromNative(_material.mProperties[i])!,
     );
   }
 
@@ -138,11 +138,11 @@ class Material extends AssimpType<aiMaterial> {
     return Iterable.generate(
       libassimp.aiGetMaterialTextureCount(ptr, type.index),
       (i) {
-        final str = aiString.alloc();
+        final str = calloc<aiString>();
         libassimp.aiGetMaterialTexture(ptr, type.index, i, str, nullptr,
             nullptr, nullptr, nullptr, nullptr, nullptr);
-        final path = AssimpString.fromNative(str);
-        free(str);
+        final path = AssimpString.fromNative(str.ref);
+        calloc.free(str);
         return path;
       },
     );

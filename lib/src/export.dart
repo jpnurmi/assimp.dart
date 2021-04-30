@@ -45,7 +45,6 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
-import 'package:meta/meta.dart';
 
 import 'bindings.dart';
 import 'extensions.dart';
@@ -60,7 +59,7 @@ class ExportFormat extends AssimpType<aiExportFormatDesc> {
   aiExportFormatDesc get _desc => ptr.ref;
 
   ExportFormat._(Pointer<aiExportFormatDesc> ptr) : super(ptr);
-  factory ExportFormat.fromNative(Pointer<aiExportFormatDesc> ptr) {
+  static ExportFormat? fromNative(Pointer<aiExportFormatDesc> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return ExportFormat._(ptr);
   }
@@ -68,14 +67,14 @@ class ExportFormat extends AssimpType<aiExportFormatDesc> {
   /// a short string ID to uniquely identify the export format. Use this ID string to
   /// specify which file format you want to export to when calling #aiExportScene().
   /// Example: "dae" or "obj"
-  String get id => Utf8.fromUtf8(_desc.id);
+  String get id => _desc.id.toDartString();
 
   /// A short description of the file format to present to users. Useful if you want
   /// to allow the user to select an export format.
-  String get description => Utf8.fromUtf8(_desc.description);
+  String get description => _desc.description.toDartString();
 
   /// Recommended file extension for the exported file in lower case.
-  String get extension => Utf8.fromUtf8(_desc.fileExtension);
+  String get extension => _desc.fileExtension.toDartString();
 
   /// Release a description of the nth export file format. Must be returned by
   /// aiGetExportFormatDescription
@@ -95,7 +94,7 @@ class ExportData extends AssimpType<aiExportDataBlob> {
   aiExportDataBlob get _data => ptr.ref;
 
   ExportData._(Pointer<aiExportDataBlob> ptr) : super(ptr);
-  factory ExportData.fromNative(Pointer<aiExportDataBlob> ptr) {
+  static ExportData? fromNative(Pointer<aiExportDataBlob> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return ExportData._(ptr);
   }
@@ -114,10 +113,10 @@ class ExportData extends AssimpType<aiExportDataBlob> {
   /// If used, blob names usually contain the file
   /// extension that should be used when writing
   /// the data to disc.
-  String get name => AssimpString.fromNative(_data.mName);
+  String get name => AssimpString.fromNative(_data.name);
 
   /// Pointer to the next blob in the chain or NULL if there is none.
-  ExportData get next => ExportData.fromNative(_data.next);
+  ExportData? get next => ExportData.fromNative(_data.next);
 
   /// Releases the memory associated with the given exported data. Use this function to free a data blob
   /// returned by aiExportScene().
@@ -163,13 +162,13 @@ extension SceneExport on Scene {
   /// @return a status code indicating the result of the export
   /// @note Use aiCopyScene() to get a modifiable copy of a previously
   ///   imported scene.
-  bool exportFile(String path, {@required String format, int flags = 0}) {
-    final cpath = Utf8.toUtf8(path);
-    final cformat = Utf8.toUtf8(format);
+  bool exportFile(String path, {required String format, int flags = 0}) {
+    final cpath = path.toNativeString();
+    final cformat = format.toNativeString();
     // ### TODO: add custom io support
     final res = libassimp.aiExportSceneEx(ptr, cformat, cpath, nullptr, flags);
-    free(cpath);
-    free(cformat);
+    malloc.free(cpath);
+    malloc.free(cformat);
     return res == 0;
   }
 
@@ -181,10 +180,10 @@ extension SceneExport on Scene {
   /// #aiGetExportFormatCount() / #aiGetExportFormatDescription() to learn which export formats are available.
   /// @param pPreprocessing Please see the documentation for #aiExportScene
   /// @return the exported data or NULL in case of error
-  ExportData exportData({@required String format, int flags = 0}) {
-    final cformat = Utf8.toUtf8(format);
+  ExportData? exportData({required String format, int flags = 0}) {
+    final cformat = format.toNativeString();
     final data = libassimp.aiExportSceneToBlob(ptr, cformat, flags);
-    free(cformat);
+    malloc.free(cformat);
     return ExportData.fromNative(data);
   }
 }

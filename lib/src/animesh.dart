@@ -72,7 +72,7 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   aiAnimMesh get _animMesh => ptr.ref;
 
   AnimMesh._(Pointer<aiAnimMesh> ptr) : super(ptr);
-  factory AnimMesh.fromNative(Pointer<aiAnimMesh> ptr) {
+  static AnimMesh? fromNative(Pointer<aiAnimMesh> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return AnimMesh._(ptr);
   }
@@ -89,7 +89,7 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   Iterable<Vector3> get vertices {
     return Iterable.generate(
       _animMesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_animMesh.mVertices.elementAt(i)),
+      (i) => AssimpVector3.fromNative(_animMesh.mVertices.elementAt(i).ref),
     );
   }
 
@@ -97,7 +97,7 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   Iterable<Vector3> get normals {
     return Iterable.generate(
       _animMesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_animMesh.mNormals.elementAt(i)),
+      (i) => AssimpVector3.fromNative(_animMesh.mNormals.elementAt(i).ref),
     );
   }
 
@@ -105,7 +105,7 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   Iterable<Vector3> get tangents {
     return Iterable.generate(
       _animMesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_animMesh.mTangents.elementAt(i)),
+      (i) => AssimpVector3.fromNative(_animMesh.mTangents.elementAt(i).ref),
     );
   }
 
@@ -113,7 +113,7 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   Iterable<Vector3> get bitangents {
     return Iterable.generate(
       _animMesh.mNumVertices,
-      (i) => AssimpVector3.fromNative(_animMesh.mBitangents.elementAt(i)),
+      (i) => AssimpVector3.fromNative(_animMesh.mBitangents.elementAt(i).ref),
     );
   }
 
@@ -121,14 +121,14 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   Iterable<Iterable<Vector4>> get colors {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_COLOR_SETS &&
-        AssimpPointer.isNotNull(_animMesh.mColors?.elementAt(n))) {
+        AssimpPointer.isNotNull(_animMesh.mColors[n])) {
       ++n;
     }
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
         _animMesh.mNumVertices,
-        (j) => AssimpColor4.fromNative(_animMesh.mColors[i].elementAt(j)),
+        (j) => AssimpColor4.fromNative(_animMesh.mColors[i].elementAt(j).ref),
       ),
     );
   }
@@ -137,15 +137,15 @@ class AnimMesh extends AssimpType<aiAnimMesh> {
   Iterable<Iterable<Vector3>> get textureCoords {
     var n = 0;
     while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS &&
-        AssimpPointer.isNotNull(_animMesh.mTextureCoords?.elementAt(n))) {
+        AssimpPointer.isNotNull(_animMesh.mTextureCoords[n])) {
       ++n;
     }
     return Iterable.generate(
       n,
       (i) => Iterable.generate(
         _animMesh.mNumVertices,
-        (j) =>
-            AssimpVector3.fromNative(_animMesh.mTextureCoords[i].elementAt(j)),
+        (j) => AssimpVector3.fromNative(
+            _animMesh.mTextureCoords[i].elementAt(j).ref),
       ),
     );
   }

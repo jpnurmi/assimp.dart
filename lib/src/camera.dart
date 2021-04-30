@@ -91,7 +91,7 @@ class Camera extends AssimpType<aiCamera> {
   aiCamera get _camera => ptr.ref;
 
   Camera._(Pointer<aiCamera> ptr) : super(ptr);
-  factory Camera.fromNative(Pointer<aiCamera> ptr) {
+  static Camera? fromNative(Pointer<aiCamera> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Camera._(ptr);
   }

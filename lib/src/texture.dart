@@ -43,8 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
-
 import 'bindings.dart';
 import 'extensions.dart';
 import 'type.dart';
@@ -56,7 +54,7 @@ class Texel extends AssimpType<aiTexel> {
   aiTexel get _texel => ptr.ref;
 
   Texel._(Pointer<aiTexel> ptr) : super(ptr);
-  factory Texel.fromNative(Pointer<aiTexel> ptr) {
+  static Texel? fromNative(Pointer<aiTexel> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Texel._(ptr);
   }
@@ -83,7 +81,7 @@ class Texture extends AssimpType<aiTexture> {
   aiTexture get _texture => ptr.ref;
 
   Texture._(Pointer<aiTexture> ptr) : super(ptr);
-  factory Texture.fromNative(Pointer<aiTexture> ptr) {
+  static Texture? fromNative(Pointer<aiTexture> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return Texture._(ptr);
   }
@@ -112,7 +110,7 @@ class Texture extends AssimpType<aiTexture> {
   Iterable<Texel> get data {
     return Iterable.generate(
       _texture.mWidth * _texture.mHeight,
-      (i) => Texel.fromNative(_texture.pcData.elementAt(i)),
+      (i) => Texel.fromNative(_texture.pcData.elementAt(i))!,
     );
   }
 
@@ -134,7 +132,8 @@ class Texture extends AssimpType<aiTexture> {
   /// extension is chosen (JPEG maps to 'jpg', not to 'jpeg').
   /// E.g. 'dds\\0', 'pcx\\0', 'jpg\\0'.  All characters are lower-case.
   /// The fourth character will always be '\\0'.
-  String get formatHint => Utf8.fromUtf8(_texture.achFormatHint);
+  String get formatHint => String.fromCharCodes(
+      List<int>.generate(9, (i) => _texture.achFormatHint[i]));
 
   /// Texture original filename
   ///

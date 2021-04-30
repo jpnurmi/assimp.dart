@@ -41,6 +41,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
+import 'dart:ffi';
+
 import 'package:ffi/ffi.dart';
 
 import 'bindings.dart';
@@ -66,11 +68,11 @@ class Assimp {
   /// @return A textual description of the error that occurred at the last
   /// import process. NULL if there was no error. There can't be an error if you
   /// got a non-NULL #aiScene from #aiImportFile/#aiImportFileEx/#aiApplyPostProcessing.
-  static String get errorString => Utf8.fromUtf8(libassimp.aiGetErrorString());
+  static String get errorString => libassimp.aiGetErrorString().toDartString();
 
   /// Returns a string with legal copyright and licensing information
   /// about Assimp. The string may include multiple lines.
-  static String get legalString => Utf8.fromUtf8(libassimp.aiGetLegalString());
+  static String get legalString => libassimp.aiGetLegalString().toDartString();
 
   /// Returns the current major version number of Assimp.
   static int get versionMajor => libassimp.aiGetVersionMajor();
@@ -85,7 +87,7 @@ class Assimp {
   static int get compileFlags => libassimp.aiGetCompileFlags();
 
   /// Returns the branchname of the Assimp runtime.
-  static String get branchName => Utf8.fromUtf8(libassimp.aiGetBranchName());
+  static String get branchName => libassimp.aiGetBranchName().toDartString();
 
   /// Returns whether a given file extension is supported by ASSIMP
   ///
@@ -93,9 +95,9 @@ class Assimp {
   /// Must include a leading dot '.'. Example: ".3ds", ".md3"
   /// @return AI_TRUE if the file extension is supported.
   static bool isSupported(String extension) {
-    final ptr = Utf8.toUtf8(extension);
+    final ptr = extension.toNativeString();
     final res = libassimp.aiIsExtensionSupported(ptr);
-    free(ptr);
+    malloc.free(ptr);
     return res != 0;
   }
 
@@ -106,10 +108,10 @@ class Assimp {
   /// @param szOut String to receive the extension list.
   /// Format of the list: "*.3ds;*.obj;*.dae". NULL is not a valid parameter.
   static Iterable<String> get extensions {
-    final ptr = aiString.alloc();
+    final ptr = calloc<aiString>();
     libassimp.aiGetExtensionList(ptr);
-    final ext = AssimpString.fromNative(ptr);
-    free(ptr);
+    final ext = AssimpString.fromNative(ptr.ref);
+    calloc.free(ptr);
     return ext.split(';');
   }
 
@@ -117,7 +119,8 @@ class Assimp {
   static Iterable<ImportFormat> get importFormats {
     return Iterable.generate(
       libassimp.aiGetImportFormatCount(),
-      (i) => ImportFormat.fromNative(libassimp.aiGetImportFormatDescription(i)),
+      (i) =>
+          ImportFormat.fromNative(libassimp.aiGetImportFormatDescription(i))!,
     );
   }
 
@@ -125,7 +128,8 @@ class Assimp {
   static Iterable<ExportFormat> get exportFormats {
     return Iterable.generate(
       libassimp.aiGetExportFormatCount(),
-      (i) => ExportFormat.fromNative(libassimp.aiGetExportFormatDescription(i)),
+      (i) =>
+          ExportFormat.fromNative(libassimp.aiGetExportFormatDescription(i))!,
     );
   }
 }

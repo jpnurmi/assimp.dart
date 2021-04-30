@@ -817,11 +817,11 @@ const String AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY = 'GLOBAL_SCALE_FACTOR';
 class PropertyStore extends AssimpType<aiPropertyStore> {
   PropertyStore._(Pointer<aiPropertyStore> ptr) : super(ptr);
 
-  factory PropertyStore.fromMap(Map<String, dynamic> properties) {
+  static PropertyStore? fromMap(Map<String, dynamic>? properties) {
     if (properties == null) return null;
     final ptr = libassimp.aiCreatePropertyStore();
     for (final entry in properties.entries) {
-      final name = Utf8.toUtf8(entry.key);
+      final name = entry.key.toNativeString();
       switch (entry.value.runtimeType) {
         case bool:
           libassimp.aiSetImportPropertyInteger(
@@ -836,17 +836,17 @@ class PropertyStore extends AssimpType<aiPropertyStore> {
         case Matrix4:
           final mat = (entry.value as Matrix4).toNative();
           libassimp.aiSetImportPropertyMatrix(ptr, name, mat);
-          free(mat);
+          malloc.free(mat);
           break;
         case String:
           final str = (entry.value as String).toNative();
           libassimp.aiSetImportPropertyString(ptr, name, str);
-          free(str);
+          malloc.free(str);
           break;
         default:
           throw UnimplementedError(entry.value);
       }
-      free(name);
+      malloc.free(name);
     }
     return PropertyStore._(ptr);
   }

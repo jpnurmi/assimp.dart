@@ -60,16 +60,16 @@ class MemoryInfo extends AssimpType<aiMemoryInfo> {
   aiMemoryInfo get _memoryInfo => ptr.ref;
 
   MemoryInfo._(Pointer<aiMemoryInfo> ptr) : super(ptr);
-  factory MemoryInfo.fromNative(Pointer<aiMemoryInfo> ptr) {
+  static MemoryInfo? fromNative(Pointer<aiMemoryInfo> ptr) {
     if (AssimpPointer.isNull(ptr)) return null;
     return MemoryInfo._(ptr);
   }
 
   /// Get approximated storage required by a scene
-  factory MemoryInfo.fromScene(Scene scene) {
-    final mem = allocate<aiMemoryInfo>();
+  static MemoryInfo fromScene(Scene scene) {
+    final mem = malloc<aiMemoryInfo>();
     libassimp.aiGetMemoryRequirements(scene.ptr, mem);
-    return MemoryInfo.fromNative(mem);
+    return MemoryInfo.fromNative(mem)!;
   }
 
   /// Storage allocated for texture data
@@ -99,5 +99,5 @@ class MemoryInfo extends AssimpType<aiMemoryInfo> {
   /// Releases all resources associated with the given memory requirements.
   ///
   /// Call this function after you're done with the memory info.
-  void dispose() => free(ptr);
+  void dispose() => malloc.free(ptr);
 }

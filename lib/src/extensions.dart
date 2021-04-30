@@ -43,8 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import 'dart:convert';
 import 'dart:ffi';
-import 'dart:typed_data';
 
+import 'package:ffi/ffi.dart';
 import 'package:vector_math/vector_math.dart';
 export 'package:vector_math/vector_math.dart'
     show Aabb3, Matrix3, Matrix4, Quaternion, Vector2, Vector3, Vector4;
@@ -52,11 +52,10 @@ export 'package:vector_math/vector_math.dart'
 import 'bindings.dart';
 
 extension AssimpAabb3 on Aabb3 {
-  static Aabb3 fromNative(Pointer<aiAABB> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
+  static Aabb3 fromNative(aiAABB a) {
     return Aabb3.minMax(
-      AssimpVector3.fromNative(ptr.ref.mMin),
-      AssimpVector3.fromNative(ptr.ref.mMax),
+      AssimpVector3.fromNative(a.mMin),
+      AssimpVector3.fromNative(a.mMax),
     );
   }
 
@@ -69,9 +68,8 @@ extension AssimpAabb3 on Aabb3 {
 }
 
 extension AssimpColor3 on Vector3 {
-  static Vector3 fromNative(Pointer<aiColor3D> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Vector3(ptr.ref.r, ptr.ref.g, ptr.ref.b);
+  static Vector3 fromNative(aiColor3D m) {
+    return Vector3(m.r, m.g, m.b);
   }
 
 //  static Pointer<aiColor3D> toNative(Color color) {
@@ -84,14 +82,8 @@ extension AssimpColor3 on Vector3 {
 }
 
 extension AssimpColor4 on Vector4 {
-  static Vector4 fromNative(Pointer<aiColor4D> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Vector4(
-      ptr.ref.a,
-      ptr.ref.r,
-      ptr.ref.g,
-      ptr.ref.b,
-    );
+  static Vector4 fromNative(aiColor4D c) {
+    return Vector4(c.a, c.r, c.g, c.b);
   }
 
 //  static Pointer<aiColor4D> toNative(Color color) {
@@ -105,19 +97,8 @@ extension AssimpColor4 on Vector4 {
 }
 
 extension AssimpMatrix3 on Matrix3 {
-  static Matrix3 fromNative(Pointer<aiMatrix3x3> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Matrix3(
-      ptr.ref.a1,
-      ptr.ref.a2,
-      ptr.ref.a3,
-      ptr.ref.b1,
-      ptr.ref.b2,
-      ptr.ref.b3,
-      ptr.ref.c1,
-      ptr.ref.c2,
-      ptr.ref.c3,
-    );
+  static Matrix3 fromNative(aiMatrix3x3 m) {
+    return Matrix3(m.a1, m.a2, m.a3, m.b1, m.b2, m.b3, m.c1, m.c2, m.c3);
   }
 
 //  static Pointer<aiMatrix3x3> toNative(Matrix3 matrix) {
@@ -136,25 +117,24 @@ extension AssimpMatrix3 on Matrix3 {
 }
 
 extension AssimpMatrix4 on aiMatrix4x4 {
-  static Matrix4 fromNative(Pointer<aiMatrix4x4> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
+  static Matrix4 fromNative(aiMatrix4x4 m) {
     return Matrix4(
-      ptr.ref.a1,
-      ptr.ref.a2,
-      ptr.ref.a3,
-      ptr.ref.a4,
-      ptr.ref.b1,
-      ptr.ref.b2,
-      ptr.ref.b3,
-      ptr.ref.b4,
-      ptr.ref.c1,
-      ptr.ref.c2,
-      ptr.ref.c3,
-      ptr.ref.c4,
-      ptr.ref.d1,
-      ptr.ref.d2,
-      ptr.ref.d3,
-      ptr.ref.d4,
+      m.a1,
+      m.a2,
+      m.a3,
+      m.a4,
+      m.b1,
+      m.b2,
+      m.b3,
+      m.b4,
+      m.c1,
+      m.c2,
+      m.c3,
+      m.c4,
+      m.d1,
+      m.d2,
+      m.d3,
+      m.d4,
     );
   }
 
@@ -180,7 +160,7 @@ extension AssimpMatrix4 on aiMatrix4x4 {
 
 extension DartMatrix4 on Matrix4 {
   Pointer<aiMatrix4x4> toNative() {
-    final ptr = aiMatrix4x4.alloc();
+    final ptr = malloc<aiMatrix4x4>();
     ptr.ref.a1 = row0.x;
     ptr.ref.a2 = row0.y;
     ptr.ref.a3 = row0.z;
@@ -202,14 +182,13 @@ extension DartMatrix4 on Matrix4 {
 }
 
 extension AssimpPointer on Pointer {
-  static bool isNull(Pointer ptr) => ptr == null || ptr.address == 0;
-  static bool isNotNull(Pointer ptr) => ptr != null && ptr.address != 0;
+  static bool isNull(Pointer ptr) => ptr == nullptr;
+  static bool isNotNull(Pointer ptr) => ptr != nullptr;
 }
 
 extension AssimpQuaternion on Quaternion {
-  static Quaternion fromNative(Pointer<aiQuaternion> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Quaternion(ptr.ref.x, ptr.ref.y, ptr.ref.z, ptr.ref.z);
+  static Quaternion fromNative(aiQuaternion q) {
+    return Quaternion(q.x, q.y, q.z, q.z);
   }
 
 //  static Pointer<aiQuaternion> toNative(Quaternion quaternion) {
@@ -227,23 +206,31 @@ extension AssimpSize on Vector2 {
   double get height => y;
 }
 
+extension AssimpArrayString on String {
+  Pointer<Int8> toNativeString() {
+    return toNativeUtf8().cast<Int8>();
+  }
+}
+
+extension AssimpStringArray on Pointer<Int8> {
+  String toDartString({int? length}) {
+    return cast<Utf8>().toDartString(length: length);
+  }
+}
+
 extension AssimpString on String {
-  static String fromNative(Pointer<aiString> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    final len = ptr.ref.length;
-    if (len <= 0) return '';
-    final str = Uint8List.view(
-        ptr.ref.data.cast<Uint8>().asTypedList(len).buffer, 0, len);
-    return utf8.decode(str);
+  static String fromNative(aiString ai) {
+    return utf8.decode(List<int>.generate(ai.length, (i) => ai.data[i]));
   }
 
   Pointer<aiString> toNative() {
-    final ptr = aiString.alloc();
-    ptr.ref.length = length;
+    final ptr = calloc<aiString>();
     final units = utf8.encode(this);
-    final data = ptr.ref.data.cast<Uint8>().asTypedList(units.length + 1);
-    data.setAll(0, units);
-    data[units.length] = 0;
+    ptr.ref.length = units.length;
+    for (var i = 0; i < units.length; ++i) {
+      ptr.ref.data[i] = units[i];
+    }
+    ptr.ref.data[units.length] = 0;
     return ptr;
   }
 
@@ -257,9 +244,8 @@ extension AssimpString on String {
 }
 
 extension AssimpVector2 on Vector2 {
-  static Vector2 fromNative(Pointer<aiVector2D> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Vector2(ptr.ref.x, ptr.ref.y);
+  static Vector2 fromNative(aiVector2D v) {
+    return Vector2(v.x, v.y);
   }
 
 //  static Pointer<aiVector2D> toNative(Vector2 vec) {
@@ -271,9 +257,8 @@ extension AssimpVector2 on Vector2 {
 }
 
 extension AssimpVector3 on Vector3 {
-  static Vector3 fromNative(Pointer<aiVector3D> ptr) {
-    if (AssimpPointer.isNull(ptr)) return null;
-    return Vector3(ptr.ref.x, ptr.ref.y, ptr.ref.z);
+  static Vector3 fromNative(aiVector3D v) {
+    return Vector3(v.x, v.y, v.z);
   }
 
 //  static Pointer<aiVector3D> toNative(Vector3 vec) {
