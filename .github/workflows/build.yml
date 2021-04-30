@@ -1,5 +1,9 @@
 name: Build
 
+# for vcpkg
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
 on:
   push:
     branches: [master]
@@ -24,20 +28,22 @@ jobs:
     - name: Install Assimp on macOS
       if: matrix.os == 'macos-latest'
       run: brew install assimp
+    - name: Git checkout
+      uses: actions/checkout@v2
+    - name: Setup MSVC
+      if: matrix.os == 'windows-latest'
+      uses: ilammy/msvc-dev-cmd@v1
     - name: Install vcpkg
       if: matrix.os == 'windows-latest'
       uses: lukka/run-vcpkg@v3
       with:
         setupOnly: true
         vcpkgDirectory: '${{github.workspace}}/vcpkg'
-        vcpkgGitCommitId: 'ee17a685087a6886e5681e355d36cd784f0dd2c8'
+        vcpkgGitCommitId: '12ab060a3d43b56c6689ac7fe5861c6f9138c568'
     - name: Install Assimp on Windows
       if: matrix.os == 'windows-latest'
       run: vcpkg install assimp:x64-windows
-    - name: Git checkout
-      uses: actions/checkout@v2
-      with:
-        submodules: true
+      working-directory: '${{github.workspace}}/vcpkg'
     - name: Get dependencies
       run: dart pub get
     - name: Set environment on macOS
@@ -50,7 +56,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       uses: allenevans/set-env@v2.0.0
       with:
-        ASSIMP_LIBRARY_PATH: '${{github.workspace}}/vcpkg/installed/x64-windows/bin/assimp/assimp-vc142-mt.dll'
+        ASSIMP_LIBRARY_PATH: '${{github.workspace}}\vcpkg\installed\x64-windows\bin\assimp-vc142-mt.dll'
     - name: Run tests
       run: dart test
     - name: Measure coverage
