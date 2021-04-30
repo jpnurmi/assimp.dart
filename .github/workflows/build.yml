@@ -51,12 +51,12 @@ jobs:
       uses: allenevans/set-env@v2.0.0
       with:
         DYLD_LIBRARY_PATH: '/usr/local/opt/assimp/lib'
-        ASSIMP_LIBRARY_PATH: '/usr/local/opt/assimp/lib/libassimp.5.dylib'
+        LIBASSIMP_PATH: '/usr/local/opt/assimp/lib/libassimp.5.dylib'
     - name: Set environment on Windows
       if: matrix.os == 'windows-latest'
       uses: allenevans/set-env@v2.0.0
       with:
-        ASSIMP_LIBRARY_PATH: '${{github.workspace}}\vcpkg\installed\x64-windows\bin\assimp-vc142-mt.dll'
+        LIBASSIMP_PATH: '${{github.workspace}}\vcpkg\installed\x64-windows\bin\assimp-vc142-mt.dll'
     - name: Run tests
       run: dart test
     - name: Measure coverage

@@ -42,28 +42,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 import 'dart:ffi';
-import 'dart:io';
+
+import 'package:dylib/dylib.dart';
 
 import 'bindings.dart';
 
-String get _dlprefix => Platform.isWindows ? '' : 'lib';
-String get _dlsuffix => Platform.isWindows
-    ? '.dll'
-    : Platform.isMacOS || Platform.isIOS
-        ? '.dylib'
-        : '.so';
-String get _dlname => _dlprefix + 'assimp' + _dlsuffix;
-
-DynamicLibrary _dlopen() {
-  var path = Platform.environment['ASSIMP_LIBRARY_PATH'] ?? '';
-  if (path.isEmpty ||
-      Directory(path).statSync().type == FileSystemEntityType.directory) {
-    final name = Platform.environment['ASSIMP_LIBRARY_NAME'] ?? _dlname;
-    if (path.isNotEmpty && !path.endsWith('/')) path += '/';
-    path += name;
-  }
-  return DynamicLibrary.open(path);
-}
-
 LibAssimp? _libassimp;
-LibAssimp get libassimp => _libassimp ?? LibAssimp(_dlopen());
+LibAssimp get libassimp {
+  return _libassimp ??= LibAssimp(
+    DynamicLibrary.open(
+      resolveDylibPath(
+        'assimp',
+        dartDefine: 'LIBASSIMP_PATH',
+        environmentVariable: 'LIBASSIMP_PATH',
+      ),
+    ),
+  );
+}
