@@ -16,9 +16,3 @@ jobs:
       #   uses: axel-op/dart-package-analyzer@v3
       #   with:
       #     githubToken: ${{secrets.GITHUB_TOKEN}}
-      - name: Install Dart
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: dev
-      - name: Analyze package
-        run: dart analyze
