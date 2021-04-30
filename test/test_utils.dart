@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 import 'package:path/path.dart' hide equals;
+import 'package:equatable/equatable.dart';
 import 'package:assimp/assimp.dart';
 
 export 'third_party/matchers.dart';
@@ -9,6 +10,8 @@ export 'third_party/matchers.dart';
 String testModelPath(String fileName) => 'test/models/' + fileName;
 
 void prepareTest() {
+  EquatableConfig.stringify = true;
+
   // https://github.com/flutter/flutter/issues/20907
   if (Directory.current.path.endsWith('/test')) {
     Directory.current = Directory.current.parent;
