@@ -33,6 +33,7 @@ build-*
 build/
 pubspec.lock
 .test_coverage.dart
+.test_cov.dart
 lcov.info
 coverage_badge.svg
 coverage/
