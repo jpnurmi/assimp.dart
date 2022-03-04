@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-latest] ### TODO: windows-latest
+        os: [ubuntu-20.04] ### TODO: macos-latest, windows-latest
     continue-on-error: true
     steps:
     - name: Install Dart
