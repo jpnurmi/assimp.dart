@@ -2,8 +2,8 @@
 
 [![pub](https://img.shields.io/pub/v/assimp.svg)](https://pub.dev/packages/assimp)
 [![license: BSD](https://img.shields.io/badge/license-BSD-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
-![build](https://github.com/jpnurmi/dart_assimp/workflows/Build/badge.svg)
-[![codecov](https://codecov.io/gh/jpnurmi/dart_assimp/branch/main/graph/badge.svg)](https://codecov.io/gh/jpnurmi/dart_assimp)
+![build](https://github.com/jpnurmi/assimp.dart/workflows/Build/badge.svg)
+[![codecov](https://codecov.io/gh/jpnurmi/assimp.dart/branch/main/graph/badge.svg)](https://codecov.io/gh/jpnurmi/assimp.dart)
 
 This library provides Dart [FFI](https://dart.dev/guides/libraries/c-interop) bindings to
 [Open Asset Import Library](https://assimp.org/) aka. Assimp, which is a portable library to import
@@ -23,7 +23,7 @@ for (final mesh in scene.meshes) {
 
 A little example of what you can do with Assimp:
 
-![Assimp](https://raw.githubusercontent.com/jpnurmi/dart_assimp/master/doc/images/assimp.gif "Assimp")
+![Assimp](https://raw.githubusercontent.com/jpnurmi/assimp.dart/main/doc/images/assimp.gif "Assimp")
 
 To use this package, add `assimp` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
@@ -34,8 +34,8 @@ on the following platforms:
 - macOS (`brew install assimp`)
 - Linux (`apt install libassimp5`)
 - Windows (`vcpkg install assimp:x64-windows`)
-- [Android](https://github.com/jpnurmi/dart_assimp/wiki/Android)
-- [iOS](https://github.com/jpnurmi/dart_assimp/wiki/iOS)
+- [Android](https://github.com/jpnurmi/assimp.dart/wiki/Android)
+- [iOS](https://github.com/jpnurmi/assimp.dart/wiki/iOS)
 
 The documentation is still more or less direct copy-paste from the original library, and is
 therefore full of broken references.
